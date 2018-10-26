@@ -25,8 +25,7 @@ bool ModuleSceneIntro::Start()
 
 	
 	Ball= App->textures->Load("Assets/Sprites/BallResized.png");
-	box = App->textures->Load("pinball/crate.png");
-	bonus_fx = App->audio->LoadFx("Assets/FX/BallhittingSound.wav");
+	HitBall = App->audio->LoadFx("Assets/FX/BallhittingSound.wav");		//Clean UP music REMEMBER
 	StaticScene = App->textures->Load("Assets/Sprites/staticPritesWindowSize.png");
 	
 	ScoreBoard= App->textures->Load("Assets/Sprites/ScoreBoardResized.png");
@@ -40,6 +39,14 @@ bool ModuleSceneIntro::Start()
 bool ModuleSceneIntro::CleanUp()
 {
 	LOG("Unloading Intro scene");
+
+	
+	App->textures->Unload(Ball);
+	App->textures->Unload(StaticScene);
+	App->textures->Unload(ScoreBoard);
+	
+	
+
 
 	return true;
 }
@@ -149,5 +156,5 @@ update_status ModuleSceneIntro::Update()
 
 void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
-	App->audio->PlayFx(bonus_fx);
+	App->audio->PlayFx(HitBall);
 }

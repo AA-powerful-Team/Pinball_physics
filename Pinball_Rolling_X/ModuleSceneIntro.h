@@ -29,5 +29,5 @@ public:
 	SDL_Texture* rick;
 	SDL_Texture*StaticScene;
 	SDL_Texture*ScoreBoard;
-	uint bonus_fx;
+	uint HitBall;
 };
