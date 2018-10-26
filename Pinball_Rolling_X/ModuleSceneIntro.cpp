@@ -9,7 +9,7 @@
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
-	circle = box = rick = NULL;
+	Ball = box = rick = StaticScene = ScoreBoard = NULL;
 }
 
 ModuleSceneIntro::~ModuleSceneIntro()
@@ -23,10 +23,15 @@ bool ModuleSceneIntro::Start()
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
-	//circle = App->textures->Load("pinball/wheel.png"); 
+	
+	Ball= App->textures->Load("Assets/Sprites/BallResized.png");
 	box = App->textures->Load("pinball/crate.png");
-	rick = App->textures->Load("pinball/rick_head.png");
-	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
+	bonus_fx = App->audio->LoadFx("Assets/FX/BallhittingSound.wav");
+	StaticScene = App->textures->Load("Assets/Sprites/staticPritesWindowSize.png");
+	
+	ScoreBoard= App->textures->Load("Assets/Sprites/ScoreBoardResized.png");
+	
+
 
 	return ret;
 }
@@ -42,6 +47,14 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
+
+	//printingTheElement that are not going to move
+
+	
+		App->renderer->Blit(StaticScene, 0, 0);
+		App->renderer->Blit(ScoreBoard, 477, 0);
+	
+
 	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
 		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 10));
@@ -107,7 +120,7 @@ update_status ModuleSceneIntro::Update()
 	{
 		int x, y;
 		c->data->GetPosition(x, y);
-		App->renderer->Blit(circle, x, y, NULL, 1.0f, c->data->GetRotation());
+		App->renderer->Blit(Ball, x, y, NULL, 1.0f, c->data->GetRotation());
 		c = c->next;
 	}
 

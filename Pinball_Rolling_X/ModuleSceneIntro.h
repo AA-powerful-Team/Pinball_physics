@@ -17,13 +17,17 @@ public:
 	bool CleanUp();
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
 
+	bool PrintStaticElements = true;
+
 public:
 	p2List<PhysBody*> circles;
 	p2List<PhysBody*> boxes;
 	p2List<PhysBody*> ricks;
 
-	SDL_Texture* circle;
+	SDL_Texture* Ball;
 	SDL_Texture* box;
 	SDL_Texture* rick;
+	SDL_Texture*StaticScene;
+	SDL_Texture*ScoreBoard;
 	uint bonus_fx;
 };
