@@ -13,6 +13,10 @@
 #define PIXEL_TO_METERS(p)  ((float) METER_PER_PIXEL * p)
 
 // Small class to return to other modules to track position and rotation of physics bodies
+struct flipper;
+
+
+
 class PhysBody
 {
 public:
@@ -59,6 +63,17 @@ public:
 
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
+
+	//flippers
+	b2Body* CreateAttacherBody(int x, int y, int diameter);
+	PhysBody* CreateFlipperPbody(int x, int y, int* points, int size);
+	b2RevoluteJoint* CreateFlipperJoint(const flipper &f, int lowerAngle, int upperAngle);
+	flipper CreateFlipper(int posX, int posY, int att_diameter, int flipper_chain[], int chain_size, SDL_Rect flipper_rect, int lowerAngle, int upperAngle, int adjx, int adjy);
+
+	//Flipper movement
+	void FlipperSetMaxMotorTorque(flipper &f, float32 MaxTorque);
+	void FlipperSetMotorSpeed(flipper &f, float32 MotorSpeed);
+
 
 private:
 

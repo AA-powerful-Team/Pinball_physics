@@ -5,6 +5,22 @@
 #include "Globals.h"
 
 class PhysBody;
+struct b2Body;
+struct b2RevoluteJoint;
+struct b2PrismaticJoint;
+
+struct flipper
+{
+	//flipper b2 body and physbody
+	b2Body* Attacher;
+	PhysBody* Pbody;
+
+	//flipper joint
+	b2RevoluteJoint* Joint;
+
+	//Rect for blitting purposes
+	SDL_Rect Rect;
+};
 
 class ModuleSceneIntro : public Module
 {
@@ -43,6 +59,25 @@ public:
 	bool BlitBlueBouncer = false;
 
 	int start_time;
+	
+
+
+	uint bonus_fx;
+	SDL_Texture* spriteSheet;
+
+	//flippers
+	
+	flipper rightFlipper;
+	SDL_Rect rightFlipperRect;
+
+	flipper leftFlipper;
+	SDL_Rect leftFlipperRect;
+	
+	flipper rightUpFlipper;
+	SDL_Rect rightUpFlipperRect;
+
+	flipper leftUpFlipper;
+	SDL_Rect leftUpFlipperRect;
 	
 
 };
