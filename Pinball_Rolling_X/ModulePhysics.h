@@ -51,13 +51,20 @@ public:
 	PhysBody* CreateChain(int x, int y, int* points, int size);
 	PhysBody* CreateStaticChain(int x, int y, int* points, int size);
 
+	//Colliders
 	PhysBody* Bouncer = nullptr;
 	PhysBody*BouncerL = nullptr;
-
 	PhysBody* BouncerCircle = nullptr;
 	PhysBody*BouncerLCircle = nullptr;
-
 	PhysBody*BlueBouncer = nullptr;
+
+	//Sensors
+	//Upper part
+	PhysBody*UpperSenser1;
+	PhysBody*UpperSenser2;
+	PhysBody*UpperSenser3;
+	PhysBody*UpperSenser4;
+	PhysBody*UpperSmallSenser1;
 
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);

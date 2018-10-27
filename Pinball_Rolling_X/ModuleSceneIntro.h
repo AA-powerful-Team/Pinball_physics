@@ -40,8 +40,10 @@ public:
 public:
 
 	p2List<PhysBody*> circles;
-	p2List<PhysBody*> boxes;
-	p2List<PhysBody*> ricks;
+
+	
+	
+
 
 	SDL_Texture* Ball;
 	SDL_Texture* box;
@@ -52,6 +54,12 @@ public:
 	SDL_Texture*BouncerCIR;
 	SDL_Texture*BlueBouncerLight;
 	SDL_Texture* spriteSheet;
+	
+	//lights
+	SDL_Texture*BigBlueLight;
+	SDL_Texture*BigBlueTriLightH;
+
+
 	//flippers
 
 	flipper rightFlipper;
@@ -66,17 +74,25 @@ public:
 	flipper leftUpFlipper;
 	SDL_Rect leftUpFlipperRect;
 
+	//music
 
 	uint HitBall;
 	uint BouncerSound;
+	uint BlueUpperSenser1;
+	uint SmallLightOn;
 
+	//Collisions bools
 	bool BlitBouncer=false;
 	bool BlitBouncerL =false;
 	bool BlitBouncerCircle = false;
 	bool BlitBouncerLCircle = false;
 	bool BlitBlueBouncer = false;
 
-	int start_time;
-	
+	//Sensors bools
+	bool sensor_BlueUpperSenser1=false;
+	bool sensor_BlueUpperSenser2 = false;
+	bool sensor_BlueUpperSenser3 = false;
+	bool sensor_BlueUpperSenser4 = false;
+	bool sensor_UpperSmallSenser1 = false;
 
 };

@@ -9,7 +9,7 @@
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
-	Ball = box = rick = StaticScene = ScoreBoard = NULL;
+	Ball = StaticScene = ScoreBoard = NULL;
 }
 
 ModuleSceneIntro::~ModuleSceneIntro()
@@ -30,10 +30,13 @@ bool ModuleSceneIntro::Start()
 	BouncerTR = App->textures->Load("Assets/Sprites/RedTriangle.png");
 	BouncerCIR = App->textures->Load("Assets/Sprites/RedLightHit.png");
 	BlueBouncerLight= App->textures->Load("Assets/Sprites/BlueRect.png");
+	BigBlueLight = App->textures->Load("Assets/Sprites/BigLightCIrcle.png");
+	BigBlueTriLightH = App->textures->Load("Assets/Sprites/BigLightTriangleH.png");
 
 	HitBall = App->audio->LoadFx("Assets/FX/BallhittingSound.wav");		//Clean UP music REMEMBER
 	BouncerSound= App->audio->LoadFx("Assets/FX/BallHitBouncers.wav");
-
+	BlueUpperSenser1 = App->audio->LoadFx("Assets/FX/TopBigBlueLighOn.wav");
+	SmallLightOn= App->audio->LoadFx("Assets/FX/SmallLightOn.wav");
 
 	spriteSheet = App->textures->Load("Assets/Sprites/spriteSheet.png");
 
@@ -112,6 +115,8 @@ bool ModuleSceneIntro::CleanUp()
 	App->textures->Unload(BouncerTR);
 	App->textures->Unload(BouncerCIR);
 	App->textures->Unload(BlueBouncerLight);
+	App->textures->Unload(BigBlueLight);
+	App->textures->Unload(BigBlueTriLightH);
 
 	return true;
 }
@@ -127,7 +132,7 @@ update_status ModuleSceneIntro::Update()
 	App->renderer->Blit(ScoreBoard, 477, 0);
 
 
-
+//Check Collisions
 	if (BlitBouncer) {
 		App->renderer->Blit(BouncerTR, 283, 577);	
 		BlitBouncer = false;
@@ -155,6 +160,37 @@ update_status ModuleSceneIntro::Update()
 		BlitBlueBouncer = false;
 	}
 
+	//CheckSensors
+	
+	if (sensor_BlueUpperSenser1) {
+		
+		
+		App->renderer->Blit(BigBlueTriLightH, 278,8);
+		App->renderer->Blit(BigBlueLight, 281, 45);
+		//sensor_BlueUpperSenser1 = false;
+	}
+	if (sensor_BlueUpperSenser2) {
+
+		App->renderer->Blit(BigBlueTriLightH, 242, 8);
+		App->renderer->Blit(BigBlueLight, 247, 44);
+		//sensor_BlueUpperSenser2 = false;
+	
+	}
+
+	if (sensor_BlueUpperSenser3) {
+
+		App->renderer->Blit(BigBlueTriLightH, 207, 8);
+		App->renderer->Blit(BigBlueLight, 211, 47);
+		//sensor_BlueUpperSenser3 = false;
+	}
+
+	if (sensor_BlueUpperSenser4) {
+
+		App->renderer->Blit(BigBlueLight, 339, 23);
+		//sensor_BlueUpperSenser3 = false;
+	}
+
+	//Spawn Balls
 	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
 		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 10));
@@ -274,6 +310,53 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		BlitBlueBouncer = true;
 		App->audio->PlayFx(BouncerSound);
 	}
+
+
+	if (bodyA==App->physics->UpperSenser1 && bodyB==circles.getLast()->data ||
+		bodyB == App->physics->UpperSenser1 && bodyA == circles.getLast()->data) {
+		
+		if (sensor_BlueUpperSenser1 != true) {
+			App->audio->PlayFx(BlueUpperSenser1);
+			sensor_BlueUpperSenser1 = true;
+		}
+
+	}
+
+	if (bodyA == App->physics->UpperSenser2 && bodyB == circles.getLast()->data || 
+		bodyB == App->physics->UpperSenser2 && bodyA == circles.getLast()->data) {
+		
+		if (sensor_BlueUpperSenser2 != true) {
+			App->audio->PlayFx(BlueUpperSenser1);
+			sensor_BlueUpperSenser2 = true;
+		}
+	}
+
+	if (bodyA == App->physics->UpperSenser3 && bodyB == circles.getLast()->data || 
+		bodyB == App->physics->UpperSenser3 && bodyA == circles.getLast()->data) {
+
+		if (sensor_BlueUpperSenser3 != true) {
+			App->audio->PlayFx(BlueUpperSenser1);
+			sensor_BlueUpperSenser3 = true;
+		}
+	}
+
+	if (bodyA == App->physics->UpperSenser4 && bodyB == circles.getLast()->data || 
+		bodyB == App->physics->UpperSenser4 && bodyA == circles.getLast()->data) {
+
+		if (sensor_BlueUpperSenser4 != true) {
+			App->audio->PlayFx(BlueUpperSenser1);
+			sensor_BlueUpperSenser4 = true;
+		}
+	}
+	if (bodyA == App->physics->UpperSmallSenser1 && bodyB == circles.getLast()->data ||
+		bodyB == App->physics->UpperSmallSenser1 && bodyA == circles.getLast()->data) {
+
+		if (sensor_UpperSmallSenser1 != true) {
+			App->audio->PlayFx(SmallLightOn);
+			sensor_UpperSmallSenser1 = true;
+		}
+	}
+	
 
 	App->audio->PlayFx(HitBall);
 }

@@ -339,7 +339,7 @@ bool ModulePhysics::Start()
 	};
 
 
-
+	//COlliders
 	world_parts.add(Bouncer = CreateStaticChain(1, 0, triangle_boucer_right, 6));
 	world_parts.add(BouncerL = CreateStaticChain(1, 0, triangle_boucer, 6));
 	world_parts.add(BouncerCircle = CreateStaticCircle(275, 136, 20));
@@ -358,7 +358,16 @@ bool ModulePhysics::Start()
 	world_parts.add(CreateStaticChain(0, 0, top_triangle_right, 28));
 	world_parts.add(CreateStaticChain(0, 0, bonus_entrance, 44));
 	world_parts.add(CreateStaticChain(0, 0, up_left_corner, 120));
-	
+
+	//sensors
+	//Upper Part
+	UpperSenser1=CreateRectangleSensor(293,57,10,10);
+	UpperSenser2 = CreateRectangleSensor(258, 56, 10, 10);
+	UpperSenser3 = CreateRectangleSensor(222, 60, 10, 10);
+	UpperSenser4 = CreateRectangleSensor(350, 35, 10, 10);
+	UpperSmallSenser1= CreateRectangleSensor(392, 147, 7, 7);
+
+
 	return true;
 }
 
