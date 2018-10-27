@@ -326,12 +326,13 @@ bool ModulePhysics::Start()
 		119, 736
 	};
 
+
 	world_parts.add(App->physics->CreateStaticChain(1, 0, fliper_down_left, 16));
 	world_parts.add(App->physics->CreateStaticChain(1, 0, fliper_down_right, 16));
 	world_parts.add(App->physics->CreateStaticChain(1, 0, fliper_up_right, 14));
 	world_parts.add(App->physics->CreateStaticChain(1, 0, fliper_up_left, 14));
-	world_parts.add(App->physics->CreateStaticChain(1, 0, triangle_boucer_right, 6));
-	world_parts.add(App->physics->CreateStaticChain(1, 0, triangle_boucer, 6));
+	Bouncer = App->physics->CreateStaticChain(1, 0, triangle_boucer_right, 6);
+	BouncerL = App->physics->CreateStaticChain(1, 0, triangle_boucer, 6);
 	world_parts.add(App->physics->CreateStaticChain(1, 0, top3_path, 12));
 	world_parts.add(App->physics->CreateStaticChain(1, 0, top2_path, 12));
 	world_parts.add(App->physics->CreateStaticChain(1, 0, top1_path, 12));
@@ -344,6 +345,7 @@ bool ModulePhysics::Start()
 	world_parts.add(App->physics->CreateStaticChain(0, 0, top_triangle_right, 28));
 	world_parts.add(App->physics->CreateStaticChain(0, 0, bonus_entrance, 44));
 	world_parts.add(App->physics->CreateStaticChain(0, 0, up_left_corner, 120));
+	
 	return true;
 }
 

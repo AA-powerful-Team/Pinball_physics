@@ -25,12 +25,12 @@ bool ModuleSceneIntro::Start()
 
 	
 	Ball= App->textures->Load("Assets/Sprites/BallResized.png");
-	HitBall = App->audio->LoadFx("Assets/FX/BallhittingSound.wav");		//Clean UP music REMEMBER
 	StaticScene = App->textures->Load("Assets/Sprites/staticPritesWindowSize.png");
-	
 	ScoreBoard= App->textures->Load("Assets/Sprites/ScoreBoardResized.png");
-	
+	BouncerTR = App->textures->Load("Assets/Sprites/RedTriangle.png");
 
+	HitBall = App->audio->LoadFx("Assets/FX/BallhittingSound.wav");		//Clean UP music REMEMBER
+	BouncerSound= App->audio->LoadFx("Assets/FX/BallHitBouncers.wav");
 
 	return ret;
 }
@@ -44,7 +44,7 @@ bool ModuleSceneIntro::CleanUp()
 	App->textures->Unload(Ball);
 	App->textures->Unload(StaticScene);
 	App->textures->Unload(ScoreBoard);
-	
+	App->textures->Unload(BouncerTR);
 	
 
 
@@ -57,62 +57,31 @@ update_status ModuleSceneIntro::Update()
 
 	//printingTheElement that are not going to move
 
-	
-		App->renderer->Blit(StaticScene, 0, 0);
-		App->renderer->Blit(ScoreBoard, 477, 0);
-	
 
-	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
+	App->renderer->Blit(StaticScene, 0, 0);
+	App->renderer->Blit(ScoreBoard, 477, 0);
+
+
+
+	if (BlitBouncer) {
+		App->renderer->Blit(BouncerTR, 283, 577);	
+		BlitBouncer = false;
+	}
+
+	if (BlitBouncerL) {
+		App->renderer->Blit(BouncerTR, 144, 577);
+		BlitBouncerL = false;
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
 		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 10));
 		circles.getLast()->data->listener = this;
 	}
 
-	if(App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
-	{
-		boxes.add(App->physics->CreateRectangle(App->input->GetMouseX(), App->input->GetMouseY(), 100, 50));
-	}
 
-	if(App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
-	{
-		// Pivot 0, 0
-		int rick_head[64] = {
-			14, 36,
-			42, 40,
-			40, 0,
-			75, 30,
-			88, 4,
-			94, 39,
-			111, 36,
-			104, 58,
-			107, 62,
-			117, 67,
-			109, 73,
-			110, 85,
-			106, 91,
-			109, 99,
-			103, 104,
-			100, 115,
-			106, 121,
-			103, 125,
-			98, 126,
-			95, 137,
-			83, 147,
-			67, 147,
-			53, 140,
-			46, 132,
-			34, 136,
-			38, 126,
-			23, 123,
-			30, 114,
-			10, 102,
-			29, 90,
-			0, 75,
-			30, 62
-		};
+	
 
-		ricks.add(App->physics->CreateChain(App->input->GetMouseX(), App->input->GetMouseY(), rick_head, 64));
-	}
 
 	// Prepare for raycast ------------------------------------------------------
 	
@@ -131,30 +100,22 @@ update_status ModuleSceneIntro::Update()
 		c = c->next;
 	}
 
-	c = boxes.getFirst();
-
-	while(c != NULL)
-	{
-		int x, y;
-		c->data->GetPosition(x, y);
-		App->renderer->Blit(box, x, y, NULL, 1.0f, c->data->GetRotation());
-		c = c->next;
-	}
-
-	c = ricks.getFirst();
-
-	while(c != NULL)
-	{
-		int x, y;
-		c->data->GetPosition(x, y);
-		App->renderer->Blit(rick, x, y, NULL, 1.0f, c->data->GetRotation());
-		c = c->next;
-	}
 
 	return UPDATE_CONTINUE;
 }
 
 void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
+
+	if (bodyA == App->physics->Bouncer || bodyB == App->physics->Bouncer) {
+		BlitBouncer = true;
+		App->audio->PlayFx(BouncerSound);
+
+	}
+	if (bodyA == App->physics->BouncerL || bodyB == App->physics->BouncerL) {
+		BlitBouncerL = true;
+		App->audio->PlayFx(BouncerSound);
+	}
+
 	App->audio->PlayFx(HitBall);
 }

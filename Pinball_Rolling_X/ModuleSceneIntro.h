@@ -29,5 +29,15 @@ public:
 	SDL_Texture* rick;
 	SDL_Texture*StaticScene;
 	SDL_Texture*ScoreBoard;
+	SDL_Texture*BouncerTR;
+
 	uint HitBall;
+	uint BouncerSound;
+
+	bool BlitBouncer=false;
+	bool BlitBouncerL =false;
+
+	int start_time;
+	
+
 };
