@@ -33,9 +33,10 @@ bool ModuleSceneIntro::Start()
 
 	HitBall = App->audio->LoadFx("Assets/FX/BallhittingSound.wav");		//Clean UP music REMEMBER
 	BouncerSound= App->audio->LoadFx("Assets/FX/BallHitBouncers.wav");
-
-
-	spriteSheet = App->textures->Load("Assets/Sprites/spriteSheet.png");
+	
+	launchertext = App->textures->Load("Assets/Sprites/Kicker_small.png"); // clean up
+	launcherRect = {0,0,38,68};
+	spriteSheet = App->textures->Load("Assets/Sprites/spriteSheet.png"); //clean up
 
 	int fliper_down_right[16] = {
 		271, 739,
@@ -96,6 +97,10 @@ bool ModuleSceneIntro::Start()
 	rightUpFlipperRect = { 101, 0, 38, 57 };
 	rightUpFlipper = App->physics->CreateFlipper(374, 327,
 		9, fliper_up_right, 14, rightUpFlipperRect, 15 - 15, 60 - 15, -374, -327);
+
+	launcher.anchor = App->physics->CreateStaticRectangle(460, 820, 5, 5,0);
+	launcher.body = App->physics->CreateRectangle(450, 820, 30, 10,0.5);
+	launcher.joint = App->physics->CreatePrismaticJoint(launcher.anchor, launcher.body, 1, -60, -10, 15);
 
 	return ret;
 }
@@ -206,7 +211,24 @@ update_status ModuleSceneIntro::Update()
 		App->physics->FlipperSetMaxMotorTorque(rightUpFlipper, 0.0f);
 		App->physics->FlipperSetMotorSpeed(rightUpFlipper, 0.0f);
 	}
+	
+	//kicker controls
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT) {
 
+		launcher.joint->SetMotorSpeed(2);
+		launcher.joint->SetMaxMotorForce(3);
+	}
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN) {
+
+		launcher.joint->SetMotorSpeed(2);
+		launcher.joint->SetMaxMotorForce(3);
+		
+	}
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_UP) {
+		launcher.joint->SetMotorSpeed(-15);
+		launcher.joint->SetMaxMotorForce(20);
+		
+	}
 	
 	
 	iPoint mouse;
@@ -244,7 +266,12 @@ update_status ModuleSceneIntro::Update()
 
 	App->renderer->Blit(spriteSheet, coords.x - 63, coords.y - 15, &rightUpFlipper.Rect, SDL_FLIP_NONE, 1.0f, rightUpFlipper.Pbody->GetRotation(), 30, rightUpFlipper.Rect.h / 2 - 13);
 
-
+	//draw kicker
+	iPoint launch_pos;
+	launcher.body->GetPosition(launch_pos.x, launch_pos.y);
+	launch_pos.x -= launcher.body->width ;
+	launch_pos.y -= launcher.body->height;
+	App->renderer->Blit(launchertext, launch_pos.x+13 , launch_pos.y+6, &launcherRect);
 
 
 	return UPDATE_CONTINUE;

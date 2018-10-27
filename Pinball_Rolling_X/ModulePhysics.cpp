@@ -368,7 +368,8 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius)
 	shape.m_radius = PIXEL_TO_METERS(radius);
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
-	fixture.density = 1.0f;
+	//fixture.filter.categoryBits = 5;
+	fixture.density = 0.1f;
 
 	b->CreateFixture(&fixture);
 
@@ -404,7 +405,7 @@ PhysBody* ModulePhysics::CreateStaticCircle(int x, int y, int radius,int resti)
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height)
+PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height,float resti)
 {
 	b2BodyDef body;
 	body.type = b2_dynamicBody;
@@ -416,8 +417,9 @@ PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height)
 
 	b2FixtureDef fixture;
 	fixture.shape = &box;
+	fixture.restitution = resti;
 	fixture.density = 1.0f;
-
+	
 	b->CreateFixture(&fixture);
 
 	PhysBody* pbody = new PhysBody();
@@ -856,3 +858,56 @@ void ModulePhysics::FlipperSetMotorSpeed(flipper &flipper, float32 MotorSpeed)
 	flipper.Joint->SetMotorSpeed(MotorSpeed);
 }
 
+PhysBody* ModulePhysics::CreateStaticRectangle(int x, int y, int width, int height, int resti)
+{
+	b2BodyDef body;
+	body.type = b2_staticBody;
+	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+	b2Body* b = world->CreateBody(&body);
+	b2PolygonShape box;
+	box.SetAsBox(PIXEL_TO_METERS(width) * 0.5f, PIXEL_TO_METERS(height) * 0.5f);
+
+	b2FixtureDef fixture;
+	fixture.shape = &box;
+	fixture.restitution = resti;
+	fixture.density = 1.0f;
+
+	b->CreateFixture(&fixture);
+
+	PhysBody* pbody = new PhysBody();
+	pbody->body = b;
+	b->SetUserData(pbody);
+	pbody->width = width * 0.5f;
+	pbody->height = height * 0.5f;
+
+	return pbody;
+}
+
+b2PrismaticJoint * ModulePhysics::CreatePrismaticJoint(PhysBody * anchor, PhysBody * body, int max_move, int min_move, int motor_speed, int max_force)
+{
+	b2PrismaticJointDef def;
+
+	def.bodyA = anchor->body;
+	def.bodyB = body->body;
+
+	def.collideConnected = false;
+
+	def.enableLimit = true;
+	def.enableMotor = true;
+
+
+	b2Vec2 localAxis(0, 1);
+	def.localAxisA = localAxis;
+
+	//set limmits
+	def.lowerTranslation = PIXEL_TO_METERS(min_move);
+	def.upperTranslation = PIXEL_TO_METERS(max_move);
+	
+	//set values
+	def.motorSpeed = motor_speed;
+	def.maxMotorForce = max_force;
+	
+
+	return (b2PrismaticJoint*)world->CreateJoint(&def);
+}
