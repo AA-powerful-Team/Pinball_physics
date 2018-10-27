@@ -5,6 +5,8 @@
 #include "ModulePhysics.h"
 #include "p2Point.h"
 #include "math.h"
+#include "ChainPoints.h"
+#include "ModuleSceneIntro.h"
 
 #ifdef _DEBUG
 #pragma comment( lib, "Box2D/libx86/Debug/Box2D.lib" )
@@ -59,6 +61,7 @@ bool ModulePhysics::Start()
 		center 2
 		277, 135*/
 	// Pivot 0, 0
+	
 	int up_left_corner[120] = {
 		26, 537,
 		27, 486,
@@ -183,7 +186,7 @@ bool ModulePhysics::Start()
 		337, 403,
 		344, 381
 	};
-	
+
 	// Pivot -1, -1
 	int right_down_base[14] = {
 		433, 366,
@@ -205,7 +208,7 @@ bool ModulePhysics::Start()
 		102, 732,
 		27, 685,
 		27, 602
-		};
+	};
 
 	// Pivot -1, -1
 	int middle_thing[12] = {
@@ -326,10 +329,10 @@ bool ModulePhysics::Start()
 		119, 736
 	};
 
-	world_parts.add(App->physics->CreateStaticChain(1, 0, fliper_down_left, 16));
-	world_parts.add(App->physics->CreateStaticChain(1, 0, fliper_down_right, 16));
-	world_parts.add(App->physics->CreateStaticChain(1, 0, fliper_up_right, 14));
-	world_parts.add(App->physics->CreateStaticChain(1, 0, fliper_up_left, 14));
+	//world_parts.add(App->physics->CreateStaticChain(1, 0, fliper_down_left, 16));
+	//world_parts.add(App->physics->CreateStaticChain(1, 0, fliper_down_right, 16));
+	//world_parts.add(App->physics->CreateStaticChain(1, 0, fliper_up_right, 14));
+	//world_parts.add(App->physics->CreateStaticChain(1, 0, fliper_up_left, 14));
 	world_parts.add(App->physics->CreateStaticChain(1, 0, triangle_boucer_right, 6));
 	world_parts.add(App->physics->CreateStaticChain(1, 0, triangle_boucer, 6));
 	world_parts.add(App->physics->CreateStaticChain(1, 0, top3_path, 12));
@@ -735,4 +738,109 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 
 	if(physB && physB->listener != NULL)
 		physB->listener->OnCollision(physB, physA);
+}
+
+b2Body* ModulePhysics::CreateAttacherBody(int x, int y, int diameter)
+{
+	b2Body* flipper_attacher; //body to Ret
+
+	b2BodyDef flipper_attacher_body;
+	flipper_attacher_body.type = b2_staticBody;
+	flipper_attacher_body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+	flipper_attacher = world->CreateBody(&flipper_attacher_body);
+
+	b2CircleShape flipper_attacher_shape;
+	flipper_attacher_shape.m_radius = PIXEL_TO_METERS(diameter) * 0.5f;
+
+	b2FixtureDef flipper_attacher_fixture;
+	flipper_attacher_fixture.shape = &flipper_attacher_shape;
+	flipper_attacher->CreateFixture(&flipper_attacher_fixture);
+
+	return flipper_attacher;
+}
+
+PhysBody* ModulePhysics::CreateFlipperPbody(int x, int y, int* points, int size)
+{
+	b2BodyDef body;
+	body.type = b2_dynamicBody;
+	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+	b2Body* b = world->CreateBody(&body);
+	b2PolygonShape box; 
+
+	//creating the shape					
+	b2Vec2* chain = new b2Vec2[size / 2];
+
+	for (uint i = 0; i < size / 2; ++i)
+	{
+		chain[i].x = PIXEL_TO_METERS(points[i * 2 + 0]);
+		chain[i].y = PIXEL_TO_METERS(points[i * 2 + 1]);
+	}
+
+	box.Set(chain, size / 2);
+
+	b2FixtureDef fixture;
+	fixture.shape = &box;
+	fixture.density = 1.0f;
+
+	b->CreateFixture(&fixture);
+
+	delete chain;
+
+	PhysBody* pbody = new PhysBody();
+	pbody->body = b;
+	b->SetUserData(pbody);
+	pbody->width = pbody->height = 0;
+
+	return pbody;
+}
+
+b2RevoluteJoint* ModulePhysics::CreateFlipperJoint(const flipper &flipper, int lowerAngle, int upperAngle)
+{
+	//Initialize the joint
+	b2RevoluteJointDef jointDef;
+	jointDef.Initialize(flipper.Attacher, flipper.Pbody->body, flipper.Attacher->GetWorldCenter());
+
+	jointDef.collideConnected = false;
+	//SET the limits for the joint 
+	jointDef.enableLimit = true;
+	jointDef.lowerAngle = lowerAngle * DEGTORAD;
+	jointDef.upperAngle = upperAngle * DEGTORAD;
+
+	//Activate the motor 
+	jointDef.enableMotor = true;
+
+	//Create the joint
+	return (b2RevoluteJoint*)world->CreateJoint(&jointDef);
+}
+
+flipper ModulePhysics::CreateFlipper(int posX, int posY, int att_diameter, int flipper_chain[], int chain_size,
+	SDL_Rect flipper_rect, int lowerAngle, int upperAngle, int adjx, int adjy)
+{
+	flipper flip;
+
+	/*int PbodyDefX = posX - (flipper_rect.w / 5);
+	int PbodyDefY = posY - (flipper_rect.y + flipper_rect.h / 3);*/
+
+	/*int PbodyDefX = posX - (flipper_rect.w);
+	int PbodyDefY = posY - (flipper_rect.y + flipper_rect.h / 3);
+*/
+	
+	flip.Attacher = CreateAttacherBody(posX, posY, att_diameter);
+	flip.Pbody = CreateFlipperPbody(posX+adjx, posY+adjy, flipper_chain, chain_size);
+	flip.Rect = flipper_rect;
+	flip.Joint = CreateFlipperJoint(flip, lowerAngle, upperAngle);
+
+	return flip;
+}
+
+void ModulePhysics::FlipperSetMaxMotorTorque(flipper &flipper, float32 MaxTorque)
+{
+	flipper.Joint->SetMaxMotorTorque(MaxTorque);
+}
+
+void ModulePhysics::FlipperSetMotorSpeed(flipper &flipper, float32 MotorSpeed)
+{
+	flipper.Joint->SetMotorSpeed(MotorSpeed);
 }
