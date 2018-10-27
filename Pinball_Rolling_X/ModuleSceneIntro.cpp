@@ -26,11 +26,13 @@ bool ModuleSceneIntro::Start()
 
 	
 	Ball= App->textures->Load("Assets/Sprites/BallResized.png");
-	box = App->textures->Load("pinball/crate.png");
-	bonus_fx = App->audio->LoadFx("Assets/FX/BallhittingSound.wav");
 	StaticScene = App->textures->Load("Assets/Sprites/staticPritesWindowSize.png");
-	
 	ScoreBoard= App->textures->Load("Assets/Sprites/ScoreBoardResized.png");
+
+	BouncerTR = App->textures->Load("Assets/Sprites/RedTriangle.png");
+	BouncerCIR = App->textures->Load("Assets/Sprites/RedLightHit.png");
+	BlueBouncerLight= App->textures->Load("Assets/Sprites/BlueRect.png");
+
 
 	spriteSheet = App->textures->Load("Assets/Sprites/spriteSheet.png");
 
@@ -95,6 +97,8 @@ bool ModuleSceneIntro::Start()
 		9, fliper_up_right, 14, rightUpFlipperRect, 15 - 15, 60 - 15, -374, -327);
 
 
+	HitBall = App->audio->LoadFx("Assets/FX/BallhittingSound.wav");		//Clean UP music REMEMBER
+	BouncerSound= App->audio->LoadFx("Assets/FX/BallHitBouncers.wav");
 
 	return ret;
 }
@@ -103,6 +107,14 @@ bool ModuleSceneIntro::Start()
 bool ModuleSceneIntro::CleanUp()
 {
 	LOG("Unloading Intro scene");
+
+	
+	App->textures->Unload(Ball);
+	App->textures->Unload(StaticScene);
+	App->textures->Unload(ScoreBoard);
+	App->textures->Unload(BouncerTR);
+	App->textures->Unload(BouncerCIR);
+	App->textures->Unload(BlueBouncerLight);
 
 	return true;
 }
@@ -118,58 +130,65 @@ update_status ModuleSceneIntro::Update()
 	App->renderer->Blit(ScoreBoard, 477, 0);
 
 
+
+	if (BlitBouncer) {
+		App->renderer->Blit(BouncerTR, 283, 577);	
+		BlitBouncer = false;
+	}
+
+	if (BlitBouncerL) {
+		App->renderer->Blit(BouncerTR, 65, 577,NULL,SDL_FLIP_HORIZONTAL);
+		BlitBouncerL = false;
+	}
+
+	if (BlitBouncerLCircle) {
+
+		App->renderer->Blit(BouncerCIR, 185, 120);
+		BlitBouncerLCircle = false;
+	}
+	
+	if (BlitBouncerCircle) {
+
+		App->renderer->Blit(BouncerCIR, 253, 116);
+		BlitBouncerCircle = false;
+
+
+	App->renderer->Blit(StaticScene, 0, 0);
+	App->renderer->Blit(ScoreBoard, 477, 0);
+
+
 	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
 		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 10));
 		circles.getLast()->data->listener = this;
 	}
-
-	if (App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
-	{
-		boxes.add(App->physics->CreateRectangle(App->input->GetMouseX(), App->input->GetMouseY(), 100, 50));
+    
+	if (BlitBlueBouncer) {
+		App->renderer->Blit(BlueBouncerLight, 94, 266);
+		BlitBlueBouncer = false;
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
-	{
-		// Pivot 0, 0
-		int rick_head[64] = {
-			14, 36,
-			42, 40,
-			40, 0,
-			75, 30,
-			88, 4,
-			94, 39,
-			111, 36,
-			104, 58,
-			107, 62,
-			117, 67,
-			109, 73,
-			110, 85,
-			106, 91,
-			109, 99,
-			103, 104,
-			100, 115,
-			106, 121,
-			103, 125,
-			98, 126,
-			95, 137,
-			83, 147,
-			67, 147,
-			53, 140,
-			46, 132,
-			34, 136,
-			38, 126,
-			23, 123,
-			30, 114,
-			10, 102,
-			29, 90,
-			0, 75,
-			30, 62
-		};
 
-		ricks.add(App->physics->CreateChain(App->input->GetMouseX(), App->input->GetMouseY(), rick_head, 64));
-	}
 	// fliper controls
+
+
+
+	// Prepare for raycast ------------------------------------------------------
+	
+	iPoint mouse;
+	mouse.x = App->input->GetMouseX();
+	mouse.y = App->input->GetMouseY();
+
+	// All draw functions ------------------------------------------------------
+	p2List_item<PhysBody*>* c = circles.getFirst();
+
+	while(c != NULL)
+	{
+		int x, y;
+		c->data->GetPosition(x, y);
+		App->renderer->Blit(Ball, x, y, NULL,SDL_FLIP_NONE,1.0f, c->data->GetRotation());
+		c = c->next;
+	}
 
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN)
 	{
@@ -234,8 +253,6 @@ update_status ModuleSceneIntro::Update()
 
 
 		
-	
-	
 	//draw flipers
 	iPoint coords(112, 692);
 	/*leftFlipper.Pbody->GetPosition(coords.x, coords.y);*/
@@ -257,7 +274,6 @@ update_status ModuleSceneIntro::Update()
 
 	App->renderer->Blit(spriteSheet, coords.x - 63, coords.y - 15, &rightUpFlipper.Rect, 1.0f, rightUpFlipper.Pbody->GetRotation(), 30, rightUpFlipper.Rect.h / 2 - 13);
 
-
 	
 	//draw map
 
@@ -266,5 +282,28 @@ update_status ModuleSceneIntro::Update()
 
 void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
-	App->audio->PlayFx(bonus_fx);
+
+	if (bodyA == App->physics->Bouncer || bodyB == App->physics->Bouncer) {
+		BlitBouncer = true;
+		App->audio->PlayFx(BouncerSound);
+
+	}
+	else if (bodyA == App->physics->BouncerL || bodyB == App->physics->BouncerL) {
+		BlitBouncerL = true;
+		App->audio->PlayFx(BouncerSound);
+	}
+	else if (bodyA == App->physics->BouncerLCircle || bodyB == App->physics->BouncerLCircle) {
+		BlitBouncerLCircle = true;
+		App->audio->PlayFx(BouncerSound);
+	}
+	else if (bodyA == App->physics->BouncerCircle || bodyB == App->physics->BouncerCircle) {
+		BlitBouncerCircle = true;
+		App->audio->PlayFx(BouncerSound);
+	}
+	else if (bodyA == App->physics->BlueBouncer || bodyB == App->physics->BlueBouncer) {
+		BlitBlueBouncer = true;
+		App->audio->PlayFx(BouncerSound);
+	}
+
+	App->audio->PlayFx(HitBall);
 }
