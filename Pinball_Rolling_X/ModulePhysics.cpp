@@ -127,7 +127,7 @@ bool ModulePhysics::Start()
 	};
 
 	// Pivot 0, 0
-	int bonus_entrance[58] = {
+	int bonus_entrance[44] = {
 		119, 385,
 		103, 377,
 		62, 264,
@@ -150,14 +150,8 @@ bool ModulePhysics::Start()
 		136, 338,
 		112, 340,
 		115, 372,
-		115, 372,
-		115, 372,
-		115, 372,
-		115, 372,
-		115, 372,
-		115, 372,
-		115, 372
-	
+
+
 	};
 
 	// Pivot 0, 0
@@ -179,7 +173,7 @@ bool ModulePhysics::Start()
 	};
 
 	// Pivot -1, -1
-	int middle_pice_with_right_fliper_up[38] = {
+	int middle_pice_with_right_fliper_up[28] = {
 		345, 373,
 		355, 374,
 		389, 332,
@@ -193,14 +187,9 @@ bool ModulePhysics::Start()
 		311, 486,
 		329, 433,
 		337, 403,
-		344, 381,
-		344, 381,
-		344, 381,
-		344, 381,
-		344, 381,
 		344, 381
 	};
-	
+
 	// Pivot -1, -1
 	int right_down_base[16] = {
 		432, 858,
@@ -223,8 +212,8 @@ bool ModulePhysics::Start()
 		100, 729,
 		27, 685,
 		27, 602,
-		
-		};
+
+	};
 
 	// Pivot -1, -1
 	int middle_thing[14] = {
@@ -308,7 +297,7 @@ bool ModulePhysics::Start()
 	};
 
 
-	
+
 
 	int BlueBouncer_Coord[16] = {
 		92, 270,
@@ -323,25 +312,28 @@ bool ModulePhysics::Start()
 
 
 
-	world_parts.add(Bouncer = CreateStaticChain(0, 0, triangle_boucer_right, 14,2));
-	world_parts.add(BouncerL = CreateStaticChain(0, 0, triangle_boucer, 12,2));
-	world_parts.add(BouncerCircle = CreateStaticCircle(275, 136, 20,2));
-	world_parts.add(BouncerLCircle = CreateStaticCircle(207, 140, 20,2));
-	world_parts.add(BlueBouncer = CreateStaticChain(1,0, BlueBouncer_Coord, 16,2));
+	world_parts.add(Bouncer = CreateStaticChain(0, 0, triangle_boucer_right, 14, 2));
+	world_parts.add(BouncerL = CreateStaticChain(0, 0, triangle_boucer, 12, 2));
+	world_parts.add(BouncerCircle = CreateStaticCircle(275, 136, 20, 2));
+	world_parts.add(BouncerLCircle = CreateStaticCircle(207, 140, 20, 2));
+	world_parts.add(BlueBouncer = CreateStaticChain(1, 0, BlueBouncer_Coord, 16, 2));
 
-	world_parts.add(CreateStaticChain(0, 0, top3_path, 12));
-	world_parts.add(CreateStaticChain(0, 0, top2_path, 12));
-	world_parts.add(CreateStaticChain(0, 0, top1_path, 12));
-	world_parts.add(CreateStaticChain(0, 0, triangle_bottom_left, 6));
-	world_parts.add(CreateStaticChain(0, 1, right_down_path_to_flipper, 16));
-	world_parts.add(CreateStaticChain(0, 2, middle_thing, 14));
-	world_parts.add(CreateStaticChain(2, 1, left_down_path_to_flipper, 16));
-	world_parts.add(CreateStaticChain(2, 0, right_down_base, 16));
-	world_parts.add(CreateStaticChain(0, 0, middle_pice_with_right_fliper_up, 38));
-	world_parts.add(CreateStaticChain(0, 0, top_triangle_right, 28));
-	world_parts.add(CreateStaticChain(0, 0, bonus_entrance, 58));
-	world_parts.add(CreateStaticChain(0, 0, up_left_corner, 122));
-	
+	world_parts.add(CreateStaticChain(0, 0, top3_path, 12, 0));
+	world_parts.add(CreateStaticChain(0, 0, top2_path, 12, 0));
+	world_parts.add(CreateStaticChain(0, 0, top1_path, 12, 0));
+
+	world_parts.add(CreateStaticChain(0, 0, triangle_bottom_left, 6, 0));
+	world_parts.add(CreateStaticChain(0, 1, right_down_path_to_flipper, 16, 0));
+	world_parts.add(CreateStaticChain(0, 2, middle_thing, 14, 0));
+	world_parts.add(CreateStaticChain(2, 1, left_down_path_to_flipper, 16, 0));
+	world_parts.add(CreateStaticChain(2, 0, right_down_base, 16, 0));
+
+	world_parts.add(CreateStaticChain(0, 0, middle_pice_with_right_fliper_up, 28, 0));
+	world_parts.add(CreateStaticChain(0, 0, bonus_entrance, 44, 0));
+
+	world_parts.add(CreateStaticChain(0, 0, top_triangle_right, 28, 0));
+	world_parts.add(CreateStaticChain(0, 0, up_left_corner, 122, 0));
+
 	return true;
 }
 
