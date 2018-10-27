@@ -335,16 +335,14 @@ bool ModulePhysics::Start()
 	151, 303
 	};
 
-	Bouncer = CreateStaticChain(1, 0, triangle_boucer_right, 6);
-	BouncerL = CreateStaticChain(1, 0, triangle_boucer, 6);
-	BouncerCircle = CreateStaticCircle(275, 136, 20);
-	BouncerLCircle = CreateStaticCircle(207, 140, 20);
-	BlueBouncer = CreateStaticChain(1,0, BlueBouncer_Coord, 12);
 
-	world_parts.add(CreateStaticChain(1, 0, fliper_down_left, 16));
-	world_parts.add(CreateStaticChain(1, 0, fliper_down_right, 16));
-	world_parts.add(CreateStaticChain(1, 0, fliper_up_right, 14));
-	world_parts.add(CreateStaticChain(1, 0, fliper_up_left, 14));
+
+	world_parts.add(Bouncer = CreateStaticChain(1, 0, triangle_boucer_right, 6));
+	world_parts.add(BouncerL = CreateStaticChain(1, 0, triangle_boucer, 6));
+	world_parts.add(BouncerCircle = CreateStaticCircle(275, 136, 20));
+	world_parts.add(BouncerLCircle = CreateStaticCircle(207, 140, 20));
+	world_parts.add(BlueBouncer = CreateStaticChain(1,0, BlueBouncer_Coord, 12));
+
 	world_parts.add(CreateStaticChain(1, 0, top3_path, 12));
 	world_parts.add(CreateStaticChain(1, 0, top2_path, 12));
 	world_parts.add(CreateStaticChain(1, 0, top1_path, 12));
