@@ -62,40 +62,39 @@ bool ModulePhysics::Start()
 		center 2
 		277, 135*/
 	// Pivot 0, 0
-	int up_left_corner[120] = {
-		26, 537,
+	int up_left_corner[122] = {
 		27, 486,
 		60, 400,
 		21, 279,
 		5, 202,
 		0, 42,
 		12, 23,
-		28, 15,
-		52, 17,
+		28, 20,
+		49, 22,
 		65, 38,
 		67, 86,
 		70, 143,
-		77, 179,
-		88, 217,
-		93, 219,
-		93, 211,
-		82, 177,
+		76, 180,
+		87, 220,
+		92, 220,
+		91, 213,
+		81, 179,
 		76, 143,
 		72, 98,
 		70, 71,
-		71, 40,
+		69, 42,
 		69, 17,
 		80, 4,
 		97, 4,
-		109, 13,
-		111, 36,
-		112, 70,
+		107, 14,
+		108, 36,
+		111, 69,
 		113, 102,
 		118, 120,
 		121, 133,
-		132, 158,
-		139, 170,
-		143, 161,
+		136, 169,
+		144, 171,
+		129, 143,
 		121, 116,
 		116, 86,
 		117, 57,
@@ -104,11 +103,11 @@ bool ModulePhysics::Start()
 		161, 1,
 		178, 1,
 		202, 0,
-		226, 2,
+		227, -1,
 		255, 0,
 		282, 0,
-		301, 3,
-		327, 6,
+		303, 0,
+		335, 5,
 		370, 19,
 		388, 30,
 		409, 48,
@@ -122,33 +121,43 @@ bool ModulePhysics::Start()
 		475, -1,
 		-2, -1,
 		-1, 570,
-		19, 544
+		8, 556,
+		24, 540,
+		24, 497
 	};
 
 	// Pivot 0, 0
-	int bonus_entrance[44] = {
+	int bonus_entrance[58] = {
 		119, 385,
 		103, 377,
-		60, 263,
-		35, 172,
-		30, 58,
+		62, 264,
+		35, 176,
+		31, 58,
 		36, 60,
-		40, 171,
+		40, 174,
 		65, 258,
-		239, 342,
-		239, 366,
-		296, 384,
-		273, 468,
-		268, 459,
-		285, 410,
-		267, 387,
-		244, 391,
-		234, 430,
-		169, 397,
-		158, 356,
-		140, 339,
-		114, 334,
+		238, 346,
+		241, 370,
+		296, 385,
+		279, 453,
+		270, 469,
+		288, 409,
+		271, 391,
+		245, 391,
+		233, 433,
+		167, 401,
+		160, 353,
+		136, 338,
+		112, 340,
+		115, 372,
+		115, 372,
+		115, 372,
+		115, 372,
+		115, 372,
+		115, 372,
+		115, 372,
 		115, 372
+	
 	};
 
 	// Pivot 0, 0
@@ -170,66 +179,74 @@ bool ModulePhysics::Start()
 	};
 
 	// Pivot -1, -1
-	int middle_pice_with_right_fliper_up[28] = {
+	int middle_pice_with_right_fliper_up[38] = {
 		345, 373,
-		354, 369,
-		388, 329,
-		387, 317,
-		376, 304,
+		355, 374,
+		389, 332,
+		391, 321,
+		377, 308,
 		415, 231,
-		409, 305,
+		413, 281,
 		398, 338,
 		376, 378,
 		341, 438,
-		310, 484,
+		311, 486,
 		329, 433,
 		337, 403,
+		344, 381,
+		344, 381,
+		344, 381,
+		344, 381,
+		344, 381,
 		344, 381
 	};
 	
 	// Pivot -1, -1
-	int right_down_base[14] = {
-		433, 366,
-		432, 818,
-		260, 820,
-		402, 733,
+	int right_down_base[16] = {
+		432, 858,
+		256, 860,
+		257, 823,
+		402, 735,
 		400, 569,
 		361, 517,
-		427, 370
+		431, 365,
+		432, 839
 	};
 
 	// Pivot -1, -1
 	int left_down_path_to_flipper[16] = {
 		31, 597,
 		33, 602,
-		35, 679,
-		109, 726,
-		111, 732,
-		102, 732,
+		34, 682,
+		106, 725,
+		109, 732,
+		100, 729,
 		27, 685,
-		27, 602
+		27, 602,
+		
 		};
 
 	// Pivot -1, -1
-	int middle_thing[12] = {
-		188, 821,
-		188, 814,
-		192, 808,
-		204, 808,
-		208, 814,
-		208, 822
+	int middle_thing[14] = {
+		189, 817,
+		193, 810,
+		203, 810,
+		207, 815,
+		206, 829,
+		189, 830,
+		188, 822
 	};
 
 	// Pivot -1, -1
 	int right_down_path_to_flipper[16] = {
+		370, 598,
 		367, 602,
-		366, 679,
-		289, 726,
-		289, 731,
-		296, 731,
-		370, 684,
-		372, 601,
-		367, 595
+		366, 682,
+		293, 726,
+		288, 734,
+		302, 727,
+		371, 684,
+		372, 603
 	};
 
 	// Pivot 1, 0
@@ -241,22 +258,22 @@ bool ModulePhysics::Start()
 
 	// Pivot 1, 0
 	int top1_path[12] = {
-		208, 81,
-		208, 46,
-		204, 41,
-		200, 46,
-		200, 80,
-		204, 85
+		206, 81,
+		206, 48,
+		203, 43,
+		201, 46,
+		201, 80,
+		204, 85,
 	};
 
 	// Pivot 1, 0
 	int top2_path[12] = {
-		235, 76,
-		235, 39,
+		236, 76,
+		235, 40,
 		239, 37,
-		244, 40,
-		244, 76,
-		241, 82
+		242, 40,
+		242, 74,
+		241, 79
 	};
 
 	// Pivot 1, 0
@@ -270,94 +287,60 @@ bool ModulePhysics::Start()
 	};
 
 	// Pivot 1, 0
-	int triangle_boucer[6] = {
-		123, 694,
-		65, 556,
-		65, 662
+	int triangle_boucer[12] = {
+		115, 678,
+		75, 583,
+		66, 581,
+		67, 664,
+		112, 688,
+		116, 683
 	};
 
 	// Pivot 1, 0
-	int triangle_boucer_right[6] = {
-		276, 696,
-		336, 552,
-		336, 660
+	int triangle_boucer_right[14] = {
+		284, 680,
+		326, 581,
+		330, 580,
+		335, 584,
+		334, 662,
+		291, 686,
+		284, 686
 	};
 
-	// Pivot 1, 0
-	int fliper_up_left[14] = {
-		298, 370,
-		255, 348,
-		243, 348,
-		242, 359,
-		246, 364,
-		294, 377,
-		300, 375
-	};
 
-	// Pivot 1, 0
-	int fliper_up_right[14] = {
-		370, 317,
-		348, 365,
-		350, 371,
-		354, 369,
-		384, 330,
-		384, 321,
-		378, 315
-	};
+	
 
-	// Pivot 1, 0
-	int fliper_down_right[16] = {
-		271, 739,
-		225, 772,
-		225, 781,
-		230, 781,
-		285, 757,
-		289, 749,
-		288, 740,
-		280, 735
-	};
-
-	// Pivot 1, 0
-	int fliper_down_left[16] = {
-		128, 736,
-		175, 772,
-		174, 780,
-		169, 781,
-		114, 757,
-		110, 749,
-		111, 742,
-		119, 736
-	};
-
-	int BlueBouncer_Coord[12] = {
-	91, 274,
-	97, 267,
-	105, 270,
-	132, 283,
-	153, 294,
-	151, 303
+	int BlueBouncer_Coord[16] = {
+		92, 270,
+		95, 266,
+		100, 265,
+		149, 290,
+		152, 294,
+		152, 298,
+		149, 298,
+		94, 272
 	};
 
 
 
-	world_parts.add(Bouncer = CreateStaticChain(1, 0, triangle_boucer_right, 6));
-	world_parts.add(BouncerL = CreateStaticChain(1, 0, triangle_boucer, 6));
-	world_parts.add(BouncerCircle = CreateStaticCircle(275, 136, 20));
-	world_parts.add(BouncerLCircle = CreateStaticCircle(207, 140, 20));
-	world_parts.add(BlueBouncer = CreateStaticChain(1,0, BlueBouncer_Coord, 12));
+	world_parts.add(Bouncer = CreateStaticChain(0, 0, triangle_boucer_right, 14,2));
+	world_parts.add(BouncerL = CreateStaticChain(0, 0, triangle_boucer, 12,2));
+	world_parts.add(BouncerCircle = CreateStaticCircle(275, 136, 20,2));
+	world_parts.add(BouncerLCircle = CreateStaticCircle(207, 140, 20,2));
+	world_parts.add(BlueBouncer = CreateStaticChain(1,0, BlueBouncer_Coord, 16,2));
 
-	world_parts.add(CreateStaticChain(1, 0, top3_path, 12));
-	world_parts.add(CreateStaticChain(1, 0, top2_path, 12));
-	world_parts.add(CreateStaticChain(1, 0, top1_path, 12));
-	world_parts.add(CreateStaticChain(1, 0, triangle_bottom_left, 6));
-	world_parts.add(CreateStaticChain(-1, 1, right_down_path_to_flipper, 16));
-	world_parts.add(CreateStaticChain(-1, 1, middle_thing, 12));
-	world_parts.add(CreateStaticChain(-1, 1, left_down_path_to_flipper, 16));
-	world_parts.add(CreateStaticChain(-1, 1, right_down_base, 14));
-	world_parts.add(CreateStaticChain(-1, 1, middle_pice_with_right_fliper_up, 28));
+	world_parts.add(CreateStaticChain(0, 0, top3_path, 12));
+	world_parts.add(CreateStaticChain(0, 0, top2_path, 12));
+	world_parts.add(CreateStaticChain(0, 0, top1_path, 12));
+	world_parts.add(CreateStaticChain(0, 0, triangle_bottom_left, 6));
+	world_parts.add(CreateStaticChain(0, 1, right_down_path_to_flipper, 16));
+	world_parts.add(CreateStaticChain(0, 2, middle_thing, 14));
+	world_parts.add(CreateStaticChain(2, 1, left_down_path_to_flipper, 16));
+	world_parts.add(CreateStaticChain(2, 0, right_down_base, 16));
+	world_parts.add(CreateStaticChain(0, 0, middle_pice_with_right_fliper_up, 38));
 	world_parts.add(CreateStaticChain(0, 0, top_triangle_right, 28));
-	world_parts.add(CreateStaticChain(0, 0, bonus_entrance, 44));
-	world_parts.add(CreateStaticChain(0, 0, up_left_corner, 120));
+	world_parts.add(CreateStaticChain(0, 0, bonus_entrance, 58));
+	world_parts.add(CreateStaticChain(0, 0, up_left_corner, 122));
 	
 	return true;
 }
@@ -405,7 +388,7 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius)
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateStaticCircle(int x, int y, int radius)
+PhysBody* ModulePhysics::CreateStaticCircle(int x, int y, int radius,int resti)
 {
 	b2BodyDef body;
 	body.type = b2_staticBody;
@@ -418,7 +401,7 @@ PhysBody* ModulePhysics::CreateStaticCircle(int x, int y, int radius)
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
 	fixture.density = 1.0f;
-
+	fixture.restitution = resti;
 	b->CreateFixture(&fixture);
 
 	PhysBody* pbody = new PhysBody();
@@ -515,7 +498,7 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size)
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateStaticChain(int x, int y, int* points, int size)
+PhysBody* ModulePhysics::CreateStaticChain(int x, int y, int* points, int size,int resti)
 {
 	b2BodyDef body;
 	body.type = b2_staticBody;
@@ -535,7 +518,10 @@ PhysBody* ModulePhysics::CreateStaticChain(int x, int y, int* points, int size)
 	shape.CreateLoop(p, size / 2);
 
 	b2FixtureDef fixture;
+	fixture.restitution = resti;
+	fixture.density = 1.0f;
 	fixture.shape = &shape;
+	
 
 	b->CreateFixture(&fixture);
 

@@ -45,11 +45,11 @@ public:
 	bool CleanUp();
 
 	PhysBody* CreateCircle(int x, int y, int radius);
-	PhysBody*CreateStaticCircle(int x, int y, int radius);
+	PhysBody*CreateStaticCircle(int x, int y, int radius, int resti);
 	PhysBody* CreateRectangle(int x, int y, int width, int height);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height);
 	PhysBody* CreateChain(int x, int y, int* points, int size);
-	PhysBody* CreateStaticChain(int x, int y, int* points, int size);
+	PhysBody* CreateStaticChain(int x, int y, int* points, int size, int resti = 0);
 
 	PhysBody* Bouncer = nullptr;
 	PhysBody*BouncerL = nullptr;
