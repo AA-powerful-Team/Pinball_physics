@@ -30,12 +30,17 @@ public:
 	SDL_Texture*StaticScene;
 	SDL_Texture*ScoreBoard;
 	SDL_Texture*BouncerTR;
+	SDL_Texture*BouncerCIR;
+	SDL_Texture*BlueBouncerLight;
 
 	uint HitBall;
 	uint BouncerSound;
 
 	bool BlitBouncer=false;
 	bool BlitBouncerL =false;
+	bool BlitBouncerCircle = false;
+	bool BlitBouncerLCircle = false;
+	bool BlitBlueBouncer = false;
 
 	int start_time;
 	

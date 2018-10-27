@@ -28,6 +28,8 @@ bool ModuleSceneIntro::Start()
 	StaticScene = App->textures->Load("Assets/Sprites/staticPritesWindowSize.png");
 	ScoreBoard= App->textures->Load("Assets/Sprites/ScoreBoardResized.png");
 	BouncerTR = App->textures->Load("Assets/Sprites/RedTriangle.png");
+	BouncerCIR = App->textures->Load("Assets/Sprites/RedLightHit.png");
+	BlueBouncerLight= App->textures->Load("Assets/Sprites/BlueRect.png");
 
 	HitBall = App->audio->LoadFx("Assets/FX/BallhittingSound.wav");		//Clean UP music REMEMBER
 	BouncerSound= App->audio->LoadFx("Assets/FX/BallHitBouncers.wav");
@@ -45,8 +47,8 @@ bool ModuleSceneIntro::CleanUp()
 	App->textures->Unload(StaticScene);
 	App->textures->Unload(ScoreBoard);
 	App->textures->Unload(BouncerTR);
-	
-
+	App->textures->Unload(BouncerCIR);
+	App->textures->Unload(BlueBouncerLight);
 
 	return true;
 }
@@ -69,8 +71,25 @@ update_status ModuleSceneIntro::Update()
 	}
 
 	if (BlitBouncerL) {
-		App->renderer->Blit(BouncerTR, 144, 577);
+		App->renderer->Blit(BouncerTR, 65, 577,NULL,SDL_FLIP_HORIZONTAL);
 		BlitBouncerL = false;
+	}
+
+	if (BlitBouncerLCircle) {
+
+		App->renderer->Blit(BouncerCIR, 185, 120);
+		BlitBouncerLCircle = false;
+	}
+	
+	if (BlitBouncerCircle) {
+
+		App->renderer->Blit(BouncerCIR, 253, 116);
+		BlitBouncerCircle = false;
+	}
+	if (BlitBlueBouncer) {
+
+		App->renderer->Blit(BlueBouncerLight, 94, 266);
+		BlitBlueBouncer = false;
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
@@ -96,7 +115,7 @@ update_status ModuleSceneIntro::Update()
 	{
 		int x, y;
 		c->data->GetPosition(x, y);
-		App->renderer->Blit(Ball, x, y, NULL, 1.0f, c->data->GetRotation());
+		App->renderer->Blit(Ball, x, y, NULL,SDL_FLIP_NONE,1.0f, c->data->GetRotation());
 		c = c->next;
 	}
 
@@ -112,8 +131,20 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		App->audio->PlayFx(BouncerSound);
 
 	}
-	if (bodyA == App->physics->BouncerL || bodyB == App->physics->BouncerL) {
+	else if (bodyA == App->physics->BouncerL || bodyB == App->physics->BouncerL) {
 		BlitBouncerL = true;
+		App->audio->PlayFx(BouncerSound);
+	}
+	else if (bodyA == App->physics->BouncerLCircle || bodyB == App->physics->BouncerLCircle) {
+		BlitBouncerLCircle = true;
+		App->audio->PlayFx(BouncerSound);
+	}
+	else if (bodyA == App->physics->BouncerCircle || bodyB == App->physics->BouncerCircle) {
+		BlitBouncerCircle = true;
+		App->audio->PlayFx(BouncerSound);
+	}
+	else if (bodyA == App->physics->BlueBouncer || bodyB == App->physics->BlueBouncer) {
+		BlitBlueBouncer = true;
 		App->audio->PlayFx(BouncerSound);
 	}
 

@@ -326,25 +326,37 @@ bool ModulePhysics::Start()
 		119, 736
 	};
 
+	int BlueBouncer_Coord[12] = {
+	91, 274,
+	97, 267,
+	105, 270,
+	132, 283,
+	153, 294,
+	151, 303
+	};
 
-	world_parts.add(App->physics->CreateStaticChain(1, 0, fliper_down_left, 16));
-	world_parts.add(App->physics->CreateStaticChain(1, 0, fliper_down_right, 16));
-	world_parts.add(App->physics->CreateStaticChain(1, 0, fliper_up_right, 14));
-	world_parts.add(App->physics->CreateStaticChain(1, 0, fliper_up_left, 14));
-	Bouncer = App->physics->CreateStaticChain(1, 0, triangle_boucer_right, 6);
-	BouncerL = App->physics->CreateStaticChain(1, 0, triangle_boucer, 6);
-	world_parts.add(App->physics->CreateStaticChain(1, 0, top3_path, 12));
-	world_parts.add(App->physics->CreateStaticChain(1, 0, top2_path, 12));
-	world_parts.add(App->physics->CreateStaticChain(1, 0, top1_path, 12));
-	world_parts.add(App->physics->CreateStaticChain(1, 0, triangle_bottom_left, 6));
-	world_parts.add(App->physics->CreateStaticChain(-1, 1, right_down_path_to_flipper, 16));
-	world_parts.add(App->physics->CreateStaticChain(-1, 1, middle_thing, 12));
-	world_parts.add(App->physics->CreateStaticChain(-1, 1, left_down_path_to_flipper, 16));
-	world_parts.add(App->physics->CreateStaticChain(-1, 1, right_down_base, 14));
-	world_parts.add(App->physics->CreateStaticChain(-1, 1, middle_pice_with_right_fliper_up, 28));
-	world_parts.add(App->physics->CreateStaticChain(0, 0, top_triangle_right, 28));
-	world_parts.add(App->physics->CreateStaticChain(0, 0, bonus_entrance, 44));
-	world_parts.add(App->physics->CreateStaticChain(0, 0, up_left_corner, 120));
+	Bouncer = CreateStaticChain(1, 0, triangle_boucer_right, 6);
+	BouncerL = CreateStaticChain(1, 0, triangle_boucer, 6);
+	BouncerCircle = CreateStaticCircle(275, 136, 20);
+	BouncerLCircle = CreateStaticCircle(207, 140, 20);
+	BlueBouncer = CreateStaticChain(1,0, BlueBouncer_Coord, 12);
+
+	world_parts.add(CreateStaticChain(1, 0, fliper_down_left, 16));
+	world_parts.add(CreateStaticChain(1, 0, fliper_down_right, 16));
+	world_parts.add(CreateStaticChain(1, 0, fliper_up_right, 14));
+	world_parts.add(CreateStaticChain(1, 0, fliper_up_left, 14));
+	world_parts.add(CreateStaticChain(1, 0, top3_path, 12));
+	world_parts.add(CreateStaticChain(1, 0, top2_path, 12));
+	world_parts.add(CreateStaticChain(1, 0, top1_path, 12));
+	world_parts.add(CreateStaticChain(1, 0, triangle_bottom_left, 6));
+	world_parts.add(CreateStaticChain(-1, 1, right_down_path_to_flipper, 16));
+	world_parts.add(CreateStaticChain(-1, 1, middle_thing, 12));
+	world_parts.add(CreateStaticChain(-1, 1, left_down_path_to_flipper, 16));
+	world_parts.add(CreateStaticChain(-1, 1, right_down_base, 14));
+	world_parts.add(CreateStaticChain(-1, 1, middle_pice_with_right_fliper_up, 28));
+	world_parts.add(CreateStaticChain(0, 0, top_triangle_right, 28));
+	world_parts.add(CreateStaticChain(0, 0, bonus_entrance, 44));
+	world_parts.add(CreateStaticChain(0, 0, up_left_corner, 120));
 	
 	return true;
 }
@@ -372,6 +384,30 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius)
 {
 	b2BodyDef body;
 	body.type = b2_dynamicBody;
+	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+	b2Body* b = world->CreateBody(&body);
+
+	b2CircleShape shape;
+	shape.m_radius = PIXEL_TO_METERS(radius);
+	b2FixtureDef fixture;
+	fixture.shape = &shape;
+	fixture.density = 1.0f;
+
+	b->CreateFixture(&fixture);
+
+	PhysBody* pbody = new PhysBody();
+	pbody->body = b;
+	b->SetUserData(pbody);
+	pbody->width = pbody->height = radius;
+
+	return pbody;
+}
+
+PhysBody* ModulePhysics::CreateStaticCircle(int x, int y, int radius)
+{
+	b2BodyDef body;
+	body.type = b2_staticBody;
 	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
 
 	b2Body* b = world->CreateBody(&body);
