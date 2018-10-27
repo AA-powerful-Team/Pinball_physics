@@ -4,6 +4,8 @@
 #include "p2Point.h"
 #include "Globals.h"
 
+
+
 class PhysBody;
 struct b2Body;
 struct b2RevoluteJoint;
@@ -36,6 +38,7 @@ public:
 	bool PrintStaticElements = true;
 
 public:
+
 	p2List<PhysBody*> circles;
 	p2List<PhysBody*> boxes;
 	p2List<PhysBody*> ricks;
@@ -48,6 +51,21 @@ public:
 	SDL_Texture*BouncerTR;
 	SDL_Texture*BouncerCIR;
 	SDL_Texture*BlueBouncerLight;
+	SDL_Texture* spriteSheet;
+	//flippers
+
+	flipper rightFlipper;
+	SDL_Rect rightFlipperRect;
+
+	flipper leftFlipper;
+	SDL_Rect leftFlipperRect;
+
+	flipper rightUpFlipper;
+	SDL_Rect rightUpFlipperRect;
+
+	flipper leftUpFlipper;
+	SDL_Rect leftUpFlipperRect;
+
 
 	uint HitBall;
 	uint BouncerSound;
@@ -59,25 +77,6 @@ public:
 	bool BlitBlueBouncer = false;
 
 	int start_time;
-	
-
-
-	uint bonus_fx;
-	SDL_Texture* spriteSheet;
-
-	//flippers
-	
-	flipper rightFlipper;
-	SDL_Rect rightFlipperRect;
-
-	flipper leftFlipper;
-	SDL_Rect leftFlipperRect;
-	
-	flipper rightUpFlipper;
-	SDL_Rect rightUpFlipperRect;
-
-	flipper leftUpFlipper;
-	SDL_Rect leftUpFlipperRect;
 	
 
 };

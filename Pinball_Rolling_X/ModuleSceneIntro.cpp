@@ -6,7 +6,6 @@
 #include "ModuleTextures.h"
 #include "ModuleAudio.h"
 #include "ModulePhysics.h"
-#include "ChainPoints.h"
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -28,10 +27,12 @@ bool ModuleSceneIntro::Start()
 	Ball= App->textures->Load("Assets/Sprites/BallResized.png");
 	StaticScene = App->textures->Load("Assets/Sprites/staticPritesWindowSize.png");
 	ScoreBoard= App->textures->Load("Assets/Sprites/ScoreBoardResized.png");
-
 	BouncerTR = App->textures->Load("Assets/Sprites/RedTriangle.png");
 	BouncerCIR = App->textures->Load("Assets/Sprites/RedLightHit.png");
 	BlueBouncerLight= App->textures->Load("Assets/Sprites/BlueRect.png");
+
+	HitBall = App->audio->LoadFx("Assets/FX/BallhittingSound.wav");		//Clean UP music REMEMBER
+	BouncerSound= App->audio->LoadFx("Assets/FX/BallHitBouncers.wav");
 
 
 	spriteSheet = App->textures->Load("Assets/Sprites/spriteSheet.png");
@@ -46,7 +47,7 @@ bool ModuleSceneIntro::Start()
 		288, 740,
 		280, 735
 	};
-	
+
 	// Pivot 1, 0
 	int fliper_down_left[16] = {
 		128, 736,
@@ -68,7 +69,7 @@ bool ModuleSceneIntro::Start()
 		294, 377,
 		300, 375
 	};
-	
+
 	// Pivot 1, 0
 	int fliper_up_right[14] = {
 		370, 317,
@@ -82,11 +83,11 @@ bool ModuleSceneIntro::Start()
 	
 	leftFlipperRect = { 0,78,63,43 };
 	leftFlipper = App->physics->CreateFlipper(120, 748,
-		9, fliper_down_left, 16, leftFlipperRect, -45, 0, -120,-747);
+		9, fliper_down_left, 16, leftFlipperRect, -45, 0, -120, -747);
 
 	rightFlipperRect = { 71,78,63,43 };
 	rightFlipper = App->physics->CreateFlipper(280, 748,
-		9, fliper_down_right, 16, rightFlipperRect, 15-15, 60-15, -280 , -747);
+		9, fliper_down_right, 16, rightFlipperRect, 15 - 15, 60 - 15, -280, -747);
 
 	leftUpFlipperRect = { 0,0,60,32 };
 	leftUpFlipper = App->physics->CreateFlipper(254, 356,
@@ -95,10 +96,6 @@ bool ModuleSceneIntro::Start()
 	rightUpFlipperRect = { 101, 0, 38, 57 };
 	rightUpFlipper = App->physics->CreateFlipper(374, 327,
 		9, fliper_up_right, 14, rightUpFlipperRect, 15 - 15, 60 - 15, -374, -327);
-
-
-	HitBall = App->audio->LoadFx("Assets/FX/BallhittingSound.wav");		//Clean UP music REMEMBER
-	BouncerSound= App->audio->LoadFx("Assets/FX/BallHitBouncers.wav");
 
 	return ret;
 }
@@ -151,44 +148,20 @@ update_status ModuleSceneIntro::Update()
 
 		App->renderer->Blit(BouncerCIR, 253, 116);
 		BlitBouncerCircle = false;
+	}
+	if (BlitBlueBouncer) {
 
-
-	App->renderer->Blit(StaticScene, 0, 0);
-	App->renderer->Blit(ScoreBoard, 477, 0);
-
+		App->renderer->Blit(BlueBouncerLight, 94, 266);
+		BlitBlueBouncer = false;
+	}
 
 	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
 		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 10));
 		circles.getLast()->data->listener = this;
 	}
-    
-	if (BlitBlueBouncer) {
-		App->renderer->Blit(BlueBouncerLight, 94, 266);
-		BlitBlueBouncer = false;
-	}
-
 
 	// fliper controls
-
-
-
-	// Prepare for raycast ------------------------------------------------------
-	
-	iPoint mouse;
-	mouse.x = App->input->GetMouseX();
-	mouse.y = App->input->GetMouseY();
-
-	// All draw functions ------------------------------------------------------
-	p2List_item<PhysBody*>* c = circles.getFirst();
-
-	while(c != NULL)
-	{
-		int x, y;
-		c->data->GetPosition(x, y);
-		App->renderer->Blit(Ball, x, y, NULL,SDL_FLIP_NONE,1.0f, c->data->GetRotation());
-		c = c->next;
-	}
 
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN)
 	{
@@ -211,7 +184,6 @@ update_status ModuleSceneIntro::Update()
 		App->physics->FlipperSetMaxMotorTorque(leftUpFlipper, 0.0f);
 		App->physics->FlipperSetMotorSpeed(leftUpFlipper, 0.0f);
 	}
-
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN)
 	{
 		App->physics->FlipperSetMaxMotorTorque(rightFlipper, 25.0f);
@@ -234,48 +206,46 @@ update_status ModuleSceneIntro::Update()
 		App->physics->FlipperSetMaxMotorTorque(rightUpFlipper, 0.0f);
 		App->physics->FlipperSetMotorSpeed(rightUpFlipper, 0.0f);
 	}
-		// Prepare for raycast ------------------------------------------------------
 
-		iPoint mouse;
-		mouse.x = App->input->GetMouseX();
-		mouse.y = App->input->GetMouseY();
+	
+	
+	iPoint mouse;
+	mouse.x = App->input->GetMouseX();
+	mouse.y = App->input->GetMouseY();
 
-		// All draw functions ------------------------------------------------------
-		p2List_item<PhysBody*>* c = circles.getFirst();
+	// All draw functions ------------------------------------------------------
+	p2List_item<PhysBody*>* c = circles.getFirst();
 
-		while (c != NULL)
-		{
-			int x, y;
-			c->data->GetPosition(x, y);
-			App->renderer->Blit(Ball, x, y, NULL, 1.0f, c->data->GetRotation());
-			c = c->next;
-		}
-
-
-		
+	while(c != NULL)
+	{
+		int x, y;
+		c->data->GetPosition(x, y);
+		App->renderer->Blit(Ball, x, y, NULL,SDL_FLIP_NONE,1.0f, c->data->GetRotation());
+		c = c->next;
+	}
+	
 	//draw flipers
 	iPoint coords(112, 692);
-	/*leftFlipper.Pbody->GetPosition(coords.x, coords.y);*/
 
-	App->renderer->Blit(spriteSheet, coords.x, coords.y + leftFlipper.Rect.h, &leftFlipper.Rect, 1.0f, leftFlipper.Pbody->GetRotation(), 10, leftFlipper.Rect.h / 2 -15);
+	App->renderer->Blit(spriteSheet, coords.x, coords.y + leftFlipper.Rect.h, &leftFlipper.Rect,SDL_FLIP_NONE, 1.0f, leftFlipper.Pbody->GetRotation(), 10, leftFlipper.Rect.h / 2 - 15);
 
-	coords.x= 290;
-	coords.y= 750;
+	coords.x = 290;
+	coords.y = 750;
 
-	App->renderer->Blit(spriteSheet, coords.x-63, coords.y -15, &rightFlipper.Rect, 1.0f, rightFlipper.Pbody->GetRotation(), 55, rightFlipper.Rect.h/2 - 7 );
-	
+	App->renderer->Blit(spriteSheet, coords.x - 63, coords.y - 15, &rightFlipper.Rect, SDL_FLIP_NONE, 1.0f, rightFlipper.Pbody->GetRotation(), 55, rightFlipper.Rect.h / 2 - 7);
+
 	coords.x = 240;
-	coords.y = 315; 
+	coords.y = 315;
 
-	App->renderer->Blit(spriteSheet, coords.x, coords.y + leftUpFlipper.Rect.h, &leftUpFlipper.Rect, 1.0f, leftUpFlipper.Pbody->GetRotation(), 10, leftUpFlipper.Rect.h / 2 - 15);
+	App->renderer->Blit(spriteSheet, coords.x, coords.y + leftUpFlipper.Rect.h, &leftUpFlipper.Rect, SDL_FLIP_NONE, 1.0f, leftUpFlipper.Pbody->GetRotation(), 10, leftUpFlipper.Rect.h / 2 - 15);
 
 	coords.x = 410;
-	coords.y = 330; 
+	coords.y = 330;
 
-	App->renderer->Blit(spriteSheet, coords.x - 63, coords.y - 15, &rightUpFlipper.Rect, 1.0f, rightUpFlipper.Pbody->GetRotation(), 30, rightUpFlipper.Rect.h / 2 - 13);
+	App->renderer->Blit(spriteSheet, coords.x - 63, coords.y - 15, &rightUpFlipper.Rect, SDL_FLIP_NONE, 1.0f, rightUpFlipper.Pbody->GetRotation(), 30, rightUpFlipper.Rect.h / 2 - 13);
 
-	
-	//draw map
+
+
 
 	return UPDATE_CONTINUE;
 }

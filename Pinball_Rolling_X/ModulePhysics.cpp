@@ -5,8 +5,9 @@
 #include "ModulePhysics.h"
 #include "p2Point.h"
 #include "math.h"
-#include "ChainPoints.h"
+//#include "ChainPoints.h"
 #include "ModuleSceneIntro.h"
+
 
 #ifdef _DEBUG
 #pragma comment( lib, "Box2D/libx86/Debug/Box2D.lib" )
@@ -61,7 +62,6 @@ bool ModulePhysics::Start()
 		center 2
 		277, 135*/
 	// Pivot 0, 0
-	
 	int up_left_corner[120] = {
 		26, 537,
 		27, 486,
@@ -186,7 +186,7 @@ bool ModulePhysics::Start()
 		337, 403,
 		344, 381
 	};
-
+	
 	// Pivot -1, -1
 	int right_down_base[14] = {
 		433, 366,
@@ -208,7 +208,7 @@ bool ModulePhysics::Start()
 		102, 732,
 		27, 685,
 		27, 602
-	};
+		};
 
 	// Pivot -1, -1
 	int middle_thing[12] = {
@@ -329,7 +329,6 @@ bool ModulePhysics::Start()
 		119, 736
 	};
 
-
 	int BlueBouncer_Coord[12] = {
 	91, 274,
 	97, 267,
@@ -360,7 +359,6 @@ bool ModulePhysics::Start()
 	world_parts.add(CreateStaticChain(0, 0, bonus_entrance, 44));
 	world_parts.add(CreateStaticChain(0, 0, up_left_corner, 120));
 	
-
 	return true;
 }
 
@@ -766,6 +764,7 @@ int PhysBody::RayCast(int x1, int y1, int x2, int y2, float& normal_x, float& no
 	return ret;
 }
 
+
 void ModulePhysics::BeginContact(b2Contact* contact)
 {
 	PhysBody* physA = (PhysBody*)contact->GetFixtureA()->GetBody()->GetUserData();
@@ -805,9 +804,9 @@ PhysBody* ModulePhysics::CreateFlipperPbody(int x, int y, int* points, int size)
 	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
 
 	b2Body* b = world->CreateBody(&body);
-	b2PolygonShape box; 
+	b2PolygonShape box;
 
-	//creating the shape					
+	//creating the shape
 	b2Vec2* chain = new b2Vec2[size / 2];
 
 	for (uint i = 0; i < size / 2; ++i)
@@ -853,20 +852,16 @@ b2RevoluteJoint* ModulePhysics::CreateFlipperJoint(const flipper &flipper, int l
 	return (b2RevoluteJoint*)world->CreateJoint(&jointDef);
 }
 
+
 flipper ModulePhysics::CreateFlipper(int posX, int posY, int att_diameter, int flipper_chain[], int chain_size,
 	SDL_Rect flipper_rect, int lowerAngle, int upperAngle, int adjx, int adjy)
 {
 	flipper flip;
 
-	/*int PbodyDefX = posX - (flipper_rect.w / 5);
-	int PbodyDefY = posY - (flipper_rect.y + flipper_rect.h / 3);*/
 
-	/*int PbodyDefX = posX - (flipper_rect.w);
-	int PbodyDefY = posY - (flipper_rect.y + flipper_rect.h / 3);
-*/
-	
+
 	flip.Attacher = CreateAttacherBody(posX, posY, att_diameter);
-	flip.Pbody = CreateFlipperPbody(posX+adjx, posY+adjy, flipper_chain, chain_size);
+	flip.Pbody = CreateFlipperPbody(posX + adjx, posY + adjy, flipper_chain, chain_size);
 	flip.Rect = flipper_rect;
 	flip.Joint = CreateFlipperJoint(flip, lowerAngle, upperAngle);
 
@@ -882,3 +877,4 @@ void ModulePhysics::FlipperSetMotorSpeed(flipper &flipper, float32 MotorSpeed)
 {
 	flipper.Joint->SetMotorSpeed(MotorSpeed);
 }
+
