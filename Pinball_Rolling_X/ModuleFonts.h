@@ -1,7 +1,6 @@
-#ifndef __ModuleFonts_H__
-#define __ModuleFonts_H__
+#ifndef __ModuleFont_H__
+#define __ModuleFont_H__
 
-#include "Globals.h"
 #include "Module.h"
 #include "SDL\include\SDL_pixels.h"
 
@@ -17,11 +16,11 @@ struct Font
 	uint rows, len, char_w, char_h, row_chars;
 };
 
-class ModuleFonts : public Module 
+class ModuleFonts : public Module
 {
 public:
 
-	ModuleFonts(Application* app, bool start_enabled = true);
+	ModuleFonts(Application* app, bool start_enabled=true);
 	~ModuleFonts();
 
 	// Load Font
@@ -30,11 +29,11 @@ public:
 
 	// Create a surface from text
 	void Blit(int x, int y, int bmp_font_id, const char* text) const;
-
+	//void scoreToText(char* string, uint score, uint size);
 private:
 
-	Font	 fonts[MAX_FONTS];
+	Font	fonts[MAX_FONTS];
 };
 
 
-#endif // __ModuleFonts_H__
+#endif // __ModuleFont_H__
