@@ -6,6 +6,9 @@
 #include "ModuleTextures.h"
 #include "ModuleAudio.h"
 #include "ModulePhysics.h"
+#include "ChainPoints.h"
+
+float flipperMaxTorque = 28.0;
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -45,7 +48,6 @@ bool ModuleSceneIntro::Start()
 	KickerFX= App->audio->LoadFx("Assets/FX/Kicker.wav");
 
 	launcherRect = {0,0,38,68};
-
 
 
 
@@ -92,7 +94,14 @@ bool ModuleSceneIntro::Start()
 		384, 321,
 		378, 315
 	};
-
+	// Pivot -1, -1
+	int invFlipper[8] = {
+		465, 300,
+		456, 317,
+		433, 356,
+		468, 301
+	};
+	
 	//Colldier to avoid the ball falling back to the kicker
 	
 
@@ -113,9 +122,13 @@ bool ModuleSceneIntro::Start()
 
 	rightUpFlipperRect = { 101, 0, 38, 57 };
 	rightUpFlipper = App->physics->CreateFlipper(374, 327,
-		9, fliper_up_right, 14, rightUpFlipperRect, 15 - 15, 60 - 15, -374, -327);
+		9, fliper_up_right, 14, rightUpFlipperRect, 0, 45, -374, -327);
 
-
+	//invisible flipper
+	invisibleFlipperRect = { 0,0,10,10 };
+	InvisibleFlipper = App->physics->CreateFlipper(460, 300,
+		1, invFlipper, 8, invisibleFlipperRect, -30, 0, -463, -301);
+	
 
 	//startingPoint
 	 StartingPoint.x=453;
@@ -154,7 +167,7 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
-
+	InvisibleFlipper.Pbody->body->SetGravityScale(0);
 	//printingTheElement that are not going to move
 
 
@@ -235,13 +248,27 @@ update_status ModuleSceneIntro::Update()
 
 
 	// fliper controls
+	if (up)
+	{
+		App->physics->FlipperSetMaxMotorTorque(InvisibleFlipper, -30.0f);
+		App->physics->FlipperSetMotorSpeed(InvisibleFlipper, flipperMaxTorque);
+
+	}
+	else if (up==false){
+		App->physics->FlipperSetMaxMotorTorque(InvisibleFlipper, flipperMaxTorque);
+		App->physics->FlipperSetMotorSpeed(InvisibleFlipper, -flipperMaxTorque);
+
+	}
 
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN)
 	{
-		App->physics->FlipperSetMaxMotorTorque(leftFlipper, 25.0f);
-		App->physics->FlipperSetMotorSpeed(leftFlipper, -25.0f);
-		App->physics->FlipperSetMaxMotorTorque(leftUpFlipper, 25.0f);
-		App->physics->FlipperSetMotorSpeed(leftUpFlipper, -25.0f);
+		App->physics->FlipperSetMaxMotorTorque(leftFlipper, flipperMaxTorque);
+		App->physics->FlipperSetMotorSpeed(leftFlipper, -flipperMaxTorque);
+		App->physics->FlipperSetMaxMotorTorque(leftUpFlipper, flipperMaxTorque);
+		App->physics->FlipperSetMotorSpeed(leftUpFlipper, -flipperMaxTorque);
+
+		up = true;
+		
 
 		App->audio->PlayFx(FlipperUp);
 
@@ -249,10 +276,13 @@ update_status ModuleSceneIntro::Update()
 	else if (App->input->GetKey(SDL_SCANCODE_LEFT) == (KEY_UP))
 	{
 		App->physics->FlipperSetMaxMotorTorque(leftFlipper, 10.0f);
-		App->physics->FlipperSetMotorSpeed(leftFlipper, 25.0f);
+		App->physics->FlipperSetMotorSpeed(leftFlipper, flipperMaxTorque);
 		App->physics->FlipperSetMaxMotorTorque(leftUpFlipper, 10.0f);
-		App->physics->FlipperSetMotorSpeed(leftUpFlipper, 25.0f);
+		App->physics->FlipperSetMotorSpeed(leftUpFlipper, flipperMaxTorque);
 
+		
+
+		
 		App->audio->PlayFx(FlipperDown);
 
 	}
@@ -262,22 +292,29 @@ update_status ModuleSceneIntro::Update()
 		App->physics->FlipperSetMotorSpeed(leftFlipper, 0.0f);
 		App->physics->FlipperSetMaxMotorTorque(leftUpFlipper, 0.0f);
 		App->physics->FlipperSetMotorSpeed(leftUpFlipper, 0.0f);
+
+		/*App->physics->FlipperSetMaxMotorTorque(InvisibleFlipper, 0.0f);
+		App->physics->FlipperSetMotorSpeed(InvisibleFlipper, 0.0f);*/
+		
 	}
+	//flipper 2
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN)
 	{
-		App->physics->FlipperSetMaxMotorTorque(rightFlipper, 25.0f);
-		App->physics->FlipperSetMotorSpeed(rightFlipper, 25.0f);
-		App->physics->FlipperSetMaxMotorTorque(rightUpFlipper, 25.0f);
-		App->physics->FlipperSetMotorSpeed(rightUpFlipper, 25.0f);
+		App->physics->FlipperSetMaxMotorTorque(rightFlipper, flipperMaxTorque);
+		App->physics->FlipperSetMotorSpeed(rightFlipper, flipperMaxTorque);
+		App->physics->FlipperSetMaxMotorTorque(rightUpFlipper, flipperMaxTorque);
+		App->physics->FlipperSetMotorSpeed(rightUpFlipper, flipperMaxTorque);
 
 		App->audio->PlayFx(FlipperUp);
+
+		up = false;
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_RIGHT) == (KEY_UP))
 	{
 		App->physics->FlipperSetMaxMotorTorque(rightFlipper, 10.0f);
-		App->physics->FlipperSetMotorSpeed(rightFlipper, -25.0f);
+		App->physics->FlipperSetMotorSpeed(rightFlipper, -flipperMaxTorque);
 		App->physics->FlipperSetMaxMotorTorque(rightUpFlipper, 10.0f);
-		App->physics->FlipperSetMotorSpeed(rightUpFlipper, -25.0f);
+		App->physics->FlipperSetMotorSpeed(rightUpFlipper, -flipperMaxTorque);
 
 		App->audio->PlayFx(FlipperDown);
 
@@ -441,24 +478,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	if (bodyA == App->physics->LimitKickerPath && bodyB == circles.getLast()->data ||
 		bodyB == App->physics->LimitKickerPath && bodyA == circles.getLast()->data) {
 		
-	/*	int KickerLimitPath[20] = {
-		
-			433, 364,
-			440, 351,
-			448, 334,
-			460, 311,
-			466, 292,
-			471, 272,
-			472, 313,
-			471, 341,
-			471, 359,
-			438, 362
 	
-		};
-	
-		App->physics->LimitKickerPath=App->physics->CreateStaticChain(1, 0, KickerLimitPath,20, 0);
-
-		*/
 	}
 
 	

@@ -5,9 +5,11 @@
 #include "ModulePhysics.h"
 #include "p2Point.h"
 #include "math.h"
-//#include "ChainPoints.h"
+#include "ChainPoints.h"
 #include "ModuleSceneIntro.h"
 
+float WALL_RESTITUTION = 0.3;
+float BOUNCER_RESTI = 1.2;
 
 #ifdef _DEBUG
 #pragma comment( lib, "Box2D/libx86/Debug/Box2D.lib" )
@@ -38,30 +40,7 @@ bool ModulePhysics::Start()
 	b2BodyDef bd;
 	ground = world->CreateBody(&bd);
 
-	//// big static circle as "ground" in the middle of the screen
-	//int x = SCREEN_WIDTH / 2;
-	//int y = SCREEN_HEIGHT / 1.5f;
-	//int diameter = SCREEN_WIDTH / 2;
-
-	//b2BodyDef body;
-	//body.type = b2_staticBody;
-	//body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
-
-	//b2Body* big_ball = world->CreateBody(&body);
-
-	//b2CircleShape shape;
-	//shape.m_radius = PIXEL_TO_METERS(diameter) * 0.5f;
-
-	//b2FixtureDef fixture;
-	//fixture.shape = &shape;
-	//big_ball->CreateFixture(&fixture);
-
-	/*must add 2 circeles of 21 radius
-		center 1
-		208, 139,
-		center 2
-		277, 135*/
-	// Pivot 0, 0
+	
 	int up_left_corner[122] = {
 		27, 486,
 		60, 400,
@@ -286,51 +265,83 @@ bool ModulePhysics::Start()
 	};
 
 	// Pivot 1, 0
-	int triangle_boucer_right[14] = {
-		284, 680,
+	int triangle_boucer_right[12] = {
+		284, 679,
 		326, 581,
 		330, 580,
-		335, 584,
-		334, 662,
-		291, 686,
-		284, 686
+		330, 585,
+		330, 657,
+		291, 679
 	};
 
 
-	int BlueBouncer_Coord[16] = {
-		92, 270,
-		95, 266,
-		100, 265,
-		149, 290,
-		152, 294,
+	int BlueBouncer_Coord[12] = {
+		146, 297,
 		152, 298,
-		149, 298,
-		94, 272
+		152, 292,
+		102, 266,
+		98, 272,
+		142, 295
+	};
+
+	int blue_triangle[10] = {
+		86, 270,
+		94, 268,
+		100, 268,
+		98, 273,
+		90, 270
+	};
+
+	int invWall[8] = {
+		0, 569,
+		1, 735,
+		-15, 732,
+		-16, 568
+	};
+	// Pivot -1, -1
+	int triangleRightWall[10] = {
+		334, 585,
+		333, 658,
+		288, 686,
+		293, 680,
+		330, 657
+	};
+	// Pivot -1, -1
+	int triangleLeftWall[10] = {
+		63, 582,
+		64, 660,
+		105, 684,
+		108, 682,
+		67, 658
 	};
 
 	
-
-
-	world_parts.add(Bouncer = CreateStaticChain(0, 0, triangle_boucer_right, 14, 2));
-	world_parts.add(BouncerL = CreateStaticChain(0, 0, triangle_boucer, 12, 2));
-	world_parts.add(BouncerCircle = CreateStaticCircle(275, 136, 20, 2));
-	world_parts.add(BouncerLCircle = CreateStaticCircle(207, 140, 20, 2));
-	world_parts.add(BlueBouncer = CreateStaticChain(1, 0, BlueBouncer_Coord, 16, 2));
-
+	//bouncers
+	world_parts.add(Bouncer = CreateStaticChain(0, 0, triangle_boucer_right, 12, BOUNCER_RESTI));
+	world_parts.add(BouncerL = CreateStaticChain(0, 0, triangle_boucer, 12, BOUNCER_RESTI));
+	world_parts.add(BouncerCircle = CreateStaticCircle(275, 136, 20, BOUNCER_RESTI));
+	world_parts.add(BouncerLCircle = CreateStaticCircle(207, 140, 20, BOUNCER_RESTI));
+	world_parts.add(BlueBouncer = CreateStaticChain(1, 0, BlueBouncer_Coord, 12, BOUNCER_RESTI));
+	//no restitution
+	world_parts.add(CreateStaticChain(0, 0, blue_triangle, 10, 0));
 	world_parts.add(CreateStaticChain(0, 0, top3_path, 12, 0));
 	world_parts.add(CreateStaticChain(0, 0, top2_path, 12, 0));
 	world_parts.add(CreateStaticChain(0, 0, top1_path, 12, 0));
-	world_parts.add(CreateStaticChain(0, 0, triangle_bottom_left, 6, 0));
-	world_parts.add(CreateStaticChain(0, 1, right_down_path_to_flipper, 16, 0));
-	world_parts.add(CreateStaticChain(0, 2, middle_thing, 14, 0));
-	world_parts.add(CreateStaticChain(2, 1, left_down_path_to_flipper, 16, 0));
-	world_parts.add(CreateStaticChain(2, 0, right_down_base, 16, 0));
+	world_parts.add(CreateStaticChain(0, 0, triangleRightWall, 10, 0));
+	world_parts.add(CreateStaticChain(0, 0, triangleLeftWall, 10, 0));
+	//with restitution
+	world_parts.add(CreateStaticChain(0, 0, invWall, 8, WALL_RESTITUTION));
+	world_parts.add(CreateStaticChain(0, 0, triangle_bottom_left, 6, WALL_RESTITUTION));
+	world_parts.add(CreateStaticChain(0, 1, right_down_path_to_flipper, 16, WALL_RESTITUTION));
+	world_parts.add(CreateStaticChain(0, 2, middle_thing, 14, WALL_RESTITUTION));
+	world_parts.add(CreateStaticChain(2, 1, left_down_path_to_flipper, 16, WALL_RESTITUTION));
+	world_parts.add(CreateStaticChain(2, 0, right_down_base, 16, WALL_RESTITUTION));
 
-	world_parts.add(CreateStaticChain(0, 0, middle_pice_with_right_fliper_up, 28, 0));
-	world_parts.add(CreateStaticChain(0, 0, bonus_entrance, 44, 0));
+	world_parts.add(CreateStaticChain(0, 0, middle_pice_with_right_fliper_up, 28, WALL_RESTITUTION));
+	world_parts.add(CreateStaticChain(0, 0, bonus_entrance, 44, WALL_RESTITUTION));
 
-	world_parts.add(CreateStaticChain(0, 0, top_triangle_right, 28, 0));
-	world_parts.add(CreateStaticChain(0, 0, up_left_corner, 122, 0));
+	world_parts.add(CreateStaticChain(0, 0, top_triangle_right, 28, WALL_RESTITUTION));
+	world_parts.add(CreateStaticChain(0, 0, up_left_corner, 122, WALL_RESTITUTION));
 
 	//sensors
 	//Upper Part
@@ -503,7 +514,7 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size)
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateStaticChain(int x, int y, int* points, int size,int resti)
+PhysBody* ModulePhysics::CreateStaticChain(int x, int y, int* points, int size,float resti)
 {
 	b2BodyDef body;
 	body.type = b2_staticBody;
@@ -793,8 +804,11 @@ PhysBody* ModulePhysics::CreateFlipperPbody(int x, int y, int* points, int size)
 	b2BodyDef body;
 	body.type = b2_dynamicBody;
 	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+	
 
+	
 	b2Body* b = world->CreateBody(&body);
+
 	b2PolygonShape box;
 
 	//creating the shape

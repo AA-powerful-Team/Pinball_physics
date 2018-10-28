@@ -50,7 +50,7 @@ public:
 	PhysBody* CreateStaticRectangle(int x, int y, int width, int height,int resti);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height);
 	PhysBody* CreateChain(int x, int y, int* points, int size);
-	PhysBody* CreateStaticChain(int x, int y, int* points, int size, int resti = 0);
+	PhysBody* CreateStaticChain(int x, int y, int* points, int size, float resti = 0);
 
 	//Colliders
 	PhysBody* Bouncer = nullptr;

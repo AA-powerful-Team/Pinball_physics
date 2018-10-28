@@ -84,6 +84,9 @@ public:
 	flipper leftUpFlipper;
 	SDL_Rect leftUpFlipperRect;
 
+	flipper InvisibleFlipper;
+	SDL_Rect invisibleFlipperRect;
+
 	//kicker
 	kicker launcher;
 	SDL_Rect launcherRect;
@@ -120,4 +123,5 @@ public:
 
 	//startingPoint
 	iPoint StartingPoint;
+	bool up = false;
 };
