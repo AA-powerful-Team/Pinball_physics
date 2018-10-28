@@ -387,7 +387,7 @@ bool ModuleSceneIntro::Start()
 		67, 658
 	};
 
-//Bouncers
+	//Bouncers
 	world_parts.add(Bouncer = App->physics->CreateStaticChain(0, 0, triangle_boucer_right, 12, BOUNCER_RESTI));
 	world_parts.add(BouncerL = App->physics->CreateStaticChain(0, 0, triangle_boucer, 12, BOUNCER_RESTI));
 	world_parts.add(BouncerCircle = App->physics->CreateStaticCircle(275, 136, 20, BOUNCER_RESTI));
@@ -432,8 +432,6 @@ bool ModuleSceneIntro::Start()
 	pitSensor = App->physics->CreateRectangleSensor(200, 835, 400, 10);
 	KickerPathSensor= App->physics->CreateRectangleSensor(450, 230, 50, 5);
 
-
-  
 	//Flipper Collision this shold go with th eother colliders from the module physics
 	leftFlipperRect = { 0,78,63,43 };
 	leftFlipper = App->physics->CreateFlipper(120, 748,
@@ -451,13 +449,11 @@ bool ModuleSceneIntro::Start()
 	rightUpFlipper = App->physics->CreateFlipper(374, 327,
 		9, fliper_up_right, 14, rightUpFlipperRect, 0, 45, -374, -327);
 
-  
 	//invisible flipper
 	invisibleFlipperRect = { 0,0,10,10 };
 	InvisibleFlipper = App->physics->CreateFlipper(460, 300,
 		1, invFlipper, 8, invisibleFlipperRect, -30, 0, -463, -301);
 	
-
 	//startingPoint
 	 StartingPoint.x=453;
 	 StartingPoint.y = 730;
@@ -653,8 +649,6 @@ if (!EndMatch) {
 		App->physics->FlipperSetMotorSpeed(leftUpFlipper, -flipperMaxTorque);
 
 	
-		
-
 		App->audio->PlayFx(FlipperUp);
 
 	}
@@ -664,8 +658,6 @@ if (!EndMatch) {
 		App->physics->FlipperSetMotorSpeed(leftFlipper, flipperMaxTorque);
 		App->physics->FlipperSetMaxMotorTorque(leftUpFlipper, 10.0f);
 		App->physics->FlipperSetMotorSpeed(leftUpFlipper, flipperMaxTorque);
-
-		
 
 		
 		App->audio->PlayFx(FlipperDown);
@@ -678,9 +670,8 @@ if (!EndMatch) {
 		App->physics->FlipperSetMaxMotorTorque(leftUpFlipper, 0.0f);
 		App->physics->FlipperSetMotorSpeed(leftUpFlipper, 0.0f);
 
-
-		
 	}
+
 	//flipper 2
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN)
 	{
@@ -777,6 +768,7 @@ if (!EndMatch) {
 	return UPDATE_CONTINUE;
 }
 
+//Collisions
 void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
 	//BouncerLiCollisions--------------------------

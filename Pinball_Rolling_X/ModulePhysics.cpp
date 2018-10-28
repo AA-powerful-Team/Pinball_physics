@@ -17,6 +17,7 @@ float BOUNCER_RESTI = 1.2;
 #pragma comment( lib, "Box2D/libx86/Release/Box2D.lib" )
 #endif
 
+//constructor
 ModulePhysics::ModulePhysics(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	world = NULL;
@@ -29,6 +30,7 @@ ModulePhysics::~ModulePhysics()
 {
 }
 
+//start
 bool ModulePhysics::Start()
 {
 	LOG("Creating Physics 2D environment");
@@ -43,7 +45,7 @@ bool ModulePhysics::Start()
 	return true;
 }
 
-// 
+//preupdate
 update_status ModulePhysics::PreUpdate()
 {
 	world->Step(1.0f / 60.0f, 6, 2);
@@ -62,180 +64,7 @@ update_status ModulePhysics::PreUpdate()
 	return UPDATE_CONTINUE;
 }
 
-PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius)
-{
-	b2BodyDef body;
-	body.type = b2_dynamicBody;
-	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
-
-	b2Body* b = world->CreateBody(&body);
-
-	b2CircleShape shape;
-	shape.m_radius = PIXEL_TO_METERS(radius);
-	b2FixtureDef fixture;
-	fixture.shape = &shape;
-	//fixture.filter.categoryBits = 5;
-	fixture.density = 0.1f;
-
-	b->CreateFixture(&fixture);
-
-	PhysBody* pbody = new PhysBody();
-	pbody->body = b;
-	b->SetUserData(pbody);
-	pbody->width = pbody->height = radius;
-
-	return pbody;
-}
-
-PhysBody* ModulePhysics::CreateStaticCircle(int x, int y, int radius,int resti)
-{
-	b2BodyDef body;
-	body.type = b2_staticBody;
-	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
-
-	b2Body* b = world->CreateBody(&body);
-
-	b2CircleShape shape;
-	shape.m_radius = PIXEL_TO_METERS(radius);
-	b2FixtureDef fixture;
-	fixture.shape = &shape;
-	fixture.density = 1.0f;
-	fixture.restitution = resti;
-	b->CreateFixture(&fixture);
-
-	PhysBody* pbody = new PhysBody();
-	pbody->body = b;
-	b->SetUserData(pbody);
-	pbody->width = pbody->height = radius;
-
-	return pbody;
-}
-
-PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height,float resti)
-{
-	b2BodyDef body;
-	body.type = b2_dynamicBody;
-	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
-
-	b2Body* b = world->CreateBody(&body);
-	b2PolygonShape box;
-	box.SetAsBox(PIXEL_TO_METERS(width) * 0.5f, PIXEL_TO_METERS(height) * 0.5f);
-
-	b2FixtureDef fixture;
-	fixture.shape = &box;
-	fixture.restitution = resti;
-	fixture.density = 1.0f;
-	
-	b->CreateFixture(&fixture);
-
-	PhysBody* pbody = new PhysBody();
-	pbody->body = b;
-	b->SetUserData(pbody);
-	pbody->width = width * 0.5f;
-	pbody->height = height * 0.5f;
-
-	return pbody;
-}
-
-PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int height)
-{
-	b2BodyDef body;
-	body.type = b2_staticBody;
-	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
-
-	b2Body* b = world->CreateBody(&body);
-
-	b2PolygonShape box;
-	box.SetAsBox(PIXEL_TO_METERS(width) * 0.5f, PIXEL_TO_METERS(height) * 0.5f);
-
-	b2FixtureDef fixture;
-	fixture.shape = &box;
-	fixture.density = 1.0f;
-	fixture.isSensor = true;
-
-	b->CreateFixture(&fixture);
-
-	PhysBody* pbody = new PhysBody();
-	pbody->body = b;
-	b->SetUserData(pbody);
-	pbody->width = width;
-	pbody->height = height;
-
-	return pbody;
-}
-
-PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size)
-{
-	b2BodyDef body;
-	body.type = b2_dynamicBody;
-	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
-
-	b2Body* b = world->CreateBody(&body);
-
-	b2ChainShape shape;
-	b2Vec2* p = new b2Vec2[size / 2];
-
-	for(uint i = 0; i < size / 2; ++i)
-	{
-		p[i].x = PIXEL_TO_METERS(points[i * 2 + 0]);
-		p[i].y = PIXEL_TO_METERS(points[i * 2 + 1]);
-	}
-
-	shape.CreateLoop(p, size / 2);
-
-	b2FixtureDef fixture;
-	fixture.shape = &shape;
-
-	b->CreateFixture(&fixture);
-
-	delete p;
-
-	PhysBody* pbody = new PhysBody();
-	pbody->body = b;
-	b->SetUserData(pbody);
-	pbody->width = pbody->height = 0;
-
-	return pbody;
-}
-
-PhysBody* ModulePhysics::CreateStaticChain(int x, int y, int* points, int size,float resti)
-{
-	b2BodyDef body;
-	body.type = b2_staticBody;
-	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
-
-	b2Body* b = world->CreateBody(&body);
-
-	b2ChainShape shape;
-	b2Vec2* p = new b2Vec2[size / 2];
-
-	for (uint i = 0; i < size / 2; ++i)
-	{
-		p[i].x = PIXEL_TO_METERS(points[i * 2 + 0]);
-		p[i].y = PIXEL_TO_METERS(points[i * 2 + 1]);
-	}
-
-	shape.CreateLoop(p, size / 2);
-
-	b2FixtureDef fixture;
-	fixture.restitution = resti;
-	fixture.density = 1.0f;
-	fixture.shape = &shape;
-	
-
-	b->CreateFixture(&fixture);
-
-	delete p;
-
-	PhysBody* pbody = new PhysBody();
-	pbody->body = b;
-	b->SetUserData(pbody);
-	pbody->width = pbody->height = 0;
-
-	return pbody;
-}
-
-// 
+//postupdate
 update_status ModulePhysics::PostUpdate()
 {
 	if(App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
@@ -376,7 +205,6 @@ update_status ModulePhysics::PostUpdate()
 	return UPDATE_CONTINUE;
 }
 
-
 // Called before quitting
 bool ModulePhysics::CleanUp()
 {
@@ -388,7 +216,7 @@ bool ModulePhysics::CleanUp()
 	return true;
 }
 
-
+//helping functions
 void PhysBody::GetPosition(int& x, int &y) const
 {
 	b2Vec2 pos = body->GetPosition();
@@ -417,6 +245,7 @@ bool PhysBody::Contains(int x, int y) const
 	return false;
 }
 
+//raycast
 int PhysBody::RayCast(int x1, int y1, int x2, int y2, float& normal_x, float& normal_y) const
 {
 	int ret = -1;
@@ -451,7 +280,7 @@ int PhysBody::RayCast(int x1, int y1, int x2, int y2, float& normal_x, float& no
 	return ret;
 }
 
-
+//begin contact
 void ModulePhysics::BeginContact(b2Contact* contact)
 {
 	PhysBody* physA = (PhysBody*)contact->GetFixtureA()->GetBody()->GetUserData();
@@ -462,6 +291,32 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 
 	if(physB && physB->listener != NULL)
 		physB->listener->OnCollision(physB, physA);
+}
+
+//flipper functions
+void ModulePhysics::FlipperSetMaxMotorTorque(flipper &flipper, float32 MaxTorque)
+{
+	flipper.Joint->SetMaxMotorTorque(MaxTorque);
+}
+
+void ModulePhysics::FlipperSetMotorSpeed(flipper &flipper, float32 MotorSpeed)
+{
+	flipper.Joint->SetMotorSpeed(MotorSpeed);
+}
+
+flipper ModulePhysics::CreateFlipper(int posX, int posY, int att_diameter, int flipper_chain[], int chain_size,
+	SDL_Rect flipper_rect, int lowerAngle, int upperAngle, int adjx, int adjy)
+{
+	flipper flip;
+
+
+
+	flip.Attacher = CreateAttacherBody(posX, posY, att_diameter);
+	flip.Pbody = CreateFlipperPbody(posX + adjx, posY + adjy, flipper_chain, chain_size);
+	flip.Rect = flipper_rect;
+	flip.Joint = CreateFlipperJoint(flip, lowerAngle, upperAngle);
+
+	return flip;
 }
 
 b2Body* ModulePhysics::CreateAttacherBody(int x, int y, int diameter)
@@ -489,9 +344,9 @@ PhysBody* ModulePhysics::CreateFlipperPbody(int x, int y, int* points, int size)
 	b2BodyDef body;
 	body.type = b2_dynamicBody;
 	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
-	
 
-	
+
+
 	b2Body* b = world->CreateBody(&body);
 
 	b2PolygonShape box;
@@ -542,32 +397,7 @@ b2RevoluteJoint* ModulePhysics::CreateFlipperJoint(const flipper &flipper, int l
 	return (b2RevoluteJoint*)world->CreateJoint(&jointDef);
 }
 
-
-flipper ModulePhysics::CreateFlipper(int posX, int posY, int att_diameter, int flipper_chain[], int chain_size,
-	SDL_Rect flipper_rect, int lowerAngle, int upperAngle, int adjx, int adjy)
-{
-	flipper flip;
-
-
-
-	flip.Attacher = CreateAttacherBody(posX, posY, att_diameter);
-	flip.Pbody = CreateFlipperPbody(posX + adjx, posY + adjy, flipper_chain, chain_size);
-	flip.Rect = flipper_rect;
-	flip.Joint = CreateFlipperJoint(flip, lowerAngle, upperAngle);
-
-	return flip;
-}
-
-void ModulePhysics::FlipperSetMaxMotorTorque(flipper &flipper, float32 MaxTorque)
-{
-	flipper.Joint->SetMaxMotorTorque(MaxTorque);
-}
-
-void ModulePhysics::FlipperSetMotorSpeed(flipper &flipper, float32 MotorSpeed)
-{
-	flipper.Joint->SetMotorSpeed(MotorSpeed);
-}
-
+//creation functions
 PhysBody* ModulePhysics::CreateStaticRectangle(int x, int y, int width, int height, int resti)
 {
 	b2BodyDef body;
@@ -594,6 +424,179 @@ PhysBody* ModulePhysics::CreateStaticRectangle(int x, int y, int width, int heig
 	return pbody;
 }
 
+PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius)
+{
+	b2BodyDef body;
+	body.type = b2_dynamicBody;
+	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+	b2Body* b = world->CreateBody(&body);
+
+	b2CircleShape shape;
+	shape.m_radius = PIXEL_TO_METERS(radius);
+	b2FixtureDef fixture;
+	fixture.shape = &shape;
+	//fixture.filter.categoryBits = 5;
+	fixture.density = 0.1f;
+
+	b->CreateFixture(&fixture);
+
+	PhysBody* pbody = new PhysBody();
+	pbody->body = b;
+	b->SetUserData(pbody);
+	pbody->width = pbody->height = radius;
+
+	return pbody;
+}
+
+PhysBody* ModulePhysics::CreateStaticCircle(int x, int y, int radius, int resti)
+{
+	b2BodyDef body;
+	body.type = b2_staticBody;
+	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+	b2Body* b = world->CreateBody(&body);
+
+	b2CircleShape shape;
+	shape.m_radius = PIXEL_TO_METERS(radius);
+	b2FixtureDef fixture;
+	fixture.shape = &shape;
+	fixture.density = 1.0f;
+	fixture.restitution = resti;
+	b->CreateFixture(&fixture);
+
+	PhysBody* pbody = new PhysBody();
+	pbody->body = b;
+	b->SetUserData(pbody);
+	pbody->width = pbody->height = radius;
+
+	return pbody;
+}
+
+PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height, float resti)
+{
+	b2BodyDef body;
+	body.type = b2_dynamicBody;
+	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+	b2Body* b = world->CreateBody(&body);
+	b2PolygonShape box;
+	box.SetAsBox(PIXEL_TO_METERS(width) * 0.5f, PIXEL_TO_METERS(height) * 0.5f);
+
+	b2FixtureDef fixture;
+	fixture.shape = &box;
+	fixture.restitution = resti;
+	fixture.density = 1.0f;
+
+	b->CreateFixture(&fixture);
+
+	PhysBody* pbody = new PhysBody();
+	pbody->body = b;
+	b->SetUserData(pbody);
+	pbody->width = width * 0.5f;
+	pbody->height = height * 0.5f;
+
+	return pbody;
+}
+
+PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int height)
+{
+	b2BodyDef body;
+	body.type = b2_staticBody;
+	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+	b2Body* b = world->CreateBody(&body);
+
+	b2PolygonShape box;
+	box.SetAsBox(PIXEL_TO_METERS(width) * 0.5f, PIXEL_TO_METERS(height) * 0.5f);
+
+	b2FixtureDef fixture;
+	fixture.shape = &box;
+	fixture.density = 1.0f;
+	fixture.isSensor = true;
+
+	b->CreateFixture(&fixture);
+
+	PhysBody* pbody = new PhysBody();
+	pbody->body = b;
+	b->SetUserData(pbody);
+	pbody->width = width;
+	pbody->height = height;
+
+	return pbody;
+}
+
+PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size)
+{
+	b2BodyDef body;
+	body.type = b2_dynamicBody;
+	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+	b2Body* b = world->CreateBody(&body);
+
+	b2ChainShape shape;
+	b2Vec2* p = new b2Vec2[size / 2];
+
+	for (uint i = 0; i < size / 2; ++i)
+	{
+		p[i].x = PIXEL_TO_METERS(points[i * 2 + 0]);
+		p[i].y = PIXEL_TO_METERS(points[i * 2 + 1]);
+	}
+
+	shape.CreateLoop(p, size / 2);
+
+	b2FixtureDef fixture;
+	fixture.shape = &shape;
+
+	b->CreateFixture(&fixture);
+
+	delete p;
+
+	PhysBody* pbody = new PhysBody();
+	pbody->body = b;
+	b->SetUserData(pbody);
+	pbody->width = pbody->height = 0;
+
+	return pbody;
+}
+
+PhysBody* ModulePhysics::CreateStaticChain(int x, int y, int* points, int size, float resti)
+{
+	b2BodyDef body;
+	body.type = b2_staticBody;
+	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+	b2Body* b = world->CreateBody(&body);
+
+	b2ChainShape shape;
+	b2Vec2* p = new b2Vec2[size / 2];
+
+	for (uint i = 0; i < size / 2; ++i)
+	{
+		p[i].x = PIXEL_TO_METERS(points[i * 2 + 0]);
+		p[i].y = PIXEL_TO_METERS(points[i * 2 + 1]);
+	}
+
+	shape.CreateLoop(p, size / 2);
+
+	b2FixtureDef fixture;
+	fixture.restitution = resti;
+	fixture.density = 1.0f;
+	fixture.shape = &shape;
+
+
+	b->CreateFixture(&fixture);
+
+	delete p;
+
+	PhysBody* pbody = new PhysBody();
+	pbody->body = b;
+	b->SetUserData(pbody);
+	pbody->width = pbody->height = 0;
+
+	return pbody;
+}
+
 b2PrismaticJoint * ModulePhysics::CreatePrismaticJoint(PhysBody * anchor, PhysBody * body, int max_move, int min_move, int motor_speed, int max_force)
 {
 	b2PrismaticJointDef def;
@@ -613,11 +616,11 @@ b2PrismaticJoint * ModulePhysics::CreatePrismaticJoint(PhysBody * anchor, PhysBo
 	//set limmits
 	def.lowerTranslation = PIXEL_TO_METERS(min_move);
 	def.upperTranslation = PIXEL_TO_METERS(max_move);
-	
+
 	//set values
 	def.motorSpeed = motor_speed;
 	def.maxMotorForce = max_force;
-	
+
 
 	return (b2PrismaticJoint*)world->CreateJoint(&def);
 }
