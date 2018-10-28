@@ -66,10 +66,12 @@ public:
 	PhysBody*UpperSenser3;
 	PhysBody*UpperSenser4;
 	PhysBody*UpperSmallSenser1;
+	
+	
 
 	//EssentialSensors
 	PhysBody*pitSensor;
-
+	PhysBody*LimitKickerPath;
 
 
 	// b2ContactListener ---

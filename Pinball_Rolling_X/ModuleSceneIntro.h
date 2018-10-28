@@ -88,12 +88,15 @@ public:
 	kicker launcher;
 	SDL_Rect launcherRect;
 
-
+	//FX
 	uint HitBall;
 	uint BouncerSound;
 	uint BlueUpperSenser1;
 	uint SmallLightOn;
 	uint BallInPitFX;
+	uint FlipperUp;
+	uint FlipperDown;
+	uint KickerFX;
 
 	//Collisions bools
 	bool BlitBouncer=false;

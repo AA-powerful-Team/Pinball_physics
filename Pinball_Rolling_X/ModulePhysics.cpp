@@ -297,8 +297,6 @@ bool ModulePhysics::Start()
 	};
 
 
-
-
 	int BlueBouncer_Coord[16] = {
 		92, 270,
 		95, 266,
@@ -310,6 +308,7 @@ bool ModulePhysics::Start()
 		94, 272
 	};
 
+	
 
 
 	world_parts.add(Bouncer = CreateStaticChain(0, 0, triangle_boucer_right, 14, 2));
@@ -343,6 +342,7 @@ bool ModulePhysics::Start()
 
   //EssentialSensors
 	pitSensor = CreateRectangleSensor(200,835, 400, 10);
+	LimitKickerPath= CreateRectangleSensor(460, 280, 30, 10);
 
 
 	return true;

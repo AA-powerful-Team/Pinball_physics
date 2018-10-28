@@ -32,16 +32,17 @@ bool ModuleSceneIntro::Start()
 	BlueBouncerLight= App->textures->Load("Assets/Sprites/BlueRect.png");
 	BigBlueLight = App->textures->Load("Assets/Sprites/BigLightCIrcle.png");
 	BigBlueTriLightH = App->textures->Load("Assets/Sprites/BigLightTriangleH.png");
-  launchertext = App->textures->Load("Assets/Sprites/Kicker_small.png"); // clean up
-  spriteSheet = App->textures->Load("Assets/Sprites/spriteSheet.png"); //clean up
+	 launchertext = App->textures->Load("Assets/Sprites/Kicker_small.png"); // clean up
+	spriteSheet = App->textures->Load("Assets/Sprites/spriteSheet.png"); //clean up
 
 	HitBall = App->audio->LoadFx("Assets/FX/BallhittingSound.wav");		//Clean UP music REMEMBER
 	BouncerSound= App->audio->LoadFx("Assets/FX/BallHitBouncers.wav");
-
 	BlueUpperSenser1 = App->audio->LoadFx("Assets/FX/TopBigBlueLighOn.wav");
 	SmallLightOn= App->audio->LoadFx("Assets/FX/SmallLightOn.wav");
 	BallInPitFX = App->audio->LoadFx("Assets/FX/OhhNoo.wav");
-  
+	FlipperUp= App->audio->LoadFx("Assets/FX/FlipperUp.wav");;
+	FlipperDown=App->audio->LoadFx("Assets/FX/FlipperDown.wav");
+	KickerFX= App->audio->LoadFx("Assets/FX/Kicker.wav");
 
 	launcherRect = {0,0,38,68};
 
@@ -91,7 +92,13 @@ bool ModuleSceneIntro::Start()
 		384, 321,
 		378, 315
 	};
+
+	//Colldier to avoid the ball falling back to the kicker
 	
+
+	
+	
+	//Flipper Collision this shold go with th eother colliders from the module physics
 	leftFlipperRect = { 0,78,63,43 };
 	leftFlipper = App->physics->CreateFlipper(120, 748,
 		9, fliper_down_left, 16, leftFlipperRect, -45, 0, -120, -747);
@@ -110,14 +117,18 @@ bool ModuleSceneIntro::Start()
 
 
 
-
+	//startingPoint
 	 StartingPoint.x=453;
 	 StartingPoint.y = 730;
 
+	 //Kicker
 	launcher.anchor = App->physics->CreateStaticRectangle(460, 820, 5, 5,0);
 	launcher.body = App->physics->CreateRectangle(450, 820, 30, 10,0.5);
 	launcher.joint = App->physics->CreatePrismaticJoint(launcher.anchor, launcher.body, 1, -60, -10, 15);
 
+	//Spawn Ball
+	circles.add(App->physics->CreateCircle(StartingPoint.x, StartingPoint.y, 10));
+	circles.getLast()->data->listener = this;
 
 	return ret;
 }
@@ -231,6 +242,9 @@ update_status ModuleSceneIntro::Update()
 		App->physics->FlipperSetMotorSpeed(leftFlipper, -25.0f);
 		App->physics->FlipperSetMaxMotorTorque(leftUpFlipper, 25.0f);
 		App->physics->FlipperSetMotorSpeed(leftUpFlipper, -25.0f);
+
+		App->audio->PlayFx(FlipperUp);
+
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_LEFT) == (KEY_UP))
 	{
@@ -238,6 +252,9 @@ update_status ModuleSceneIntro::Update()
 		App->physics->FlipperSetMotorSpeed(leftFlipper, 25.0f);
 		App->physics->FlipperSetMaxMotorTorque(leftUpFlipper, 10.0f);
 		App->physics->FlipperSetMotorSpeed(leftUpFlipper, 25.0f);
+
+		App->audio->PlayFx(FlipperDown);
+
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_LEFT) == (KEY_IDLE) && leftFlipper.Joint->GetJointAngle() * RADTODEG >= -45)
 	{
@@ -252,6 +269,8 @@ update_status ModuleSceneIntro::Update()
 		App->physics->FlipperSetMotorSpeed(rightFlipper, 25.0f);
 		App->physics->FlipperSetMaxMotorTorque(rightUpFlipper, 25.0f);
 		App->physics->FlipperSetMotorSpeed(rightUpFlipper, 25.0f);
+
+		App->audio->PlayFx(FlipperUp);
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_RIGHT) == (KEY_UP))
 	{
@@ -259,6 +278,8 @@ update_status ModuleSceneIntro::Update()
 		App->physics->FlipperSetMotorSpeed(rightFlipper, -25.0f);
 		App->physics->FlipperSetMaxMotorTorque(rightUpFlipper, 10.0f);
 		App->physics->FlipperSetMotorSpeed(rightUpFlipper, -25.0f);
+
+		App->audio->PlayFx(FlipperDown);
 
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_RIGHT) == (KEY_IDLE) && rightFlipper.Joint->GetJointAngle() * RADTODEG <= 135)
@@ -285,6 +306,7 @@ update_status ModuleSceneIntro::Update()
 		launcher.joint->SetMotorSpeed(-15);
 		launcher.joint->SetMaxMotorForce(20);
 		
+		App->audio->PlayFx(KickerFX);
 	}
 	
 	
@@ -414,6 +436,29 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		}
 
 		BallsNum--;
+	}
+
+	if (bodyA == App->physics->LimitKickerPath && bodyB == circles.getLast()->data ||
+		bodyB == App->physics->LimitKickerPath && bodyA == circles.getLast()->data) {
+		
+	/*	int KickerLimitPath[20] = {
+		
+			433, 364,
+			440, 351,
+			448, 334,
+			460, 311,
+			466, 292,
+			471, 272,
+			472, 313,
+			471, 341,
+			471, 359,
+			438, 362
+	
+		};
+	
+		App->physics->LimitKickerPath=App->physics->CreateStaticChain(1, 0, KickerLimitPath,20, 0);
+
+		*/
 	}
 
 	
