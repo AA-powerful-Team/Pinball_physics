@@ -5,6 +5,8 @@
 #define MAX_MOUSE_BUTTONS 5
 #define MAX_KEYS 300
 
+
+
 enum KEY_STATE
 {
 	KEY_IDLE = 0,
@@ -44,6 +46,9 @@ public:
 	{
 		return mouse_y;
 	}
+
+
+	
 
 private:
 	KEY_STATE* keyboard;
