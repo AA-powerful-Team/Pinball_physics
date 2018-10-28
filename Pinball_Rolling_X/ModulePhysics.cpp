@@ -5,9 +5,11 @@
 #include "ModulePhysics.h"
 #include "p2Point.h"
 #include "math.h"
-//#include "ChainPoints.h"
+#include "ChainPoints.h"
 #include "ModuleSceneIntro.h"
 
+float WALL_RESTITUTION = 0.3;
+float BOUNCER_RESTI = 1.2;
 
 #ifdef _DEBUG
 #pragma comment( lib, "Box2D/libx86/Debug/Box2D.lib" )
@@ -37,32 +39,6 @@ bool ModulePhysics::Start()
 	// needed to create joints like mouse joint
 	b2BodyDef bd;
 	ground = world->CreateBody(&bd);
-
-	//// big static circle as "ground" in the middle of the screen
-	//int x = SCREEN_WIDTH / 2;
-	//int y = SCREEN_HEIGHT / 1.5f;
-	//int diameter = SCREEN_WIDTH / 2;
-
-	//b2BodyDef body;
-	//body.type = b2_staticBody;
-	//body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
-
-	//b2Body* big_ball = world->CreateBody(&body);
-
-	//b2CircleShape shape;
-	//shape.m_radius = PIXEL_TO_METERS(diameter) * 0.5f;
-
-	//b2FixtureDef fixture;
-	//fixture.shape = &shape;
-	//big_ball->CreateFixture(&fixture);
-
-	/*must add 2 circeles of 21 radius
-		center 1
-		208, 139,
-		center 2
-		277, 135*/
-	// Pivot 0, 0
-	
 
 	return true;
 }
@@ -222,7 +198,7 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size)
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateStaticChain(int x, int y, int* points, int size,int resti)
+PhysBody* ModulePhysics::CreateStaticChain(int x, int y, int* points, int size,float resti)
 {
 	b2BodyDef body;
 	body.type = b2_staticBody;
@@ -513,8 +489,11 @@ PhysBody* ModulePhysics::CreateFlipperPbody(int x, int y, int* points, int size)
 	b2BodyDef body;
 	body.type = b2_dynamicBody;
 	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+	
 
+	
 	b2Body* b = world->CreateBody(&body);
+
 	b2PolygonShape box;
 
 	//creating the shape

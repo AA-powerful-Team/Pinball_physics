@@ -6,6 +6,12 @@
 #include "ModuleTextures.h"
 #include "ModuleAudio.h"
 #include "ModulePhysics.h"
+#include "ChainPoints.h"
+
+
+float WALL_RESTITUTION = 0.3;
+float BOUNCER_RESTI = 1.2;
+float flipperMaxTorque = 28.0;
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -49,7 +55,6 @@ bool ModuleSceneIntro::Start()
 	KickerFX= App->audio->LoadFx("Assets/FX/Kicker.wav");
 
 	launcherRect = {0,0,38,68};
-
 
 
 
@@ -160,6 +165,17 @@ bool ModuleSceneIntro::Start()
 		24, 540,
 		24, 497
 	};
+
+	// Pivot -1, -1
+	int invFlipper[8] = {
+		465, 300,
+		456, 317,
+		433, 356,
+		468, 301
+	};
+	
+	
+	
 
 	// Pivot 0, 0
 	int bonus_entrance[44] = {
@@ -343,29 +359,63 @@ bool ModuleSceneIntro::Start()
 		94, 272
 	};
 
+	int blue_triangle[10] = {
+		86, 270,
+		94, 268,
+		100, 268,
+		98, 273,
+		90, 270
+	};
 
+	int invWall[8] = {
+		0, 569,
+		1, 735,
+		-15, 732,
+		-16, 568
+	};
+	// Pivot -1, -1
+	int triangleRightWall[10] = {
+		334, 585,
+		333, 658,
+		288, 686,
+		293, 680,
+		330, 657
+	};
+	// Pivot -1, -1
+	int triangleLeftWall[10] = {
+		63, 582,
+		64, 660,
+		105, 684,
+		108, 682,
+		67, 658
+	};
 
+//Bouncers
+	world_parts.add(Bouncer = CreateStaticChain(0, 0, triangle_boucer_right, 12, BOUNCER_RESTI));
+	world_parts.add(BouncerL = CreateStaticChain(0, 0, triangle_boucer, 12, BOUNCER_RESTI));
+	world_parts.add(BouncerCircle = CreateStaticCircle(275, 136, 20, BOUNCER_RESTI));
+	world_parts.add(BouncerLCircle = CreateStaticCircle(207, 140, 20, BOUNCER_RESTI));
+	world_parts.add(BlueBouncer = CreateStaticChain(1, 0, BlueBouncer_Coord, 12, BOUNCER_RESTI));
+	//no restitution
+	world_parts.add(CreateStaticChain(0, 0, blue_triangle, 10, 0));
+	world_parts.add(CreateStaticChain(0, 0, top3_path, 12, 0));
+	world_parts.add(CreateStaticChain(0, 0, top2_path, 12, 0));
+	world_parts.add(CreateStaticChain(0, 0, top1_path, 12, 0));
+	world_parts.add(CreateStaticChain(0, 0, triangleRightWall, 10, 0));
+	world_parts.add(CreateStaticChain(0, 0, triangleLeftWall, 10, 0));
+	//with restitution
+	world_parts.add(CreateStaticChain(0, 0, invWall, 8, WALL_RESTITUTION));
+	world_parts.add(CreateStaticChain(0, 0, triangle_bottom_left, 6, WALL_RESTITUTION));
+	world_parts.add(CreateStaticChain(0, 1, right_down_path_to_flipper, 16, WALL_RESTITUTION));
+	world_parts.add(CreateStaticChain(0, 2, middle_thing, 14, WALL_RESTITUTION));
+	world_parts.add(CreateStaticChain(2, 1, left_down_path_to_flipper, 16, WALL_RESTITUTION));
+	world_parts.add(CreateStaticChain(2, 0, right_down_base, 16, WALL_RESTITUTION));
 
-	world_parts.add(Bouncer = App->physics->CreateStaticChain(0, 0, triangle_boucer_right, 14, 2));
-	world_parts.add(BouncerL = App->physics->CreateStaticChain(0, 0, triangle_boucer, 12, 2));
-	world_parts.add(BouncerCircle = App->physics->CreateStaticCircle(275, 136, 20, 2));
-	world_parts.add(BouncerLCircle = App->physics->CreateStaticCircle(207, 140, 20, 2));
-	world_parts.add(BlueBouncer = App->physics->CreateStaticChain(1, 0, BlueBouncer_Coord, 16, 2));
+	world_parts.add(CreateStaticChain(0, 0, middle_pice_with_right_fliper_up, 28, WALL_RESTITUTION));
+	world_parts.add(CreateStaticChain(0, 0, bonus_entrance, 44, WALL_RESTITUTION));
 
-	world_parts.add(App->physics->CreateStaticChain(0, 0, top3_path, 12, 0));
-	world_parts.add(App->physics->CreateStaticChain(0, 0, top2_path, 12, 0));
-	world_parts.add(App->physics->CreateStaticChain(0, 0, top1_path, 12, 0));
-	world_parts.add(App->physics->CreateStaticChain(0, 0, triangle_bottom_left, 6, 0));
-	world_parts.add(App->physics->CreateStaticChain(0, 1, right_down_path_to_flipper, 16, 0));
-	world_parts.add(App->physics->CreateStaticChain(0, 2, middle_thing, 14, 0));
-	world_parts.add(App->physics->CreateStaticChain(2, 1, left_down_path_to_flipper, 16, 0));
-	world_parts.add(App->physics->CreateStaticChain(2, 0, right_down_base, 16, 0));
-
-	world_parts.add(App->physics->CreateStaticChain(0, 0, middle_pice_with_right_fliper_up, 28, 0));
-	world_parts.add(App->physics->CreateStaticChain(0, 0, bonus_entrance, 44, 0));
-
-	world_parts.add(App->physics->CreateStaticChain(0, 0, top_triangle_right, 28, 0));
-	world_parts.add(App->physics->CreateStaticChain(0, 0, up_left_corner, 122, 0));
+	world_parts.add(CreateStaticChain(0, 0, top_triangle_right, 28, WALL_RESTITUTION));
+	world_parts.add(CreateStaticChain(0, 0, up_left_corner, 122, WALL_RESTITUTION));
 
 	//sensors
 		//Upper Part
@@ -384,7 +434,7 @@ bool ModuleSceneIntro::Start()
 	//EssentialSensors
 	pitSensor = App->physics->CreateRectangleSensor(200, 835, 400, 10);
 	
-
+  
 	//Flipper Collision this shold go with th eother colliders from the module physics
 	leftFlipperRect = { 0,78,63,43 };
 	leftFlipper = App->physics->CreateFlipper(120, 748,
@@ -400,8 +450,14 @@ bool ModuleSceneIntro::Start()
 
 	rightUpFlipperRect = { 101, 0, 38, 57 };
 	rightUpFlipper = App->physics->CreateFlipper(374, 327,
-		9, fliper_up_right, 14, rightUpFlipperRect, 15 - 15, 60 - 15, -374, -327);
+		9, fliper_up_right, 14, rightUpFlipperRect, 0, 45, -374, -327);
 
+  
+	//invisible flipper
+	invisibleFlipperRect = { 0,0,10,10 };
+	InvisibleFlipper = App->physics->CreateFlipper(460, 300,
+		1, invFlipper, 8, invisibleFlipperRect, -30, 0, -463, -301);
+	
 
 	//startingPoint
 	 StartingPoint.x=453;
@@ -444,7 +500,7 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
-
+	InvisibleFlipper.Pbody->body->SetGravityScale(0);
 	//printingTheElement that are not going to move
 	App->renderer->Blit(StaticScene, 0, 0);
 	App->renderer->Blit(ScoreBoard, 477, 0);
@@ -577,13 +633,27 @@ if (!EndMatch) {
 
 
 	// fliper controls
+	if (up)
+	{
+		App->physics->FlipperSetMaxMotorTorque(InvisibleFlipper, -30.0f);
+		App->physics->FlipperSetMotorSpeed(InvisibleFlipper, flipperMaxTorque);
+
+	}
+	else if (up==false){
+		App->physics->FlipperSetMaxMotorTorque(InvisibleFlipper, flipperMaxTorque);
+		App->physics->FlipperSetMotorSpeed(InvisibleFlipper, -flipperMaxTorque);
+
+	}
 
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN)
 	{
-		App->physics->FlipperSetMaxMotorTorque(leftFlipper, 25.0f);
-		App->physics->FlipperSetMotorSpeed(leftFlipper, -25.0f);
-		App->physics->FlipperSetMaxMotorTorque(leftUpFlipper, 25.0f);
-		App->physics->FlipperSetMotorSpeed(leftUpFlipper, -25.0f);
+		App->physics->FlipperSetMaxMotorTorque(leftFlipper, flipperMaxTorque);
+		App->physics->FlipperSetMotorSpeed(leftFlipper, -flipperMaxTorque);
+		App->physics->FlipperSetMaxMotorTorque(leftUpFlipper, flipperMaxTorque);
+		App->physics->FlipperSetMotorSpeed(leftUpFlipper, -flipperMaxTorque);
+
+		up = true;
+		
 
 		App->audio->PlayFx(FlipperUp);
 
@@ -591,10 +661,13 @@ if (!EndMatch) {
 	else if (App->input->GetKey(SDL_SCANCODE_LEFT) == (KEY_UP))
 	{
 		App->physics->FlipperSetMaxMotorTorque(leftFlipper, 10.0f);
-		App->physics->FlipperSetMotorSpeed(leftFlipper, 25.0f);
+		App->physics->FlipperSetMotorSpeed(leftFlipper, flipperMaxTorque);
 		App->physics->FlipperSetMaxMotorTorque(leftUpFlipper, 10.0f);
-		App->physics->FlipperSetMotorSpeed(leftUpFlipper, 25.0f);
+		App->physics->FlipperSetMotorSpeed(leftUpFlipper, flipperMaxTorque);
 
+		
+
+		
 		App->audio->PlayFx(FlipperDown);
 
 	}
@@ -604,22 +677,29 @@ if (!EndMatch) {
 		App->physics->FlipperSetMotorSpeed(leftFlipper, 0.0f);
 		App->physics->FlipperSetMaxMotorTorque(leftUpFlipper, 0.0f);
 		App->physics->FlipperSetMotorSpeed(leftUpFlipper, 0.0f);
+
+		/*App->physics->FlipperSetMaxMotorTorque(InvisibleFlipper, 0.0f);
+		App->physics->FlipperSetMotorSpeed(InvisibleFlipper, 0.0f);*/
+		
 	}
+	//flipper 2
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN)
 	{
-		App->physics->FlipperSetMaxMotorTorque(rightFlipper, 25.0f);
-		App->physics->FlipperSetMotorSpeed(rightFlipper, 25.0f);
-		App->physics->FlipperSetMaxMotorTorque(rightUpFlipper, 25.0f);
-		App->physics->FlipperSetMotorSpeed(rightUpFlipper, 25.0f);
+		App->physics->FlipperSetMaxMotorTorque(rightFlipper, flipperMaxTorque);
+		App->physics->FlipperSetMotorSpeed(rightFlipper, flipperMaxTorque);
+		App->physics->FlipperSetMaxMotorTorque(rightUpFlipper, flipperMaxTorque);
+		App->physics->FlipperSetMotorSpeed(rightUpFlipper, flipperMaxTorque);
 
 		App->audio->PlayFx(FlipperUp);
+
+		up = false;
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_RIGHT) == (KEY_UP))
 	{
 		App->physics->FlipperSetMaxMotorTorque(rightFlipper, 10.0f);
-		App->physics->FlipperSetMotorSpeed(rightFlipper, -25.0f);
+		App->physics->FlipperSetMotorSpeed(rightFlipper, -flipperMaxTorque);
 		App->physics->FlipperSetMaxMotorTorque(rightUpFlipper, 10.0f);
-		App->physics->FlipperSetMotorSpeed(rightUpFlipper, -25.0f);
+		App->physics->FlipperSetMotorSpeed(rightUpFlipper, -flipperMaxTorque);
 
 		App->audio->PlayFx(FlipperDown);
 
