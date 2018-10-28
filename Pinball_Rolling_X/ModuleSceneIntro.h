@@ -24,6 +24,12 @@ struct flipper
 	SDL_Rect Rect;
 };
 
+struct kicker {
+	PhysBody* anchor;
+	PhysBody* body;
+	b2PrismaticJoint* joint;
+};
+
 class ModuleSceneIntro : public Module
 {
 public:
@@ -48,16 +54,20 @@ public:
 	SDL_Texture* Ball;
 	SDL_Texture* box;
 	SDL_Texture* rick;
-	SDL_Texture*StaticScene;
-	SDL_Texture*ScoreBoard;
-	SDL_Texture*BouncerTR;
-	SDL_Texture*BouncerCIR;
-	SDL_Texture*BlueBouncerLight;
+	SDL_Texture* StaticScene;
+	SDL_Texture* ScoreBoard;
+	SDL_Texture* BouncerTR;
+	SDL_Texture* BouncerCIR;
+	SDL_Texture* BlueBouncerLight;
 	SDL_Texture* spriteSheet;
+
 	
 	//lights
 	SDL_Texture*BigBlueLight;
 	SDL_Texture*BigBlueTriLightH;
+
+
+	SDL_Texture* launchertext;
 
 
 	//flippers
@@ -74,7 +84,10 @@ public:
 	flipper leftUpFlipper;
 	SDL_Rect leftUpFlipperRect;
 
-	//music
+	//kicker
+	kicker launcher;
+	SDL_Rect launcherRect;
+
 
 	uint HitBall;
 	uint BouncerSound;

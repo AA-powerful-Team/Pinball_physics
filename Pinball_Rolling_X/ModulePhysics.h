@@ -45,11 +45,12 @@ public:
 	bool CleanUp();
 
 	PhysBody* CreateCircle(int x, int y, int radius);
-	PhysBody*CreateStaticCircle(int x, int y, int radius);
-	PhysBody* CreateRectangle(int x, int y, int width, int height);
+	PhysBody*CreateStaticCircle(int x, int y, int radius, int resti);
+	PhysBody* CreateRectangle(int x, int y, int width, int height,float rest);
+	PhysBody* CreateStaticRectangle(int x, int y, int width, int height,int resti);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height);
 	PhysBody* CreateChain(int x, int y, int* points, int size);
-	PhysBody* CreateStaticChain(int x, int y, int* points, int size);
+	PhysBody* CreateStaticChain(int x, int y, int* points, int size, int resti = 0);
 
 	//Colliders
 	PhysBody* Bouncer = nullptr;
@@ -83,6 +84,9 @@ public:
 	//Flipper movement
 	void FlipperSetMaxMotorTorque(flipper &f, float32 MaxTorque);
 	void FlipperSetMotorSpeed(flipper &f, float32 MotorSpeed);
+
+	//create primatic joint
+	b2PrismaticJoint* CreatePrismaticJoint(PhysBody * anchor, PhysBody * body, int max_move, int min_move, int motor_speed, int max_force);
 
 private:
 
