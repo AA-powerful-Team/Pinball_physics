@@ -476,7 +476,10 @@ bool ModuleSceneIntro::CleanUp()
 {
 	LOG("Unloading Intro scene");
 
-	
+	//remove music & FX
+	App->audio->CleanUp();
+
+	//text clean up
 	App->textures->Unload(Ball);
 	App->textures->Unload(StaticScene);
 	App->textures->Unload(ScoreBoard);
@@ -508,6 +511,7 @@ bool ModuleSceneIntro::CleanUp()
 	circles.clear();
 	LOG("Unloading circles");
 
+	//remove world parts
 	p2List_item<PhysBody*>* item2;
 	item2 = world_parts.getFirst();
 
@@ -522,6 +526,7 @@ bool ModuleSceneIntro::CleanUp()
 	world_parts.clear();
 	LOG("Unloading world parts");
 
+	//remove sensors
 	p2List_item<PhysBody*>* item3;
 	item3 = sensorsList.getFirst();
 
