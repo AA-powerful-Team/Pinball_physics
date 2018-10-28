@@ -15,7 +15,9 @@ The original pinball game can be found [here] (http://www.freewebarcade.com/game
 
 Download the Zip file and extract it. Open the folder and double click on the executable (.exe) 
 
-_IMPORTANT: do not modify, change or add any folder or file, or else the game may not work correctly._ ## Controls Player controls: 
+_IMPORTANT: do not modify, change or add any folder or file, or else the game may not work correctly._ 
+
+## Controls Player controls: 
 
 - RIGHT FLIPPER: Right arrow key 
 - LEFT FLIPPER: Right left key 
