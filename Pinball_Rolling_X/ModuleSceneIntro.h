@@ -80,6 +80,7 @@ public:
 	uint BouncerSound;
 	uint BlueUpperSenser1;
 	uint SmallLightOn;
+	uint BallInPitFX;
 
 	//Collisions bools
 	bool BlitBouncer=false;
@@ -89,10 +90,18 @@ public:
 	bool BlitBlueBouncer = false;
 
 	//Sensors bools
+	//Light Sensors Bools
 	bool sensor_BlueUpperSenser1=false;
 	bool sensor_BlueUpperSenser2 = false;
 	bool sensor_BlueUpperSenser3 = false;
 	bool sensor_BlueUpperSenser4 = false;
 	bool sensor_UpperSmallSenser1 = false;
+	//Essntial Sensors
+	bool PitSensorForBall = false;
 
+	//numOfBalls
+	int BallsNum = 4;
+
+	//startingPoint
+	iPoint StartingPoint;
 };

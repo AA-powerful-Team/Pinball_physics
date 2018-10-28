@@ -66,6 +66,11 @@ public:
 	PhysBody*UpperSenser4;
 	PhysBody*UpperSmallSenser1;
 
+	//EssentialSensors
+	PhysBody*pitSensor;
+
+
+
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
 

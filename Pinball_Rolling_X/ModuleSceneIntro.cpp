@@ -37,6 +37,9 @@ bool ModuleSceneIntro::Start()
 	BouncerSound= App->audio->LoadFx("Assets/FX/BallHitBouncers.wav");
 	BlueUpperSenser1 = App->audio->LoadFx("Assets/FX/TopBigBlueLighOn.wav");
 	SmallLightOn= App->audio->LoadFx("Assets/FX/SmallLightOn.wav");
+	BallInPitFX = App->audio->LoadFx("Assets/FX/OhhNoo.wav");
+
+
 
 	spriteSheet = App->textures->Load("Assets/Sprites/spriteSheet.png");
 
@@ -99,6 +102,11 @@ bool ModuleSceneIntro::Start()
 	rightUpFlipperRect = { 101, 0, 38, 57 };
 	rightUpFlipper = App->physics->CreateFlipper(374, 327,
 		9, fliper_up_right, 14, rightUpFlipperRect, 15 - 15, 60 - 15, -374, -327);
+
+
+
+	 StartingPoint.x=453;
+	 StartingPoint.y = 730;
 
 	return ret;
 }
@@ -190,12 +198,19 @@ update_status ModuleSceneIntro::Update()
 		//sensor_BlueUpperSenser3 = false;
 	}
 
-	//Spawn Balls
-	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
-	{
-		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 10));
+	//Check Essential Sensors
+	//Ball in Pit
+	
+	if (PitSensorForBall || App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN && BallsNum>0) {
+
+		circles.add(App->physics->CreateCircle(StartingPoint.x,StartingPoint.y,10));
 		circles.getLast()->data->listener = this;
+
+		PitSensorForBall = false;
+		
 	}
+
+
 
 	// fliper controls
 
@@ -356,6 +371,18 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			sensor_UpperSmallSenser1 = true;
 		}
 	}
+	
+	if (bodyA == App->physics->pitSensor && bodyB == circles.getLast()->data ||
+		bodyB == App->physics->pitSensor && bodyA == circles.getLast()->data) {
+
+		if (PitSensorForBall != true) {
+			App->audio->PlayFx(BallInPitFX);
+			PitSensorForBall = true;
+		}
+
+		BallsNum--;
+	}
+
 	
 
 	App->audio->PlayFx(HitBall);

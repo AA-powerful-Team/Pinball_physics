@@ -366,7 +366,11 @@ bool ModulePhysics::Start()
 	UpperSenser3 = CreateRectangleSensor(222, 60, 10, 10);
 	UpperSenser4 = CreateRectangleSensor(350, 35, 10, 10);
 	UpperSmallSenser1= CreateRectangleSensor(392, 147, 7, 7);
+	//EssentialSensors
+	pitSensor = CreateRectangleSensor(200,835, 400, 10);
 
+
+	
 
 	return true;
 }
