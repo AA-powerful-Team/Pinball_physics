@@ -46,8 +46,34 @@ public:
 public:
 
 	p2List<PhysBody*> circles;
+	p2List<PhysBody*> world_parts;
 
+
+	//Colliders
+	PhysBody* Bouncer = nullptr;
+	PhysBody*BouncerL = nullptr;
+	PhysBody* BouncerCircle = nullptr;
+	PhysBody*BouncerLCircle = nullptr;
+	PhysBody*BlueBouncer = nullptr;
+
+
+	//Sensors
+		//Upper part
+	PhysBody*UpperSenser1;
+	PhysBody*UpperSenser2;
+	PhysBody*UpperSenser3;
+	PhysBody*UpperSenser4;
+	PhysBody*UpperSmallSenser1;
+	PhysBody*UpperSmallSenser2;
+	PhysBody*UpperSmallSenser3;
+
+		//Lower part
+	PhysBody*LowerBigSensor1;
+
+	//EssentialSensors
+	PhysBody*pitSensor;
 	
+
 	
 
 
@@ -63,6 +89,7 @@ public:
 	//lights
 	SDL_Texture*BigBlueLight;
 	SDL_Texture*BigBlueTriLightH;
+	SDL_Texture*LittleBlueLight;
 
 
 	
@@ -82,8 +109,7 @@ public:
 	flipper leftUpFlipper;
 	SDL_Rect leftUpFlipperRect;
 
-	flipper InvisibleFlipper;
-	SDL_Rect invisibleFlipperRect;
+	
 
 	//kicker
 	kicker launcher;
@@ -107,15 +133,24 @@ public:
 	bool BlitBlueBouncer = false;
 
 	//Sensors bools
-	//Light Sensors Bools
+		//Upper Light Sensors Bools
 	bool sensor_BlueUpperSenser1=false;
 	bool sensor_BlueUpperSenser2 = false;
 	bool sensor_BlueUpperSenser3 = false;
 	bool sensor_BlueUpperSenser4 = false;
 	bool sensor_UpperSmallSenser1 = false;
+	bool sensor_UpperSmallSenser2 = false;
+	bool sensor_UpperSmallSenser3 = false;
+
+		//Lower Light Sensors Bools
+	bool sensor_LowerBigSensor1 = false;
+
+
+
+
+
 	//Essntial Sensors bool
 	bool PitSensorForBall = false;
-	bool ColliderPathKickerOn = false;
 	bool EndMatch = false;
 
 	//numOfBalls
