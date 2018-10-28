@@ -70,16 +70,15 @@ public:
 	//create primatic joint
 	b2PrismaticJoint* CreatePrismaticJoint(PhysBody * anchor, PhysBody * body, int max_move, int min_move, int motor_speed, int max_force);
 
+	
+
 private:
 
 	bool debug;
 	b2World* world;
-
-
 	b2Body* ground;
 	
 	// Mouse joint
-
 	b2MouseJoint* mouse_joint;
 	b2Body* body_clicked;
 };

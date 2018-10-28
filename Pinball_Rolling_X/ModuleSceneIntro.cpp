@@ -9,9 +9,6 @@
 #include "ChainPoints.h"
 
 
-float WALL_RESTITUTION = 0.3;
-float BOUNCER_RESTI = 1.2;
-float flipperMaxTorque = 28.0;
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -391,31 +388,31 @@ bool ModuleSceneIntro::Start()
 	};
 
 //Bouncers
-	world_parts.add(Bouncer = CreateStaticChain(0, 0, triangle_boucer_right, 12, BOUNCER_RESTI));
-	world_parts.add(BouncerL = CreateStaticChain(0, 0, triangle_boucer, 12, BOUNCER_RESTI));
-	world_parts.add(BouncerCircle = CreateStaticCircle(275, 136, 20, BOUNCER_RESTI));
-	world_parts.add(BouncerLCircle = CreateStaticCircle(207, 140, 20, BOUNCER_RESTI));
-	world_parts.add(BlueBouncer = CreateStaticChain(1, 0, BlueBouncer_Coord, 12, BOUNCER_RESTI));
+	world_parts.add(Bouncer = App->physics->CreateStaticChain(0, 0, triangle_boucer_right, 12, BOUNCER_RESTI));
+	world_parts.add(BouncerL = App->physics->CreateStaticChain(0, 0, triangle_boucer, 12, BOUNCER_RESTI));
+	world_parts.add(BouncerCircle = App->physics->CreateStaticCircle(275, 136, 20, BOUNCER_RESTI));
+	world_parts.add(BouncerLCircle = App->physics->CreateStaticCircle(207, 140, 20, BOUNCER_RESTI));
+	world_parts.add(BlueBouncer = App->physics->CreateStaticChain(1, 0, BlueBouncer_Coord, 12, BOUNCER_RESTI));
 	//no restitution
-	world_parts.add(CreateStaticChain(0, 0, blue_triangle, 10, 0));
-	world_parts.add(CreateStaticChain(0, 0, top3_path, 12, 0));
-	world_parts.add(CreateStaticChain(0, 0, top2_path, 12, 0));
-	world_parts.add(CreateStaticChain(0, 0, top1_path, 12, 0));
-	world_parts.add(CreateStaticChain(0, 0, triangleRightWall, 10, 0));
-	world_parts.add(CreateStaticChain(0, 0, triangleLeftWall, 10, 0));
+	world_parts.add(App->physics->CreateStaticChain(0, 0, blue_triangle, 10, 0));
+	world_parts.add(App->physics->CreateStaticChain(0, 0, top3_path, 12, 0));
+	world_parts.add(App->physics->CreateStaticChain(0, 0, top2_path, 12, 0));
+	world_parts.add(App->physics->CreateStaticChain(0, 0, top1_path, 12, 0));
+	world_parts.add(App->physics->CreateStaticChain(0, 0, triangleRightWall, 10, 0));
+	world_parts.add(App->physics->CreateStaticChain(0, 0, triangleLeftWall, 10, 0));
 	//with restitution
-	world_parts.add(CreateStaticChain(0, 0, invWall, 8, WALL_RESTITUTION));
-	world_parts.add(CreateStaticChain(0, 0, triangle_bottom_left, 6, WALL_RESTITUTION));
-	world_parts.add(CreateStaticChain(0, 1, right_down_path_to_flipper, 16, WALL_RESTITUTION));
-	world_parts.add(CreateStaticChain(0, 2, middle_thing, 14, WALL_RESTITUTION));
-	world_parts.add(CreateStaticChain(2, 1, left_down_path_to_flipper, 16, WALL_RESTITUTION));
-	world_parts.add(CreateStaticChain(2, 0, right_down_base, 16, WALL_RESTITUTION));
+	world_parts.add(App->physics->CreateStaticChain(0, 0, invWall, 8, WALL_RESTITUTION));
+	world_parts.add(App->physics->CreateStaticChain(0, 0, triangle_bottom_left, 6, WALL_RESTITUTION));
+	world_parts.add(App->physics->CreateStaticChain(0, 1, right_down_path_to_flipper, 16, WALL_RESTITUTION));
+	world_parts.add(App->physics->CreateStaticChain(0, 2, middle_thing, 14, WALL_RESTITUTION));
+	world_parts.add(App->physics->CreateStaticChain(2, 1, left_down_path_to_flipper, 16, WALL_RESTITUTION));
+	world_parts.add(App->physics->CreateStaticChain(2, 0, right_down_base, 16, WALL_RESTITUTION));
 
-	world_parts.add(CreateStaticChain(0, 0, middle_pice_with_right_fliper_up, 28, WALL_RESTITUTION));
-	world_parts.add(CreateStaticChain(0, 0, bonus_entrance, 44, WALL_RESTITUTION));
+	world_parts.add(App->physics->CreateStaticChain(0, 0, middle_pice_with_right_fliper_up, 28, WALL_RESTITUTION));
+	world_parts.add(App->physics->CreateStaticChain(0, 0, bonus_entrance, 44, WALL_RESTITUTION));
 
-	world_parts.add(CreateStaticChain(0, 0, top_triangle_right, 28, WALL_RESTITUTION));
-	world_parts.add(CreateStaticChain(0, 0, up_left_corner, 122, WALL_RESTITUTION));
+	world_parts.add(App->physics->CreateStaticChain(0, 0, top_triangle_right, 28, WALL_RESTITUTION));
+	world_parts.add(App->physics->CreateStaticChain(0, 0, up_left_corner, 122, WALL_RESTITUTION));
 
 	//sensors
 		//Upper Part
@@ -433,7 +430,9 @@ bool ModuleSceneIntro::Start()
 
 	//EssentialSensors
 	pitSensor = App->physics->CreateRectangleSensor(200, 835, 400, 10);
-	
+	KickerPathSensor= App->physics->CreateRectangleSensor(450, 230, 50, 5);
+
+
   
 	//Flipper Collision this shold go with th eother colliders from the module physics
 	leftFlipperRect = { 0,78,63,43 };
@@ -626,24 +625,25 @@ if (!EndMatch) {
 		circles.getLast()->data->listener = this;
 
 		PitSensorForBall = false;
-
+		FlipperKickerup = false;
 		
 	}
 
 
 
 	// fliper controls
-	if (up)
+	if (FlipperKickerup)
 	{
 		App->physics->FlipperSetMaxMotorTorque(InvisibleFlipper, -30.0f);
 		App->physics->FlipperSetMotorSpeed(InvisibleFlipper, flipperMaxTorque);
 
 	}
-	else if (up==false){
+	else if (FlipperKickerup ==false){
 		App->physics->FlipperSetMaxMotorTorque(InvisibleFlipper, flipperMaxTorque);
 		App->physics->FlipperSetMotorSpeed(InvisibleFlipper, -flipperMaxTorque);
 
 	}
+
 
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN)
 	{
@@ -652,7 +652,7 @@ if (!EndMatch) {
 		App->physics->FlipperSetMaxMotorTorque(leftUpFlipper, flipperMaxTorque);
 		App->physics->FlipperSetMotorSpeed(leftUpFlipper, -flipperMaxTorque);
 
-		up = true;
+	
 		
 
 		App->audio->PlayFx(FlipperUp);
@@ -678,8 +678,7 @@ if (!EndMatch) {
 		App->physics->FlipperSetMaxMotorTorque(leftUpFlipper, 0.0f);
 		App->physics->FlipperSetMotorSpeed(leftUpFlipper, 0.0f);
 
-		/*App->physics->FlipperSetMaxMotorTorque(InvisibleFlipper, 0.0f);
-		App->physics->FlipperSetMotorSpeed(InvisibleFlipper, 0.0f);*/
+
 		
 	}
 	//flipper 2
@@ -692,7 +691,7 @@ if (!EndMatch) {
 
 		App->audio->PlayFx(FlipperUp);
 
-		up = false;
+		
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_RIGHT) == (KEY_UP))
 	{
@@ -888,11 +887,21 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			App->audio->PlayFx(BallInPitFX);
 			PitSensorForBall = true;
 		}
-
+		
+		FlipperKickerup = false;
+		
 		BallsNum--;
 	}
 
-	
+	if (bodyA == KickerPathSensor && bodyB == circles.getLast()->data ||
+		bodyB == KickerPathSensor && bodyA == circles.getLast()->data) {
+
+		if (FlipperKickerup != true) {
+			FlipperKickerup = true;
+		}
+
+	}
+
 	//----------------------------------------------
 
 	App->audio->PlayFx(HitBall);

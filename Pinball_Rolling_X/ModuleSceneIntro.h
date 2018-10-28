@@ -71,12 +71,12 @@ public:
 	PhysBody*LowerBigSensor1;
 
 	//EssentialSensors
+	PhysBody*KickerPathSensor;
 	PhysBody*pitSensor;
 	
 
-	
 
-
+	//Textures
 	SDL_Texture* Ball;
 	SDL_Texture* StaticScene;
 	SDL_Texture* ScoreBoard;
@@ -154,11 +154,17 @@ public:
 	//Essntial Sensors bool
 	bool PitSensorForBall = false;
 	bool EndMatch = false;
+	bool FlipperKickerup = false;
 
 	//numOfBalls
 	int BallsNum = 4;
 
 	//startingPoint
 	iPoint StartingPoint;
-	bool up = false;
+	
+
+	//Parameters
+	float WALL_RESTITUTION = 0.3;
+	float BOUNCER_RESTI = 1.2;
+	float flipperMaxTorque = 28.0;
 };
