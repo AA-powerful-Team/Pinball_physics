@@ -12,11 +12,12 @@ class ModuleAudio;
 class ModulePlayer;
 class ModuleSceneIntro;
 class ModulePhysics;
+class ModuleFonts;
 
 class Application
 {
 public:
-	ModuleRender* renderer;
+	ModuleRender * renderer;
 	ModuleWindow* window;
 	ModuleTextures* textures;
 	ModuleInput* input;
@@ -24,6 +25,7 @@ public:
 	ModulePlayer* player;
 	ModuleSceneIntro* scene_intro;
 	ModulePhysics* physics;
+	ModuleFonts* fonts;
 
 private:
 

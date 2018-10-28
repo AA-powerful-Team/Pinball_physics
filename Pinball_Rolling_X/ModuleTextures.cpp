@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "ModuleRender.h"
 #include "ModuleTextures.h"
+#include "p2Defs.h"
 
 #include "SDL_image/include/SDL_image.h"
 #pragma comment( lib, "SDL_image/libx86/SDL2_image.lib" )
@@ -95,4 +96,30 @@ void ModuleTextures::Unload(SDL_Texture* texture)
 		}
 		item = item->next;
 	}
+}
+
+// size of a texture
+void ModuleTextures::GetSize(const SDL_Texture* texture, uint& width, uint& height) const
+{
+	SDL_QueryTexture((SDL_Texture*)texture, NULL, NULL, (int*)&width, (int*)&height);
+}
+
+// Load new texture from file path
+
+SDL_Texture* const ModuleTextures::Load2(const char* path)
+{
+	SDL_Texture* texture = NULL;
+	SDL_Surface* surface = IMG_Load(path);
+
+	if (surface == NULL)
+	{
+		LOG("Could not load surface with path: %s. IMG_Load: %s", path, IMG_GetError());
+	}
+	else
+	{
+		/*texture = LoadSurface(surface);
+		SDL_FreeSurface(surface);*/
+	}
+
+	return texture;
 }

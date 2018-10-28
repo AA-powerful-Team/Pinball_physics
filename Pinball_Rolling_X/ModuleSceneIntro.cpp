@@ -7,6 +7,7 @@
 #include "ModuleAudio.h"
 #include "ModulePhysics.h"
 #include "ChainPoints.h"
+#include "ModuleFonts.h"
 
 
 
@@ -24,6 +25,10 @@ bool ModuleSceneIntro::Start()
 {
 	LOG("Loading Intro assets");
 	bool ret = true;
+
+	//score define
+	score = 0;
+	high_score = 0;
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
@@ -52,340 +57,345 @@ bool ModuleSceneIntro::Start()
 	KickerFX= App->audio->LoadFx("Assets/FX/Kicker.wav");
 
 	launcherRect = {0,0,38,68};
+	YellowScoreRect = {0,0,31,32};
+	OrangeScoreRect = {0,0,31,32};
+	YellowScoreText = App->textures->Load("Assets/Sprites/OrangeNums.png");
+	OrangeScoreText = App->textures->Load("Assets/Sprites/YellowNums.png");
+
+	/*OrangeFont = App->fonts->Load("Assets/Sprites/OrangeNums.png", "0123456789", 1);
+	YellowFont = App->fonts->Load("Assets/Sprites/YellowNums.png", "0123456789", 1);
+*/
+	//int fliper_down_right[16] = {
+	//	271, 739,
+	//	225, 772,
+	//	225, 781,
+	//	230, 781,
+	//	285, 757,
+	//	289, 749,
+	//	288, 740,
+	//	280, 735
+	//};
+
+	//// Pivot 1, 0
+	//int fliper_down_left[16] = {
+	//	128, 736,
+	//	175, 772,
+	//	174, 780,
+	//	169, 781,
+	//	114, 757,
+	//	110, 749,
+	//	111, 742,
+	//	119, 736,
+	//};
+
+	//int fliper_up_left[14] = {
+	//	298, 370,
+	//	255, 348,
+	//	243, 348,
+	//	242, 359,
+	//	246, 364,
+	//	294, 377,
+	//	300, 375
+	//};
+
+	//// Pivot 1, 0
+	//int fliper_up_right[14] = {
+	//	370, 317,
+	//	348, 365,
+	//	350, 371,
+	//	354, 369,
+	//	384, 330,
+	//	384, 321,
+	//	378, 315
+	//};
+
+	//int up_left_corner[122] = {
+	//	27, 486,
+	//	60, 400,
+	//	21, 279,
+	//	5, 202,
+	//	0, 42,
+	//	12, 23,
+	//	28, 20,
+	//	49, 22,
+	//	65, 38,
+	//	67, 86,
+	//	70, 143,
+	//	76, 180,
+	//	87, 220,
+	//	92, 220,
+	//	91, 213,
+	//	81, 179,
+	//	76, 143,
+	//	72, 98,
+	//	70, 71,
+	//	69, 42,
+	//	69, 17,
+	//	80, 4,
+	//	97, 4,
+	//	107, 14,
+	//	108, 36,
+	//	111, 69,
+	//	113, 102,
+	//	118, 120,
+	//	121, 133,
+	//	136, 169,
+	//	144, 171,
+	//	129, 143,
+	//	121, 116,
+	//	116, 86,
+	//	117, 57,
+	//	124, 42,
+	//	137, 20,
+	//	161, 1,
+	//	178, 1,
+	//	202, 0,
+	//	227, -1,
+	//	255, 0,
+	//	282, 0,
+	//	303, 0,
+	//	335, 5,
+	//	370, 19,
+	//	388, 30,
+	//	409, 48,
+	//	422, 62,
+	//	438, 83,
+	//	455, 114,
+	//	465, 140,
+	//	469, 171,
+	//	469, 818,
+	//	476, 821,
+	//	475, -1,
+	//	-2, -1,
+	//	-1, 570,
+	//	8, 556,
+	//	24, 540,
+	//	24, 497
+	//};
+
+	//// Pivot -1, -1
+	//int invFlipper[8] = {
+	//	465, 300,
+	//	456, 317,
+	//	433, 356,
+	//	468, 301
+	//};
 
 
 
-	int fliper_down_right[16] = {
-		271, 739,
-		225, 772,
-		225, 781,
-		230, 781,
-		285, 757,
-		289, 749,
-		288, 740,
-		280, 735
-	};
 
-	// Pivot 1, 0
-	int fliper_down_left[16] = {
-		128, 736,
-		175, 772,
-		174, 780,
-		169, 781,
-		114, 757,
-		110, 749,
-		111, 742,
-		119, 736,
-	};
-
-	int fliper_up_left[14] = {
-		298, 370,
-		255, 348,
-		243, 348,
-		242, 359,
-		246, 364,
-		294, 377,
-		300, 375
-	};
-
-	// Pivot 1, 0
-	int fliper_up_right[14] = {
-		370, 317,
-		348, 365,
-		350, 371,
-		354, 369,
-		384, 330,
-		384, 321,
-		378, 315
-	};
-
-	int up_left_corner[122] = {
-		27, 486,
-		60, 400,
-		21, 279,
-		5, 202,
-		0, 42,
-		12, 23,
-		28, 20,
-		49, 22,
-		65, 38,
-		67, 86,
-		70, 143,
-		76, 180,
-		87, 220,
-		92, 220,
-		91, 213,
-		81, 179,
-		76, 143,
-		72, 98,
-		70, 71,
-		69, 42,
-		69, 17,
-		80, 4,
-		97, 4,
-		107, 14,
-		108, 36,
-		111, 69,
-		113, 102,
-		118, 120,
-		121, 133,
-		136, 169,
-		144, 171,
-		129, 143,
-		121, 116,
-		116, 86,
-		117, 57,
-		124, 42,
-		137, 20,
-		161, 1,
-		178, 1,
-		202, 0,
-		227, -1,
-		255, 0,
-		282, 0,
-		303, 0,
-		335, 5,
-		370, 19,
-		388, 30,
-		409, 48,
-		422, 62,
-		438, 83,
-		455, 114,
-		465, 140,
-		469, 171,
-		469, 818,
-		476, 821,
-		475, -1,
-		-2, -1,
-		-1, 570,
-		8, 556,
-		24, 540,
-		24, 497
-	};
-
-	// Pivot -1, -1
-	int invFlipper[8] = {
-		465, 300,
-		456, 317,
-		433, 356,
-		468, 301
-	};
+	//// Pivot 0, 0
+	//int bonus_entrance[44] = {
+	//	119, 385,
+	//	103, 377,
+	//	62, 264,
+	//	35, 176,
+	//	31, 58,
+	//	36, 60,
+	//	40, 174,
+	//	65, 258,
+	//	238, 346,
+	//	241, 370,
+	//	296, 385,
+	//	279, 453,
+	//	270, 469,
+	//	288, 409,
+	//	271, 391,
+	//	245, 391,
+	//	233, 433,
+	//	167, 401,
+	//	160, 353,
+	//	136, 338,
+	//	112, 340,
+	//	115, 372,
 
 
+	//};
+
+	//// Pivot 0, 0
+	//int top_triangle_right[28] = {
+	//	306, 78,
+	//	309, 43,
+	//	323, 45,
+	//	335, 53,
+	//	351, 61,
+	//	366, 73,
+	//	377, 84,
+	//	385, 92,
+	//	392, 104,
+	//	399, 111,
+	//	408, 130,
+	//	415, 144,
+	//	413, 154,
+	//	316, 86
+	//};
+
+	//// Pivot -1, -1
+	//int middle_pice_with_right_fliper_up[28] = {
+	//	345, 373,
+	//	355, 374,
+	//	389, 332,
+	//	391, 321,
+	//	377, 308,
+	//	415, 231,
+	//	413, 281,
+	//	398, 338,
+	//	376, 378,
+	//	341, 438,
+	//	311, 486,
+	//	329, 433,
+	//	337, 403,
+	//	344, 381
+	//};
+
+	//// Pivot -1, -1
+	//int right_down_base[16] = {
+	//	432, 858,
+	//	256, 860,
+	//	257, 823,
+	//	402, 735,
+	//	400, 569,
+	//	361, 517,
+	//	431, 365,
+	//	432, 839
+	//};
+
+	//// Pivot -1, -1
+	//int left_down_path_to_flipper[16] = {
+	//	31, 597,
+	//	33, 602,
+	//	34, 682,
+	//	106, 725,
+	//	109, 732,
+	//	100, 729,
+	//	27, 685,
+	//	27, 602,
+
+	//};
+
+	//// Pivot -1, -1
+	//int middle_thing[14] = {
+	//	189, 817,
+	//	193, 810,
+	//	203, 810,
+	//	207, 815,
+	//	206, 829,
+	//	189, 830,
+	//	188, 822
+	//};
+
+	//// Pivot -1, -1
+	//int right_down_path_to_flipper[16] = {
+	//	370, 598,
+	//	367, 602,
+	//	366, 682,
+	//	293, 726,
+	//	288, 734,
+	//	302, 727,
+	//	371, 684,
+	//	372, 603
+	//};
+
+	//// Pivot 1, 0
+	//int triangle_bottom_left[6] = {
+	//	0, 734,
+	//	139, 821,
+	//	-1, 821
+	//};
+
+	//// Pivot 1, 0
+	//int top1_path[12] = {
+	//	206, 81,
+	//	206, 48,
+	//	203, 43,
+	//	201, 46,
+	//	201, 80,
+	//	204, 85,
+	//};
+
+	//// Pivot 1, 0
+	//int top2_path[12] = {
+	//	236, 76,
+	//	235, 40,
+	//	239, 37,
+	//	242, 40,
+	//	242, 74,
+	//	241, 79
+	//};
+
+	//// Pivot 1, 0
+	//int top3_path[12] = {
+	//	270, 74,
+	//	270, 40,
+	//	274, 34,
+	//	277, 40,
+	//	277, 74,
+	//	274, 80
+	//};
+
+	//// Pivot 1, 0
+	//int triangle_boucer[12] = {
+	//	115, 678,
+	//	75, 583,
+	//	66, 581,
+	//	67, 664,
+	//	112, 688,
+	//	116, 683
+	//};
+
+	//// Pivot 1, 0
+	//int triangle_boucer_right[14] = {
+	//	284, 680,
+	//	326, 581,
+	//	330, 580,
+	//	335, 584,
+	//	334, 662,
+	//	291, 686,
+	//	284, 686
+	//};
 
 
-	// Pivot 0, 0
-	int bonus_entrance[44] = {
-		119, 385,
-		103, 377,
-		62, 264,
-		35, 176,
-		31, 58,
-		36, 60,
-		40, 174,
-		65, 258,
-		238, 346,
-		241, 370,
-		296, 385,
-		279, 453,
-		270, 469,
-		288, 409,
-		271, 391,
-		245, 391,
-		233, 433,
-		167, 401,
-		160, 353,
-		136, 338,
-		112, 340,
-		115, 372,
+	//int BlueBouncer_Coord[16] = {
+	//	92, 270,
+	//	95, 266,
+	//	100, 265,
+	//	149, 290,
+	//	152, 294,
+	//	152, 298,
+	//	149, 298,
+	//	94, 272
+	//};
 
+	//int blue_triangle[10] = {
+	//	86, 270,
+	//	94, 268,
+	//	100, 268,
+	//	98, 273,
+	//	90, 270
+	//};
 
-	};
-
-	// Pivot 0, 0
-	int top_triangle_right[28] = {
-		306, 78,
-		309, 43,
-		323, 45,
-		335, 53,
-		351, 61,
-		366, 73,
-		377, 84,
-		385, 92,
-		392, 104,
-		399, 111,
-		408, 130,
-		415, 144,
-		413, 154,
-		316, 86
-	};
-
-	// Pivot -1, -1
-	int middle_pice_with_right_fliper_up[28] = {
-		345, 373,
-		355, 374,
-		389, 332,
-		391, 321,
-		377, 308,
-		415, 231,
-		413, 281,
-		398, 338,
-		376, 378,
-		341, 438,
-		311, 486,
-		329, 433,
-		337, 403,
-		344, 381
-	};
-
-	// Pivot -1, -1
-	int right_down_base[16] = {
-		432, 858,
-		256, 860,
-		257, 823,
-		402, 735,
-		400, 569,
-		361, 517,
-		431, 365,
-		432, 839
-	};
-
-	// Pivot -1, -1
-	int left_down_path_to_flipper[16] = {
-		31, 597,
-		33, 602,
-		34, 682,
-		106, 725,
-		109, 732,
-		100, 729,
-		27, 685,
-		27, 602,
-
-	};
-
-	// Pivot -1, -1
-	int middle_thing[14] = {
-		189, 817,
-		193, 810,
-		203, 810,
-		207, 815,
-		206, 829,
-		189, 830,
-		188, 822
-	};
-
-	// Pivot -1, -1
-	int right_down_path_to_flipper[16] = {
-		370, 598,
-		367, 602,
-		366, 682,
-		293, 726,
-		288, 734,
-		302, 727,
-		371, 684,
-		372, 603
-	};
-
-	// Pivot 1, 0
-	int triangle_bottom_left[6] = {
-		0, 734,
-		139, 821,
-		-1, 821
-	};
-
-	// Pivot 1, 0
-	int top1_path[12] = {
-		206, 81,
-		206, 48,
-		203, 43,
-		201, 46,
-		201, 80,
-		204, 85,
-	};
-
-	// Pivot 1, 0
-	int top2_path[12] = {
-		236, 76,
-		235, 40,
-		239, 37,
-		242, 40,
-		242, 74,
-		241, 79
-	};
-
-	// Pivot 1, 0
-	int top3_path[12] = {
-		270, 74,
-		270, 40,
-		274, 34,
-		277, 40,
-		277, 74,
-		274, 80
-	};
-
-	// Pivot 1, 0
-	int triangle_boucer[12] = {
-		115, 678,
-		75, 583,
-		66, 581,
-		67, 664,
-		112, 688,
-		116, 683
-	};
-
-	// Pivot 1, 0
-	int triangle_boucer_right[14] = {
-		284, 680,
-		326, 581,
-		330, 580,
-		335, 584,
-		334, 662,
-		291, 686,
-		284, 686
-	};
-
-
-	int BlueBouncer_Coord[16] = {
-		92, 270,
-		95, 266,
-		100, 265,
-		149, 290,
-		152, 294,
-		152, 298,
-		149, 298,
-		94, 272
-	};
-
-	int blue_triangle[10] = {
-		86, 270,
-		94, 268,
-		100, 268,
-		98, 273,
-		90, 270
-	};
-
-	int invWall[8] = {
-		0, 569,
-		1, 735,
-		-15, 732,
-		-16, 568
-	};
-	// Pivot -1, -1
-	int triangleRightWall[10] = {
-		334, 585,
-		333, 658,
-		288, 686,
-		293, 680,
-		330, 657
-	};
-	// Pivot -1, -1
-	int triangleLeftWall[10] = {
-		63, 582,
-		64, 660,
-		105, 684,
-		108, 682,
-		67, 658
-	};
+	//int invWall[8] = {
+	//	0, 569,
+	//	1, 735,
+	//	-15, 732,
+	//	-16, 568
+	//};
+	//// Pivot -1, -1
+	//int triangleRightWall[10] = {
+	//	334, 585,
+	//	333, 658,
+	//	288, 686,
+	//	293, 680,
+	//	330, 657
+	//};
+	//// Pivot -1, -1
+	//int triangleLeftWall[10] = {
+	//	63, 582,
+	//	64, 660,
+	//	105, 684,
+	//	108, 682,
+	//	67, 658
+	//};
 
 	//Bouncers
 	world_parts.add(Bouncer = App->physics->CreateStaticChain(0, 0, triangle_boucer_right, 12, BOUNCER_RESTI));
@@ -492,6 +502,8 @@ bool ModuleSceneIntro::CleanUp()
 	App->textures->Unload(launchertext);
 	App->textures->Unload(spriteSheet);
 	App->textures->Unload(LittleBlueLight);
+	App->textures->Unload(YellowScoreText);
+	App->textures->Unload(OrangeScoreText);
 
 	LOG("Unloading map");
 
@@ -678,7 +690,30 @@ if (!EndMatch) {
 		
 	}
 
+	//------------------------UI Score-------------------
+	if (score > high_score) {
+		high_score = score;
+	}
 
+	if (sensor_BlueUpperSenser1 && sensor_BlueUpperSenser2 && sensor_BlueUpperSenser3&&sensor_BlueUpperSenser4)
+	{
+		AddScore(ScoreMultiply, 25);
+		sensor_BlueUpperSenser1 = sensor_BlueUpperSenser2 = sensor_BlueUpperSenser3 = sensor_BlueUpperSenser4 = false;
+	}
+	
+	if (sensor_BlueUpperSenser1 && sensor_BlueUpperSenser2 && sensor_BlueUpperSenser3)
+	{
+		AddScore(ScoreMultiply, 15);
+		sensor_BlueUpperSenser1 = sensor_BlueUpperSenser2 = sensor_BlueUpperSenser3 = false;
+	}
+
+
+	if (sensor_UpperSmallSenser1 && sensor_UpperSmallSenser2 && sensor_UpperSmallSenser3)
+	{
+		AddScore(ScoreMultiply, 30);
+		sensor_UpperSmallSenser1 = sensor_UpperSmallSenser2 = sensor_UpperSmallSenser3 = false;
+	}
+	//-------------------------------------
 
 	// fliper controls
 	if (FlipperKickerup)
@@ -828,23 +863,28 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	if (bodyA == Bouncer || bodyB ==Bouncer) {
 		BlitBouncer = true;
 		App->audio->PlayFx(BouncerSound);
+		AddScore(ScoreMultiply,5);
 
 	}
 	else if (bodyA == BouncerL || bodyB ==BouncerL) {
 		BlitBouncerL = true;
 		App->audio->PlayFx(BouncerSound);
+		AddScore(ScoreMultiply, 5);
 	}
 	else if (bodyA == BouncerLCircle || bodyB == BouncerLCircle) {
 		BlitBouncerLCircle = true;
 		App->audio->PlayFx(BouncerSound);
+		AddScore(ScoreMultiply, 25);
 	}
 	else if (bodyA == BouncerCircle || bodyB == BouncerCircle) {
 		BlitBouncerCircle = true;
 		App->audio->PlayFx(BouncerSound);
+		AddScore(ScoreMultiply, 25);
 	}
 	else if (bodyA == BlueBouncer || bodyB ==BlueBouncer) {
 		BlitBlueBouncer = true;
 		App->audio->PlayFx(BouncerSound);
+		AddScore(ScoreMultiply, 10);
 	}
 	//---------------------------------------------------
 
@@ -951,3 +991,36 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 	App->audio->PlayFx(HitBall);
 }
+
+
+//ui funtions
+void ModuleSceneIntro::AddScore(int multiply, int Addpoints)
+{
+	score += ScoreMultiply * Addpoints;
+}
+
+void ModuleSceneIntro::AddBonusScore(int multiply, int bonus)
+{
+	score += bonus * multiply;
+}
+
+
+//void ModuleSceneIntro::DrawScore() 
+//{
+//	App->renderer->Blit(YellowScoreText, 25, 460, &YellowScoreRect);
+//	App->renderer->Blit(OrangeScoreText, 487, 460, &OrangeScoreRect);
+//
+//	char char_score[10];
+//	sprintf_s(char_score, "%.5d", score);
+//	App->fonts->Blit(27, 475, OrangeFont, char_score);
+//
+//	char char_hscore[10];
+//	sprintf_s(char_hscore, "%.5d", high_score);
+//	App->fonts->Blit(489, 475, YellowFont, char_hscore);
+//
+//	/*App->renderer->Blit(balls_left.image, 310, 455, &balls_left.rect);*/
+//
+//	/*for (int i = 0; i < losed_balls; i++) {
+//		App->render->Blit(lose_ball.image, 313 + i * 10, 470, &lose_ball.rect);
+//	}*/
+//}

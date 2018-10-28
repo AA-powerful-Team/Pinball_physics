@@ -71,6 +71,7 @@ public:
 	PhysBody*UpperSenser2;
 	PhysBody*UpperSenser3;
 	PhysBody*UpperSenser4;
+
 	PhysBody*UpperSmallSenser1;
 	PhysBody*UpperSmallSenser2;
 	PhysBody*UpperSmallSenser3;
@@ -155,10 +156,6 @@ public:
 		//Lower Light Sensors Bools
 	bool sensor_LowerBigSensor1 = false;
 
-
-
-
-
 	//Essntial Sensors bool
 	bool PitSensorForBall = false;
 	bool EndMatch = false;
@@ -175,4 +172,23 @@ public:
 	float WALL_RESTITUTION = 0.3;
 	float BOUNCER_RESTI = 1.2;
 	float flipperMaxTorque = 28.0;
+
+
+	//UI
+	int			score;
+	int			high_score;
+	int			ScoreMultiply = 1;
+
+	void AddScore(int multiply, int Addscore);
+	void AddBonusScore(int multiply, int bonus);
+
+	SDL_Rect YellowScoreRect;
+	SDL_Rect OrangeScoreRect;
+	SDL_Texture* YellowScoreText = nullptr;
+	SDL_Texture* OrangeScoreText = nullptr;
+
+	int OrangeFont;
+	int YellowFont;
+
+	void DrawScore();
 };
