@@ -575,21 +575,35 @@ if (!EndMatch) {
 		toBlit = true;
 		canada = true;
 		shortcutbool = false;
+		x4 = false;
+		freegass = false;
+
 	}
 	if (QuadPoints) {
 
-		App->audio->PlayFx(GasGas);
+		App->audio->PlayFx(ShortCut);
 		score = 4 * score;
 		QuadPoints = false;
 
+		toBlit = true;
+		canada = false;
+		shortcutbool = false;
+		x4 = true;
+		freegass = false;
 		
 	}
 
 	if (DoubleXpoints) {
 
-		App->audio->PlayFx(ShortCut);
+		App->audio->PlayFx(GasGas);
 		score = 2 * score;
 		DoubleXpoints = false;
+
+		toBlit = true;
+		canada = false;
+		shortcutbool = false;
+		x4 = false;
+		freegass = true;
 	}
 
 	//Normal scroe------------------------
