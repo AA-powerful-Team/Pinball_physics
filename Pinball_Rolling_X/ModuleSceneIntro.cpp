@@ -50,6 +50,8 @@ bool ModuleSceneIntro::Start()
 	FlipperUp= App->audio->LoadFx("Assets/FX/FlipperUp.wav");;
 	FlipperDown=App->audio->LoadFx("Assets/FX/FlipperDown.wav");
 	KickerFX= App->audio->LoadFx("Assets/FX/Kicker.wav");
+	MidleLightFX = App->audio->LoadFx("Assets/FX/BigBlueLighOn.wav");
+	OneMoreChance= App->audio->LoadFx("Assets/FX/StickOfSave.wav");
 
 	launcherRect = {0,0,38,68};
 
@@ -416,18 +418,47 @@ bool ModuleSceneIntro::Start()
 
 	//sensors
 		//Upper Part
-	
+		
+		//big
 	sensorsList.add(UpperSenser1 = App->physics->CreateRectangleSensor(293, 57, 10, 10));
 	sensorsList.add(UpperSenser2 = App->physics->CreateRectangleSensor(258, 56, 10, 10));
 	sensorsList.add(UpperSenser3 = App->physics->CreateRectangleSensor(222, 60, 10, 10));
+	
 	sensorsList.add(UpperSenser4 = App->physics->CreateRectangleSensor(350, 35, 10, 10));
+		//small
 	sensorsList.add(UpperSmallSenser1 = App->physics->CreateRectangleSensor(392, 147, 7, 7));
 	sensorsList.add(UpperSmallSenser2 = App->physics->CreateRectangleSensor(370, 135, 7, 7));
 	sensorsList.add(UpperSmallSenser3 = App->physics->CreateRectangleSensor(345, 117, 7, 7));
 		
 		//Lower Part
+	//big
 	sensorsList.add(LowerBigSensor1= App->physics->CreateRectangleSensor(390, 705, 10,10));
+	sensorsList.add(LowerBigSensor2 = App->physics->CreateRectangleSensor(15, 705, 10, 10));
+	sensorsList.add(LowerBigSensor3 = App->physics->CreateRectangleSensor(320, 390, 10, 10));
 
+	//small
+	sensorsList.add(LowerSmallSenser1 = App->physics->CreateRectangleSensor(210, 430, 7, 7));
+	sensorsList.add(LowerSmallSenser2 = App->physics->CreateRectangleSensor(185, 415, 7, 7));
+
+	sensorsList.add(LowerSmallSenser3 = App->physics->CreateRectangleSensor(40, 475, 7, 7));
+	sensorsList.add(LowerSmallSenser4 = App->physics->CreateRectangleSensor(55, 450, 7, 7));
+	sensorsList.add(LowerSmallSenser5 = App->physics->CreateRectangleSensor(65, 425, 7, 7));
+	//Highway
+	sensorsList.add(Highway1 = App->physics->CreateRectangleSensor(55, 305, 7, 7));
+	sensorsList.add(Highway2 = App->physics->CreateRectangleSensor(45, 270, 7, 7));
+	sensorsList.add(Highway3 = App->physics->CreateRectangleSensor(35, 240, 7, 7));
+	sensorsList.add(Highway4 = App->physics->CreateRectangleSensor(25, 210, 7, 7));
+	sensorsList.add(Highway5 = App->physics->CreateRectangleSensor(20, 175, 7, 7));
+	sensorsList.add(Highway6 = App->physics->CreateRectangleSensor(18, 146, 7, 7));
+	sensorsList.add(Highway7 = App->physics->CreateRectangleSensor(18, 116, 7, 7));
+	sensorsList.add(Highway8= App->physics->CreateRectangleSensor(18, 83, 7, 7));
+	sensorsList.add(Highway9 = App->physics->CreateRectangleSensor(18, 55, 7, 7));
+	sensorsList.add(Highway10 = App->physics->CreateRectangleSensor(50,55, 7, 7));
+	sensorsList.add(Highway11 = App->physics->CreateRectangleSensor(50, 83, 7, 7));
+	sensorsList.add(Highway12 = App->physics->CreateRectangleSensor(53, 116, 7, 7));
+	sensorsList.add(Highway13 = App->physics->CreateRectangleSensor(56, 146, 7, 7));
+	sensorsList.add(Highway14 = App->physics->CreateRectangleSensor(59, 175, 7, 7));
+	sensorsList.add(Highway15 = App->physics->CreateRectangleSensor(65, 205, 7, 7));
 
 	//EssentialSensors
 	sensorsList.add(pitSensor = App->physics->CreateRectangleSensor(200, 835, 400, 10));
@@ -553,20 +584,7 @@ update_status ModuleSceneIntro::Update()
 	App->renderer->Blit(StaticScene, 0, 0);
 	App->renderer->Blit(ScoreBoard, 477, 0);
 
-	//lose Condition
-	if (BallsNum <= 0) {
-		App->renderer->Blit(PostScoreTex,200,300);
-		EndMatch = true;
-
-		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN) {
-		
-			//RESET SCORE
-			BallsNum = 4;
-			EndMatch = false;
-
-		}
-
-	}
+	
 
 
 //Check Collisions
@@ -599,7 +617,7 @@ update_status ModuleSceneIntro::Update()
 
 	//CheckSensors
 
-	//Lights-----------------------------------------------
+	//Lights Upper-----------------------------------------------
 	if (sensor_BlueUpperSenser1) {
 		
 		
@@ -651,18 +669,158 @@ update_status ModuleSceneIntro::Update()
 		//sensor_UpperSmallSenser3=false
 
 	}
+	
+	//Sensors Lower part--------------------------------------
 
-	if (sensor_LowerBigSensor1) {
+	if (sensor_LowerBigSensor3){
+		
+		App->renderer->Blit(BigBlueLight, 307,380);
+		//sensor_LowerBigSensor3=false
+	}
 
+	if (sensor_LowerSmallSenser1) {
 
-		App->renderer->Blit(BigBlueLight, 378,695);
-		//sensor_UpperSmallSenser3=false
+		App->renderer->Blit(LittleBlueLight, 202 , 423);
+		//sensor_LowerBigSensor3=false
+	}
 
+	if (sensor_LowerSmallSenser2) {
+
+		App->renderer->Blit(LittleBlueLight, 173, 412);
+		//sensor_LowerBigSensor3=false
+	}
+
+	if (sensor_LowerSmallSenser3) {
+
+		App->renderer->Blit(LittleBlueLight, 37, 470);
+		//sensor_LowerBigSensor3=false
+	}
+	
+	if (sensor_LowerSmallSenser4) {
+
+		App->renderer->Blit(LittleBlueLight, 48, 446);
+		//sensor_LowerBigSensor3=false
+	}
+	
+	if (sensor_LowerSmallSenser5) {
+
+		App->renderer->Blit(LittleBlueLight, 58, 420);
+		//sensor_LowerBigSensor3=false
+	}
+
+	//Highway LightSensors
+
+	if (sensor_Highway1) {
+
+		App->renderer->Blit(LittleBlueLight, 49, 298);
+		//sensor_LowerBigSensor3=false
+	}
+	
+	
+	if (sensor_Highway2) {
+
+		App->renderer->Blit(LittleBlueLight, 35, 265);
+		//sensor_LowerBigSensor3=false
+	}
+	
+	if (sensor_Highway3) {
+
+		App->renderer->Blit(LittleBlueLight, 26, 233);
+		//sensor_LowerBigSensor3=false
+	}
+	
+	if (sensor_Highway4) {
+
+		App->renderer->Blit(LittleBlueLight, 20, 201);
+		//sensor_LowerBigSensor3=false
+	}
+	
+	if (sensor_Highway5) {
+
+		App->renderer->Blit(LittleBlueLight, 14, 169);
+		//sensor_LowerBigSensor3=false
+	}
+	
+	if (sensor_Highway6) {
+
+		App->renderer->Blit(LittleBlueLight, 11, 139);
+		//sensor_LowerBigSensor3=false
+	}
+	
+	if (sensor_Highway7) {
+
+		App->renderer->Blit(LittleBlueLight, 11, 109);
+		//sensor_LowerBigSensor3=false
+	}
+	
+	if (sensor_Highway8) {
+
+		App->renderer->Blit(LittleBlueLight, 11, 80);
+		//sensor_LowerBigSensor3=false
+	}
+	
+	if (sensor_Highway9) {
+
+		App->renderer->Blit(LittleBlueLight, 11, 50);
+		//sensor_LowerBigSensor3=false
+	}
+	
+	if (sensor_Highway10) {
+
+		App->renderer->Blit(LittleBlueLight,44, 50);
+		//sensor_LowerBigSensor3=false
+	}
+	
+	if (sensor_Highway11) {
+
+		App->renderer->Blit(LittleBlueLight, 44, 76);
+		//sensor_LowerBigSensor3=false
+	}
+	
+	if (sensor_Highway12) {
+
+		App->renderer->Blit(LittleBlueLight, 46,105);
+		//sensor_LowerBigSensor3=false
+
+	}
+	
+	if (sensor_Highway13) {
+
+		App->renderer->Blit(LittleBlueLight,47, 135);
+		//sensor_LowerBigSensor3=false
+	}
+	
+	if (sensor_Highway14) {
+
+		App->renderer->Blit(LittleBlueLight, 51, 162);
+		//sensor_LowerBigSensor3=false
+	}
+	
+	if (sensor_Highway15) {
+
+		App->renderer->Blit(LittleBlueLight,58,195);
+		//sensor_LowerBigSensor3=false
 	}
 
 	//---------------------------------------------------
 
 	//Check Essential Sensors
+	if (sensor_LowerBigSensor1) {
+
+
+		App->renderer->Blit(BigBlueLight, 378, 695);
+		//sensor_LowerBigSensor1=false
+
+	}
+
+	if (sensor_LowerBigSensor2) {
+
+
+		App->renderer->Blit(BigBlueLight,5, 695);
+		//sensor_LowerBigSensor2=false
+
+	}
+	
 	//Ball in Pit
 	
 if (!EndMatch) {
@@ -679,8 +837,10 @@ if (!EndMatch) {
 	}
 
 
+//End of sensors-----------------------------------------------------------------------
 
-	// fliper controls
+
+// fliper controls
 	if (FlipperKickerup)
 	{
 		App->physics->FlipperSetMaxMotorTorque(InvisibleFlipper, -30.0f);
@@ -818,6 +978,22 @@ if (!EndMatch) {
 	App->renderer->Blit(launchertext, launch_pos.x+13 , launch_pos.y+6, &launcherRect);
 
 
+	//lose Condition
+	if (BallsNum <= 0) {
+		App->renderer->Blit(PostScoreTex, 200, 300);
+		EndMatch = true;
+
+		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN) {
+
+			//RESET SCORE
+			BallsNum = 4;
+			EndMatch = false;
+
+		}
+
+	}
+
+
 	return UPDATE_CONTINUE;
 }
 
@@ -825,24 +1001,34 @@ if (!EndMatch) {
 void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
 	//BouncerLiCollisions--------------------------
-	if (bodyA == Bouncer || bodyB ==Bouncer) {
+	if (bodyA == Bouncer && bodyB == circles.getLast()->data ||
+		bodyB == Bouncer && bodyA == circles.getLast()->data) {
+
 		BlitBouncer = true;
 		App->audio->PlayFx(BouncerSound);
 
 	}
-	else if (bodyA == BouncerL || bodyB ==BouncerL) {
+	else if (bodyA == BouncerL && bodyB == circles.getLast()->data ||
+		bodyB == BouncerL && bodyA == circles.getLast()->data) {
+
 		BlitBouncerL = true;
 		App->audio->PlayFx(BouncerSound);
 	}
-	else if (bodyA == BouncerLCircle || bodyB == BouncerLCircle) {
+	else if (bodyA == BouncerLCircle && bodyB == circles.getLast()->data ||
+		bodyB == BouncerLCircle && bodyA == circles.getLast()->data) {
+
 		BlitBouncerLCircle = true;
 		App->audio->PlayFx(BouncerSound);
 	}
-	else if (bodyA == BouncerCircle || bodyB == BouncerCircle) {
+	else if (bodyA == BouncerCircle && bodyB == circles.getLast()->data ||
+		bodyB == BouncerCircle && bodyA == circles.getLast()->data) {
+
 		BlitBouncerCircle = true;
 		App->audio->PlayFx(BouncerSound);
 	}
-	else if (bodyA == BlueBouncer || bodyB ==BlueBouncer) {
+	else if (bodyA == BlueBouncer && bodyB == circles.getLast()->data ||
+		bodyB == BlueBouncer && bodyA == circles.getLast()->data) {
+
 		BlitBlueBouncer = true;
 		App->audio->PlayFx(BouncerSound);
 	}
@@ -911,20 +1097,215 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			sensor_UpperSmallSenser3 = true;
 		}
 	}
-	//---------------------------------------------
 
-	if (bodyA == UpperSmallSenser3 && bodyB == circles.getLast()->data ||
-		bodyB == LowerBigSensor1 && bodyA == circles.getLast()->data) {
 
-		if (sensor_LowerBigSensor1 != true) {
+	if (bodyA == LowerBigSensor3 && bodyB == circles.getLast()->data ||
+		bodyB == LowerBigSensor3 && bodyA == circles.getLast()->data) {
+
+		if (sensor_LowerBigSensor3 != true) {
+			App->audio->PlayFx(MidleLightFX);
+			sensor_LowerBigSensor3 = true;
+		}
+	}
+
+	if (bodyA == LowerSmallSenser1 && bodyB == circles.getLast()->data ||
+		bodyB == LowerSmallSenser1 && bodyA == circles.getLast()->data) {
+
+		if (sensor_LowerSmallSenser1 != true) {
 			App->audio->PlayFx(SmallLightOn);
-			sensor_LowerBigSensor1 = true;
+			sensor_LowerSmallSenser1 = true;
 		}
 	}
 
 
+	if (bodyA == LowerSmallSenser2 && bodyB == circles.getLast()->data ||
+		bodyB == LowerSmallSenser2 && bodyA == circles.getLast()->data) {
+
+		if (sensor_LowerSmallSenser2 != true) {
+			App->audio->PlayFx(SmallLightOn);
+			sensor_LowerSmallSenser2 = true;
+		}
+	}
+
+	if (bodyA == LowerSmallSenser3 && bodyB == circles.getLast()->data ||
+		bodyB == LowerSmallSenser3 && bodyA == circles.getLast()->data) {
+
+		if (sensor_LowerSmallSenser3 != true) {
+			App->audio->PlayFx(SmallLightOn);
+			sensor_LowerSmallSenser3 = true;
+		}
+	}
+
+	if (bodyA == LowerSmallSenser4 && bodyB == circles.getLast()->data ||
+		bodyB == LowerSmallSenser4 && bodyA == circles.getLast()->data) {
+
+		if (sensor_LowerSmallSenser4 != true) {
+			App->audio->PlayFx(SmallLightOn);
+			sensor_LowerSmallSenser4 = true;
+		}
+	}
+
+	if (bodyA == LowerSmallSenser5 && bodyB == circles.getLast()->data ||
+		bodyB == LowerSmallSenser5 && bodyA == circles.getLast()->data) {
+
+		if (sensor_LowerSmallSenser5 != true) {
+			App->audio->PlayFx(SmallLightOn);
+			sensor_LowerSmallSenser5= true;
+		}
+	}
+	//higway Check
+
+	if (bodyA == Highway1 && bodyB == circles.getLast()->data ||
+		bodyB == Highway1 && bodyA == circles.getLast()->data) {
+
+		if (sensor_Highway1 != true) {
+			App->audio->PlayFx(SmallLightOn);
+			sensor_Highway1 = true;
+		}
+	}
+	if (bodyA == Highway2 && bodyB == circles.getLast()->data ||
+		bodyB == Highway2 && bodyA == circles.getLast()->data) {
+
+		if (sensor_Highway2 != true) {
+			App->audio->PlayFx(SmallLightOn);
+			sensor_Highway2 = true;
+		}
+	}
+	if (bodyA == Highway3 && bodyB == circles.getLast()->data ||
+		bodyB == Highway3 && bodyA == circles.getLast()->data) {
+
+		if (sensor_Highway3 != true) {
+			App->audio->PlayFx(SmallLightOn);
+			sensor_Highway3 = true;
+		}
+	}
+	if (bodyA == Highway4 && bodyB == circles.getLast()->data ||
+		bodyB == Highway4 && bodyA == circles.getLast()->data) {
+
+		if (sensor_Highway4 != true) {
+			App->audio->PlayFx(SmallLightOn);
+			sensor_Highway4 = true;
+		}
+	}
+	if (bodyA == Highway5 && bodyB == circles.getLast()->data ||
+		bodyB == Highway5 && bodyA == circles.getLast()->data) {
+
+		if (sensor_Highway5 != true) {
+			App->audio->PlayFx(SmallLightOn);
+			sensor_Highway5 = true;
+		}
+	}
+	if (bodyA == Highway6 && bodyB == circles.getLast()->data ||
+		bodyB == Highway6 && bodyA == circles.getLast()->data) {
+
+		if (sensor_Highway6 != true) {
+			App->audio->PlayFx(SmallLightOn);
+			sensor_Highway6 = true;
+		}
+	}
+
+	if (bodyA == Highway7 && bodyB == circles.getLast()->data ||
+		bodyB == Highway7 && bodyA == circles.getLast()->data) {
+
+		if (sensor_Highway7 != true) {
+			App->audio->PlayFx(SmallLightOn);
+			sensor_Highway7 = true;
+		}
+	}
+
+	if (bodyA == Highway8 && bodyB == circles.getLast()->data ||
+		bodyB == Highway8 && bodyA == circles.getLast()->data) {
+
+		if (sensor_Highway8 != true) {
+			App->audio->PlayFx(SmallLightOn);
+			sensor_Highway8 = true;
+		}
+	}
+	if (bodyA == Highway9 && bodyB == circles.getLast()->data ||
+		bodyB == Highway9 && bodyA == circles.getLast()->data) {
+
+		if (sensor_Highway9 != true) {
+			App->audio->PlayFx(SmallLightOn);
+			sensor_Highway9 = true;
+		}
+	}
+	if (bodyA == Highway10 && bodyB == circles.getLast()->data ||
+		bodyB == Highway10 && bodyA == circles.getLast()->data) {
+
+		if (sensor_Highway10 != true) {
+			App->audio->PlayFx(SmallLightOn);
+			sensor_Highway10 = true;
+		}
+	}
+	if (bodyA == Highway11 && bodyB == circles.getLast()->data ||
+		bodyB == Highway11 && bodyA == circles.getLast()->data) {
+
+		if (sensor_Highway11 != true) {
+			App->audio->PlayFx(SmallLightOn);
+			sensor_Highway11 = true;
+		}
+	}
+	if (bodyA == Highway12 && bodyB == circles.getLast()->data ||
+		bodyB == Highway12 && bodyA == circles.getLast()->data) {
+
+		if (sensor_Highway12 != true) {
+			App->audio->PlayFx(SmallLightOn);
+			sensor_Highway12 = true;
+		}
+	}
+	
+	if (bodyA == Highway13 && bodyB == circles.getLast()->data ||
+		bodyB == Highway13 && bodyA == circles.getLast()->data) {
+
+		if (sensor_Highway13 != true) {
+			App->audio->PlayFx(SmallLightOn);
+			sensor_Highway13 = true;
+		}
+	}
+
+	if (bodyA == Highway14 && bodyB == circles.getLast()->data ||
+		bodyB == Highway14 && bodyA == circles.getLast()->data) {
+
+		if (sensor_Highway14 != true) {
+			App->audio->PlayFx(SmallLightOn);
+			sensor_Highway14 = true;
+		}
+	}
+	if (bodyA == Highway15 && bodyB == circles.getLast()->data ||
+		bodyB == Highway15 && bodyA == circles.getLast()->data) {
+
+		if (sensor_Highway15 != true) {
+			App->audio->PlayFx(SmallLightOn);
+			sensor_Highway15 = true;
+		}
+	}
+	
+	//---------------------------------------------
+
+
+
+
 	//Essential Sensero Detection------------------
 	
+
+	if (bodyA == LowerBigSensor1 && bodyB == circles.getLast()->data ||
+		bodyB == LowerBigSensor1 && bodyA == circles.getLast()->data) {
+
+		if (sensor_LowerBigSensor1 != true) {
+			App->audio->PlayFx(OneMoreChance);
+			sensor_LowerBigSensor1 = true;
+		}
+	}
+	if (bodyA == LowerBigSensor2 && bodyB == circles.getLast()->data ||
+		bodyB == LowerBigSensor2 && bodyA == circles.getLast()->data) {
+
+		if (sensor_LowerBigSensor2 != true) {
+			App->audio->PlayFx(OneMoreChance);
+			sensor_LowerBigSensor2 = true;
+		}
+	}
+
+
 	if (bodyA == pitSensor && bodyB == circles.getLast()->data ||
 		bodyB == pitSensor && bodyA == circles.getLast()->data) {
 

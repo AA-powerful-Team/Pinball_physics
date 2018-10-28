@@ -72,8 +72,6 @@ update_status ModulePhysics::PostUpdate()
 	if(!debug)
 		return UPDATE_CONTINUE;
 
-	// Bonus code: this will iterate all objects in the world and draw the circles
-	// You need to provide your own macro to translate meters to pixels
 	
 	// Implement a simple mouse joint when a body is clicked for debug purposes
 	bool mouse_down = (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN);
@@ -151,8 +149,6 @@ update_status ModulePhysics::PostUpdate()
 				break;
 			}
 
-			// TODO 1: If mouse button 1 is pressed ...
-			// App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN
 			// test if the current body contains mouse position
 			if (mouse_down == true && body_clicked == NULL)
 			{
@@ -164,7 +160,6 @@ update_status ModulePhysics::PostUpdate()
 
 	// If a body was selected we will attach a mouse joint to it
 	// so we can pull it around
-	// TODO 2: If a body was selected, create a mouse joint
 	// using mouse_joint class property
 	if (body_clicked != NULL && mouse_joint == NULL)
 	{
@@ -180,7 +175,7 @@ update_status ModulePhysics::PostUpdate()
 	}
 
 
-	// TODO 3: If the player keeps pressing the mouse button, update
+	//  If the player keeps pressing the mouse button, update
 	// target position and draw a red line between both anchor points
 	if (mouse_repeat == true && mouse_joint != NULL)
 	{
@@ -192,7 +187,7 @@ update_status ModulePhysics::PostUpdate()
 
 	}
 
-	// TODO 4: If the player releases the mouse button, destroy the joint
+	//If the player releases the mouse button, destroy the joint
 	if (mouse_up == true && mouse_joint != NULL)
 	{
 		world->DestroyJoint(mouse_joint);
@@ -262,7 +257,7 @@ int PhysBody::RayCast(int x1, int y1, int x2, int y2, float& normal_x, float& no
 	{
 		if(fixture->GetShape()->RayCast(&output, input, body->GetTransform(), 0) == true)
 		{
-			// do we want the normal ?
+			
 
 			float fx = x2 - x1;
 			float fy = y2 - y1;
