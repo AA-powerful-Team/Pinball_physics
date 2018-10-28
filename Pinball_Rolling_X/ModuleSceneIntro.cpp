@@ -32,7 +32,7 @@ bool ModuleSceneIntro::Start()
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
-	
+	//texture
 	Ball= App->textures->Load("Assets/Sprites/BallResized.png");
 	StaticScene = App->textures->Load("Assets/Sprites/staticPritesWindowSize.png");
 	ScoreBoard= App->textures->Load("Assets/Sprites/ScoreBoardResized.png");
@@ -45,9 +45,11 @@ bool ModuleSceneIntro::Start()
 	spriteSheet = App->textures->Load("Assets/Sprites/spriteSheet.png"); 
 	PostScoreTex = App->textures->Load("Assets/Sprites/PostScore.png");
 	LittleBlueLight= App->textures->Load("Assets/Sprites/LityleCircleLight.png");
+	YellowScoreText = App->textures->Load("Assets/Sprites/OrangeNumsNew.png");
+	OrangeScoreText = App->textures->Load("Assets/Sprites/YellowNumsNew.png");
 
-
-	HitBall = App->audio->LoadFx("Assets/FX/BallhittingSound.wav");		//Clean UP music REMEMBER
+	//sounds
+	HitBall = App->audio->LoadFx("Assets/FX/BallhittingSound.wav");	
 	BouncerSound= App->audio->LoadFx("Assets/FX/BallHitBouncers.wav");
 	BlueUpperSenser1 = App->audio->LoadFx("Assets/FX/TopBigBlueLighOn.wav");
 	SmallLightOn= App->audio->LoadFx("Assets/FX/SmallLightOn.wav");
@@ -59,14 +61,18 @@ bool ModuleSceneIntro::Start()
 	OneMoreChance= App->audio->LoadFx("Assets/FX/StickOfSave.wav");
 	Highway = App->audio->LoadFx("Assets/FX/Awesome.wav");
 
-	launcherRect = {0,0,38,68};
-	YellowScoreRect = {0,0,31,32};
-	OrangeScoreRect = {0,0,31,32};
-	YellowScoreText = App->textures->Load("Assets/Sprites/OrangeNumsNew.png");
-	OrangeScoreText = App->textures->Load("Assets/Sprites/YellowNumsNew.png");
-
+	//fonts
 	OrangeFont = App->fonts->Load("Assets/Sprites/OrangeNumsNew.png", "0123456789", 1);
 	YellowFont = App->fonts->Load("Assets/Sprites/YellowNumsNew.png", "0123456789", 1);
+	
+	launcherRect = { 0,0,38,68 };
+	YellowScoreRect = { 0,0,31,32 };
+	OrangeScoreRect = { 0,0,31,32 };
+
+	x4Rect = {0,0,399,239};
+	freegasRect = {0,0,399,239};
+	canadaRect = {0,0,397,238};
+	ShortcutRect = {0,0,393,236};
 
 
 
@@ -526,6 +532,32 @@ if (!EndMatch) {
 		high_score = score;
 	}
 
+	//combo
+
+	if (sensor_LowerSmallSenser1 && sensor_LowerSmallSenser2 && sensor_LowerSmallSenser3 &&
+		sensor_LowerSmallSenser4 && sensor_LowerSmallSenser5) {
+
+		AddBonusScore(BallsNum, 200);
+
+		sensor_LowerSmallSenser1 = sensor_LowerSmallSenser2 = sensor_LowerSmallSenser3 =
+			sensor_LowerSmallSenser4 = sensor_LowerSmallSenser5 = sensor_LowerBigSensor3 = false;
+	}
+
+	if (sensor_Highway1 && sensor_Highway7 && sensor_Highway11 && sensor_Highway15) {
+
+		App->audio->PlayFx(Highway);
+		AddScore(ScoreMultiply, 100);
+
+		sensor_Highway1 = sensor_Highway2 = sensor_Highway3 = sensor_Highway4 =
+			sensor_Highway5 = sensor_Highway6 = sensor_Highway7 = sensor_Highway8 =
+			sensor_Highway10 = sensor_Highway11 = sensor_Highway12 = sensor_Highway13 =
+			sensor_Highway14 = sensor_Highway15 = sensor_Highway9 = false;
+
+	}
+
+
+	//Normal scroe------------------------
+
 	if (sensor_BlueUpperSenser1 && sensor_BlueUpperSenser2 && sensor_BlueUpperSenser3&&sensor_BlueUpperSenser4)
 	{
 		AddScore(ScoreMultiply, 25);
@@ -544,46 +576,25 @@ if (!EndMatch) {
 		sensor_UpperSmallSenser1 = sensor_UpperSmallSenser2 = sensor_UpperSmallSenser3 = false;
 	}
 
-	if (sensor_LowerSmallSenser1 &&  sensor_LowerSmallSenser2) {
+	/*if (sensor_LowerSmallSenser1 &&  sensor_LowerSmallSenser2) {
 
 		AddScore(ScoreMultiply, 5);
-		//sensor_LowerSmallSenser1 = sensor_LowerSmallSenser2 = false;
+		sensor_LowerSmallSenser1 = sensor_LowerSmallSenser2 = false;
 
-	}
+	}*/
 
-	if (sensor_LowerSmallSenser3 && sensor_LowerSmallSenser4 && sensor_LowerSmallSenser3) {
+	/*if (sensor_LowerSmallSenser5 && sensor_LowerSmallSenser4 && sensor_LowerSmallSenser3) {
 
 		AddScore(ScoreMultiply, 25);
-		//sensor_LowerSmallSenser3 = sensor_LowerSmallSenser4 = sensor_LowerSmallSenser3 = false;
+		sensor_LowerSmallSenser5 = sensor_LowerSmallSenser4 = sensor_LowerSmallSenser3 = false;
 
-	}
-	if (sensor_LowerBigSensor3) {
+	}*/
+	if (sensor_LowerBigSensor3 && sensor_BlueUpperSenser4) {
 
 		AddScore(ScoreMultiply, 15);
-		
+		sensor_BlueUpperSenser4=sensor_LowerBigSensor3=false;
 	}
-	//combo
 	
-	if (sensor_LowerSmallSenser1 && sensor_LowerSmallSenser2 && sensor_LowerSmallSenser3 &&
-		sensor_LowerSmallSenser4 && sensor_LowerSmallSenser3 && sensor_LowerBigSensor3) {
-
-		AddBonusScore(BallsNum,200);
-
-		sensor_LowerSmallSenser1 = sensor_LowerSmallSenser2 = sensor_LowerSmallSenser3 =
-			sensor_LowerSmallSenser4 = sensor_LowerSmallSenser5 = sensor_LowerBigSensor3 = false;
-	}
-
-	if (sensor_Highway1 && sensor_Highway7 && sensor_Highway11 && sensor_Highway15) {
-
-		App->audio->PlayFx(Highway);
-		AddScore(ScoreMultiply, 100);
-
-		sensor_Highway1 = sensor_Highway2 = sensor_Highway3 = sensor_Highway4 =
-			sensor_Highway5 = sensor_Highway6 = sensor_Highway7 = sensor_Highway8 =
-			sensor_Highway10 = sensor_Highway11 = sensor_Highway12 = sensor_Highway13 =
-			sensor_Highway14 = sensor_Highway15 = sensor_Highway9 = false;
-
-	}
 
 	//-------------------------------------
 

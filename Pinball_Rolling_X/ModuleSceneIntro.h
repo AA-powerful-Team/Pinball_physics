@@ -246,4 +246,14 @@ public:
 	int YellowFont;
 
 	void DrawScore();
+
+	SDL_Rect ShortcutRect;
+	SDL_Texture* Shortcut = nullptr;
+	SDL_Rect x4Rect;
+	SDL_Texture* x4Text = nullptr;
+	SDL_Rect freegasRect;
+	SDL_Texture* freegassText = nullptr;
+	SDL_Rect canadaRect;
+	SDL_Texture* canadaText = nullptr;
+
 };
