@@ -170,9 +170,9 @@ bool ModuleSceneIntro::Start()
 		433, 356,
 		468, 301
 	};
-	
-	
-	
+
+
+
 
 	// Pivot 0, 0
 	int bonus_entrance[44] = {
@@ -416,21 +416,22 @@ bool ModuleSceneIntro::Start()
 
 	//sensors
 		//Upper Part
-	UpperSenser1 = App->physics->CreateRectangleSensor(293, 57, 10, 10);
-	UpperSenser2 = App->physics->CreateRectangleSensor(258, 56, 10, 10);
-	UpperSenser3 = App->physics->CreateRectangleSensor(222, 60, 10, 10);
-	UpperSenser4 = App->physics->CreateRectangleSensor(350, 35, 10, 10);
-	UpperSmallSenser1 = App->physics->CreateRectangleSensor(392, 147, 7, 7);
-	UpperSmallSenser2 = App->physics->CreateRectangleSensor(370, 135, 7, 7);
-	UpperSmallSenser3 = App->physics->CreateRectangleSensor(345, 117, 7, 7);
+	
+	sensorsList.add(UpperSenser1 = App->physics->CreateRectangleSensor(293, 57, 10, 10));
+	sensorsList.add(UpperSenser2 = App->physics->CreateRectangleSensor(258, 56, 10, 10));
+	sensorsList.add(UpperSenser3 = App->physics->CreateRectangleSensor(222, 60, 10, 10));
+	sensorsList.add(UpperSenser4 = App->physics->CreateRectangleSensor(350, 35, 10, 10));
+	sensorsList.add(UpperSmallSenser1 = App->physics->CreateRectangleSensor(392, 147, 7, 7));
+	sensorsList.add(UpperSmallSenser2 = App->physics->CreateRectangleSensor(370, 135, 7, 7));
+	sensorsList.add(UpperSmallSenser3 = App->physics->CreateRectangleSensor(345, 117, 7, 7));
 		
 		//Lower Part
-	LowerBigSensor1= App->physics->CreateRectangleSensor(390, 705, 10,10);
+	sensorsList.add(LowerBigSensor1= App->physics->CreateRectangleSensor(390, 705, 10,10));
 
 
 	//EssentialSensors
-	pitSensor = App->physics->CreateRectangleSensor(200, 835, 400, 10);
-	KickerPathSensor= App->physics->CreateRectangleSensor(450, 230, 50, 5);
+	sensorsList.add(pitSensor = App->physics->CreateRectangleSensor(200, 835, 400, 10));
+	sensorsList.add(KickerPathSensor= App->physics->CreateRectangleSensor(450, 230, 50, 5));
 
 	//Flipper Collision this shold go with th eother colliders from the module physics
 	leftFlipperRect = { 0,78,63,43 };
@@ -489,6 +490,53 @@ bool ModuleSceneIntro::CleanUp()
 	App->textures->Unload(spriteSheet);
 	App->textures->Unload(LittleBlueLight);
 
+	LOG("Unloading map");
+
+	// Remove circles
+
+	p2List_item<PhysBody*>* item;
+	item = circles.getFirst();
+
+	int counter = 1;
+	while (item != NULL)
+	{
+		RELEASE(item->data);
+		item = item->next;
+
+	}
+
+	circles.clear();
+	LOG("Unloading circles");
+
+	p2List_item<PhysBody*>* item2;
+	item2 = world_parts.getFirst();
+
+
+	while (item2 != NULL)
+	{
+		RELEASE(item2->data);
+		item2 = item2->next;
+
+	}
+
+	world_parts.clear();
+	LOG("Unloading world parts");
+
+	p2List_item<PhysBody*>* item3;
+	item3 = sensorsList.getFirst();
+
+
+	while (item3 != NULL)
+	{
+		RELEASE(item3->data);
+		item3 = item3->next;
+
+	}
+
+	sensorsList.clear();
+	LOG("Unloading sensors");
+
+	
 	return true;
 }
 

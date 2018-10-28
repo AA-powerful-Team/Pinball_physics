@@ -4,7 +4,14 @@
 #include "p2Point.h"
 #include "Globals.h"
 
-
+#define RELEASE( x ) \
+    {                        \
+    if( x != NULL )        \
+	    {                      \
+      delete x;            \
+	  x = NULL;              \
+	    }                      \
+    }
 
 class PhysBody;
 struct b2Body;
@@ -47,6 +54,7 @@ public:
 
 	p2List<PhysBody*> circles;
 	p2List<PhysBody*> world_parts;
+	p2List<PhysBody*> sensorsList;
 
 
 	//Colliders

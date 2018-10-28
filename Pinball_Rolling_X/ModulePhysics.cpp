@@ -5,7 +5,6 @@
 #include "ModulePhysics.h"
 #include "p2Point.h"
 #include "math.h"
-#include "ChainPoints.h"
 #include "ModuleSceneIntro.h"
 
 float WALL_RESTITUTION = 0.3;
