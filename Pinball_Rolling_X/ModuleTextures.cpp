@@ -104,22 +104,3 @@ void ModuleTextures::GetSize(const SDL_Texture* texture, uint& width, uint& heig
 	SDL_QueryTexture((SDL_Texture*)texture, NULL, NULL, (int*)&width, (int*)&height);
 }
 
-// Load new texture from file path
-
-SDL_Texture* const ModuleTextures::Load2(const char* path)
-{
-	SDL_Texture* texture = NULL;
-	SDL_Surface* surface = IMG_Load(path);
-
-	if (surface == NULL)
-	{
-		LOG("Could not load surface with path: %s. IMG_Load: %s", path, IMG_GetError());
-	}
-	else
-	{
-		/*texture = LoadSurface(surface);
-		SDL_FreeSurface(surface);*/
-	}
-
-	return texture;
-}

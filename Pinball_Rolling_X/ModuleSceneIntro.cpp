@@ -62,10 +62,13 @@ bool ModuleSceneIntro::Start()
 	launcherRect = {0,0,38,68};
 	YellowScoreRect = {0,0,31,32};
 	OrangeScoreRect = {0,0,31,32};
-	YellowScoreText = App->textures->Load("Assets/Sprites/OrangeNums.png");
-	OrangeScoreText = App->textures->Load("Assets/Sprites/YellowNums.png");
+	YellowScoreText = App->textures->Load("Assets/Sprites/OrangeNumsNew.png");
+	OrangeScoreText = App->textures->Load("Assets/Sprites/YellowNumsNew.png");
 
-	
+	OrangeFont = App->fonts->Load("Assets/Sprites/OrangeNumsNew.png", "0123456789", 1);
+	YellowFont = App->fonts->Load("Assets/Sprites/YellowNumsNew.png", "0123456789", 1);
+
+
 
 	//Bouncers
 	world_parts.add(Bouncer = App->physics->CreateStaticChain(0, 0, triangle_boucer_right, 12, BOUNCER_RESTI));
@@ -722,17 +725,25 @@ if (!EndMatch) {
 	launch_pos.y -= launcher.body->height;
 	App->renderer->Blit(launchertext, launch_pos.x+13 , launch_pos.y+6, &launcherRect);
 
-
+	//draw score
+	DrawScore();
+	
 	//lose Condition
 	if (BallsNum <= 0) {
 		App->renderer->Blit(PostScoreTex, 200, 300);
 		EndMatch = true;
+
+		char char_score[10];
+		sprintf_s(char_score, "%.5d", score);
+		App->fonts->Blit(380, 350, OrangeFont, char_score);
+
 
 		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN) {
 
 			//RESET SCORE
 			BallsNum = 4;
 			EndMatch = false;
+			score = 0;
 
 		}
 
@@ -740,6 +751,7 @@ if (!EndMatch) {
 
 	}
 
+	
 
 	return UPDATE_CONTINUE;
 }
@@ -1112,22 +1124,22 @@ void ModuleSceneIntro::SetBoolstoFalse() {
 
 }
 
-//void ModuleSceneIntro::DrawScore() 
-//{
-//	App->renderer->Blit(YellowScoreText, 25, 460, &YellowScoreRect);
-//	App->renderer->Blit(OrangeScoreText, 487, 460, &OrangeScoreRect);
-//
-//	char char_score[10];
-//	sprintf_s(char_score, "%.5d", score);
-//	App->fonts->Blit(27, 475, OrangeFont, char_score);
-//
-//	char char_hscore[10];
-//	sprintf_s(char_hscore, "%.5d", high_score);
-//	App->fonts->Blit(489, 475, YellowFont, char_hscore);
-//
-//	/*App->renderer->Blit(balls_left.image, 310, 455, &balls_left.rect);*/
-//
-//	/*for (int i = 0; i < losed_balls; i++) {
-//		App->render->Blit(lose_ball.image, 313 + i * 10, 470, &lose_ball.rect);
-//	}*/
-//}
+void ModuleSceneIntro::DrawScore() 
+{
+	/*App->renderer->Blit(YellowScoreText, 25, 460, &YellowScoreRect);
+	App->renderer->Blit(OrangeScoreText, 560, 460, &OrangeScoreRect);
+*/
+	char char_score[10];
+	sprintf_s(char_score, "%.5d", score);
+	App->fonts->Blit(650, 500, OrangeFont, char_score);
+
+	char char_hscore[10];
+	sprintf_s(char_hscore, "%.5d", high_score);
+	App->fonts->Blit(650, 435, YellowFont, char_hscore);
+
+	/*App->renderer->Blit(balls_left.image, 310, 455, &balls_left.rect);*/
+
+	/*for (int i = 0; i < losed_balls; i++) {
+		App->render->Blit(lose_ball.image, 313 + i * 10, 470, &lose_ball.rect);
+	}*/
+}

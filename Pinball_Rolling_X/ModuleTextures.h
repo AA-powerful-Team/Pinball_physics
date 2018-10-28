@@ -16,7 +16,7 @@ public:
 	SDL_Texture* const Load(const char* path);
 	void Unload(SDL_Texture* texture);
 	void				GetSize(const SDL_Texture* texture, uint& width, uint& height) const;
-	SDL_Texture* const	Load2(const char* path);
+	
 
 public:
 	p2List<SDL_Texture*> textures;
