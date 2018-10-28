@@ -60,6 +60,8 @@ bool ModuleSceneIntro::Start()
 	MidleLightFX = App->audio->LoadFx("Assets/FX/BigBlueLighOn.wav");
 	OneMoreChance= App->audio->LoadFx("Assets/FX/StickOfSave.wav");
 	Highway = App->audio->LoadFx("Assets/FX/Awesome.wav");
+	ShortCut= App->audio->LoadFx("Assets/FX/ShortCut.wav");
+	GasGas = App->audio->LoadFx("Assets/FX/GasGas.wav");
 
 	//fonts
 	OrangeFont = App->fonts->Load("Assets/Sprites/OrangeNumsNew.png", "0123456789", 1);
@@ -150,6 +152,8 @@ bool ModuleSceneIntro::Start()
 	//EssentialSensors
 	sensorsList.add(pitSensor = App->physics->CreateRectangleSensor(200, 835, 400, 10));
 	sensorsList.add(KickerPathSensor= App->physics->CreateRectangleSensor(450, 230, 50, 5));
+	sensorsList.add(QuadXpointsSensor = App->physics->CreateRectangleSensor(270, 390, 30,20));
+	sensorsList.add(DoubleXpointsSensor = App->physics->CreateRectangleSensor(130,340, 30, 20));
 
 	//Flipper Collision this shold go with th eother colliders from the module physics
 	leftFlipperRect = { 0,78,63,43 };
@@ -312,13 +316,13 @@ update_status ModuleSceneIntro::Update()
 		
 		App->renderer->Blit(BigBlueTriLightH, 278,8);
 		App->renderer->Blit(BigBlueLight, 281, 45);
-		//sensor_BlueUpperSenser1 = false;
+		
 	}
 	if (sensor_BlueUpperSenser2) {
 
 		App->renderer->Blit(BigBlueTriLightH, 242, 8);
 		App->renderer->Blit(BigBlueLight, 247, 44);
-		//sensor_BlueUpperSenser2 = false;
+		
 	
 	}
 
@@ -326,20 +330,20 @@ update_status ModuleSceneIntro::Update()
 
 		App->renderer->Blit(BigBlueTriLightH, 207, 8);
 		App->renderer->Blit(BigBlueLight, 211, 47);
-		//sensor_BlueUpperSenser3 = false;
+		
 	}
 
 	if (sensor_BlueUpperSenser4) {
 
 		App->renderer->Blit(BigBlueLight, 339, 23);
-		//sensor_BlueUpperSenser3 = false;
+		
 	}
 
 	if (sensor_UpperSmallSenser1) {
 
 
 		App->renderer->Blit(LittleBlueLight,385,140);
-		//sensor_UpperSmallSenser1=false
+		
 
 	}
 
@@ -347,7 +351,7 @@ update_status ModuleSceneIntro::Update()
 
 
 		App->renderer->Blit(LittleBlueLight, 360, 124);
-		//sensor_UpperSmallSenser2=false
+		
 
 	}
 
@@ -355,8 +359,7 @@ update_status ModuleSceneIntro::Update()
 
 
 		App->renderer->Blit(LittleBlueLight, 336, 110);
-		//sensor_UpperSmallSenser3=false
-
+		
 	}
 	
 	//Sensors Lower part--------------------------------------
@@ -364,38 +367,37 @@ update_status ModuleSceneIntro::Update()
 	if (sensor_LowerBigSensor3){
 		
 		App->renderer->Blit(BigBlueLight, 307,380);
-		//sensor_LowerBigSensor3=false
+	
 
 	}
 
 	if (sensor_LowerSmallSenser1) {
 
 		App->renderer->Blit(LittleBlueLight, 202 , 423);
-		//sensor_LowerBigSensor3=false
+		
 	}
 
 	if (sensor_LowerSmallSenser2) {
 
 		App->renderer->Blit(LittleBlueLight, 173, 412);
-		//sensor_LowerBigSensor3=false
+		
 	}
 
 	if (sensor_LowerSmallSenser3) {
 
 		App->renderer->Blit(LittleBlueLight, 37, 470);
-		//sensor_LowerBigSensor3=false
 	}
 	
 	if (sensor_LowerSmallSenser4) {
 
 		App->renderer->Blit(LittleBlueLight, 48, 446);
-		//sensor_LowerBigSensor3=false
+		
 	}
 	
 	if (sensor_LowerSmallSenser5) {
 
 		App->renderer->Blit(LittleBlueLight, 58, 420);
-		//sensor_LowerBigSensor3=false
+		
 	}
 
 	//Highway LightSensors
@@ -403,93 +405,93 @@ update_status ModuleSceneIntro::Update()
 	if (sensor_Highway1) {
 
 		App->renderer->Blit(LittleBlueLight, 49, 298);
-		//sensor_LowerBigSensor3=false
+		
 	}
 	
 	
 	if (sensor_Highway2) {
 
 		App->renderer->Blit(LittleBlueLight, 35, 265);
-		//sensor_LowerBigSensor3=false
+	
 	}
 	
 	if (sensor_Highway3) {
 
 		App->renderer->Blit(LittleBlueLight, 26, 233);
-		//sensor_LowerBigSensor3=false
+		
 	}
 	
 	if (sensor_Highway4) {
 
 		App->renderer->Blit(LittleBlueLight, 20, 201);
-		//sensor_LowerBigSensor3=false
+	
 	}
 	
 	if (sensor_Highway5) {
 
 		App->renderer->Blit(LittleBlueLight, 14, 169);
-		//sensor_LowerBigSensor3=false
+		
 	}
 	
 	if (sensor_Highway6) {
 
 		App->renderer->Blit(LittleBlueLight, 11, 139);
-		//sensor_LowerBigSensor3=false
+		
 	}
 	
 	if (sensor_Highway7) {
 
 		App->renderer->Blit(LittleBlueLight, 11, 109);
-		//sensor_LowerBigSensor3=false
+		
 	}
 	
 	if (sensor_Highway8) {
 
 		App->renderer->Blit(LittleBlueLight, 11, 80);
-		//sensor_LowerBigSensor3=false
+		
 	}
 	
 	if (sensor_Highway9) {
 
 		App->renderer->Blit(LittleBlueLight, 11, 50);
-		//sensor_LowerBigSensor3=false
+		
 	}
 	
 	if (sensor_Highway10) {
 
 		App->renderer->Blit(LittleBlueLight,44, 50);
-		//sensor_LowerBigSensor3=false
+		
 	}
 	
 	if (sensor_Highway11) {
 
 		App->renderer->Blit(LittleBlueLight, 44, 76);
-		//sensor_LowerBigSensor3=false
+		
 	}
 	
 	if (sensor_Highway12) {
 
 		App->renderer->Blit(LittleBlueLight, 46,105);
-		//sensor_LowerBigSensor3=false
+		
 
 	}
 	
 	if (sensor_Highway13) {
 
 		App->renderer->Blit(LittleBlueLight,47, 135);
-		//sensor_LowerBigSensor3=false
+		
 	}
 	
 	if (sensor_Highway14) {
 
 		App->renderer->Blit(LittleBlueLight, 51, 162);
-		//sensor_LowerBigSensor3=false
+		
 	}
 	
 	if (sensor_Highway15) {
 
 		App->renderer->Blit(LittleBlueLight,58,195);
-		//sensor_LowerBigSensor3=false
+		
 	}
 
 	//---------------------------------------------------
@@ -498,17 +500,20 @@ update_status ModuleSceneIntro::Update()
 	if (sensor_LowerBigSensor1) {
 
 
-		App->renderer->Blit(BigBlueLight, 378, 695);
-		//sensor_LowerBigSensor1=false
+		AddScore(ScoreMultiply,-100);
 
+		App->renderer->Blit(BigBlueLight, 378, 695);
+		
+		sensor_LowerBigSensor1 = false;
 	}
 
 	if (sensor_LowerBigSensor2) {
 
+		AddScore(ScoreMultiply, -100);
 
 		App->renderer->Blit(BigBlueLight,5, 695);
-		//sensor_LowerBigSensor2=false
-
+		
+		sensor_LowerBigSensor2 = false;
 	}
 	//End of sensors-----------------------------------------------------------------------
 	//Ball in Pit
@@ -532,6 +537,9 @@ if (!EndMatch) {
 		high_score = score;
 	}
 
+	if (score < 0) {
+		score = 0;
+	}
 	//combo
 
 	if (sensor_LowerSmallSenser1 && sensor_LowerSmallSenser2 && sensor_LowerSmallSenser3 &&
@@ -554,7 +562,21 @@ if (!EndMatch) {
 			sensor_Highway14 = sensor_Highway15 = sensor_Highway9 = false;
 
 	}
+	if (QuadPoints) {
 
+		App->audio->PlayFx(GasGas);
+		score = 4 * score;
+		QuadPoints = false;
+
+		
+	}
+
+	if (DoubleXpoints) {
+
+		App->audio->PlayFx(ShortCut);
+		score = 2 * score;
+		DoubleXpoints = false;
+	}
 
 	//Normal scroe------------------------
 
@@ -576,19 +598,6 @@ if (!EndMatch) {
 		sensor_UpperSmallSenser1 = sensor_UpperSmallSenser2 = sensor_UpperSmallSenser3 = false;
 	}
 
-	/*if (sensor_LowerSmallSenser1 &&  sensor_LowerSmallSenser2) {
-
-		AddScore(ScoreMultiply, 5);
-		sensor_LowerSmallSenser1 = sensor_LowerSmallSenser2 = false;
-
-	}*/
-
-	/*if (sensor_LowerSmallSenser5 && sensor_LowerSmallSenser4 && sensor_LowerSmallSenser3) {
-
-		AddScore(ScoreMultiply, 25);
-		sensor_LowerSmallSenser5 = sensor_LowerSmallSenser4 = sensor_LowerSmallSenser3 = false;
-
-	}*/
 	if (sensor_LowerBigSensor3 && sensor_BlueUpperSenser4) {
 
 		AddScore(ScoreMultiply, 15);
@@ -1099,6 +1108,24 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 		if (FlipperKickerup != true) {
 			FlipperKickerup = true;
+		}
+
+	}
+
+	if (bodyA == QuadXpointsSensor && bodyB == circles.getLast()->data ||
+		bodyB == QuadXpointsSensor && bodyA == circles.getLast()->data) {
+
+		if (QuadPoints != true) {
+			QuadPoints = true;
+		}
+
+	}
+
+	if (bodyA == DoubleXpointsSensor && bodyB == circles.getLast()->data ||
+		bodyB == DoubleXpointsSensor && bodyA == circles.getLast()->data) {
+
+		if (DoubleXpoints != true) {
+			DoubleXpoints = true;
 		}
 
 	}
