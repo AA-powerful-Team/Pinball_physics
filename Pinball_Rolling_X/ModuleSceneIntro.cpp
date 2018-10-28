@@ -32,8 +32,9 @@ bool ModuleSceneIntro::Start()
 	BlueBouncerLight= App->textures->Load("Assets/Sprites/BlueRect.png");
 	BigBlueLight = App->textures->Load("Assets/Sprites/BigLightCIrcle.png");
 	BigBlueTriLightH = App->textures->Load("Assets/Sprites/BigLightTriangleH.png");
-	 launchertext = App->textures->Load("Assets/Sprites/Kicker_small.png"); // clean up
-	spriteSheet = App->textures->Load("Assets/Sprites/spriteSheet.png"); //clean up
+	 launchertext = App->textures->Load("Assets/Sprites/Kicker_small.png"); 
+	spriteSheet = App->textures->Load("Assets/Sprites/spriteSheet.png"); 
+	PostScoreTex = App->textures->Load("Assets/Sprites/PostScore.png");
 
 	HitBall = App->audio->LoadFx("Assets/FX/BallhittingSound.wav");		//Clean UP music REMEMBER
 	BouncerSound= App->audio->LoadFx("Assets/FX/BallHitBouncers.wav");
@@ -115,6 +116,10 @@ bool ModuleSceneIntro::Start()
 	rightUpFlipper = App->physics->CreateFlipper(374, 327,
 		9, fliper_up_right, 14, rightUpFlipperRect, 15 - 15, 60 - 15, -374, -327);
 
+	////invisible flipper
+	//invisibleFlipperRect = { 101, 0, 38, 57 };
+	//InvisibleFlipper = App->physics->CreateFlipper(550, 300,
+	//	9, fliper_up_right, 14, invisibleFlipperRect, 15 - 15, 60 - 15, -550, -300);
 
 
 	//startingPoint
@@ -147,6 +152,10 @@ bool ModuleSceneIntro::CleanUp()
 	App->textures->Unload(BlueBouncerLight);
 	App->textures->Unload(BigBlueLight);
 	App->textures->Unload(BigBlueTriLightH);
+	App->textures->Unload(PostScoreTex);
+	App->textures->Unload(launchertext);
+	App->textures->Unload(spriteSheet);
+
 
 	return true;
 }
@@ -156,10 +165,23 @@ update_status ModuleSceneIntro::Update()
 {
 
 	//printingTheElement that are not going to move
-
-
 	App->renderer->Blit(StaticScene, 0, 0);
 	App->renderer->Blit(ScoreBoard, 477, 0);
+
+	//lose Condition
+	if (BallsNum <= 0) {
+		App->renderer->Blit(PostScoreTex,200,300);
+		EndMatch = true;
+
+		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN) {
+		
+			//RESET SCORE
+			BallsNum = 4;
+			EndMatch = false;
+
+		}
+
+	}
 
 
 //Check Collisions
@@ -223,12 +245,16 @@ update_status ModuleSceneIntro::Update()
 	//Check Essential Sensors
 	//Ball in Pit
 	
+if (!EndMatch) {
+
+	
 	if (PitSensorForBall || App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN && BallsNum>0) {
 
 		circles.add(App->physics->CreateCircle(StartingPoint.x,StartingPoint.y,10));
 		circles.getLast()->data->listener = this;
 
 		PitSensorForBall = false;
+
 		
 	}
 
@@ -308,7 +334,7 @@ update_status ModuleSceneIntro::Update()
 		
 		App->audio->PlayFx(KickerFX);
 	}
-	
+}
 	
 	iPoint mouse;
 	mouse.x = App->input->GetMouseX();
@@ -441,24 +467,10 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	if (bodyA == App->physics->LimitKickerPath && bodyB == circles.getLast()->data ||
 		bodyB == App->physics->LimitKickerPath && bodyA == circles.getLast()->data) {
 		
-	/*	int KickerLimitPath[20] = {
-		
-			433, 364,
-			440, 351,
-			448, 334,
-			460, 311,
-			466, 292,
-			471, 272,
-			472, 313,
-			471, 341,
-			471, 359,
-			438, 362
-	
-		};
-	
-		App->physics->LimitKickerPath=App->physics->CreateStaticChain(1, 0, KickerLimitPath,20, 0);
+		if (ColliderPathKickerOn != true) {
+			ColliderPathKickerOn = true;
+		}
 
-		*/
 	}
 
 	

@@ -52,23 +52,21 @@ public:
 
 
 	SDL_Texture* Ball;
-	SDL_Texture* box;
-	SDL_Texture* rick;
 	SDL_Texture* StaticScene;
 	SDL_Texture* ScoreBoard;
 	SDL_Texture* BouncerTR;
 	SDL_Texture* BouncerCIR;
 	SDL_Texture* BlueBouncerLight;
 	SDL_Texture* spriteSheet;
-
+	SDL_Texture* launchertext;
 	
 	//lights
 	SDL_Texture*BigBlueLight;
 	SDL_Texture*BigBlueTriLightH;
 
 
-	SDL_Texture* launchertext;
-
+	
+	SDL_Texture*PostScoreTex;
 
 	//flippers
 
@@ -83,6 +81,9 @@ public:
 
 	flipper leftUpFlipper;
 	SDL_Rect leftUpFlipperRect;
+
+	flipper InvisibleFlipper;
+	SDL_Rect invisibleFlipperRect;
 
 	//kicker
 	kicker launcher;
@@ -112,8 +113,10 @@ public:
 	bool sensor_BlueUpperSenser3 = false;
 	bool sensor_BlueUpperSenser4 = false;
 	bool sensor_UpperSmallSenser1 = false;
-	//Essntial Sensors
+	//Essntial Sensors bool
 	bool PitSensorForBall = false;
+	bool ColliderPathKickerOn = false;
+	bool EndMatch = false;
 
 	//numOfBalls
 	int BallsNum = 4;

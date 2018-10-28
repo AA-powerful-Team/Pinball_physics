@@ -52,12 +52,14 @@ public:
 	PhysBody* CreateChain(int x, int y, int* points, int size);
 	PhysBody* CreateStaticChain(int x, int y, int* points, int size, int resti = 0);
 
+	
 	//Colliders
 	PhysBody* Bouncer = nullptr;
 	PhysBody*BouncerL = nullptr;
 	PhysBody* BouncerCircle = nullptr;
 	PhysBody*BouncerLCircle = nullptr;
 	PhysBody*BlueBouncer = nullptr;
+	
 
 	//Sensors
 	//Upper part
