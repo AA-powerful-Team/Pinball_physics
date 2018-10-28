@@ -321,7 +321,6 @@ bool ModulePhysics::Start()
 	world_parts.add(CreateStaticChain(0, 0, top3_path, 12, 0));
 	world_parts.add(CreateStaticChain(0, 0, top2_path, 12, 0));
 	world_parts.add(CreateStaticChain(0, 0, top1_path, 12, 0));
-
 	world_parts.add(CreateStaticChain(0, 0, triangle_bottom_left, 6, 0));
 	world_parts.add(CreateStaticChain(0, 1, right_down_path_to_flipper, 16, 0));
 	world_parts.add(CreateStaticChain(0, 2, middle_thing, 14, 0));
@@ -333,6 +332,18 @@ bool ModulePhysics::Start()
 
 	world_parts.add(CreateStaticChain(0, 0, top_triangle_right, 28, 0));
 	world_parts.add(CreateStaticChain(0, 0, up_left_corner, 122, 0));
+
+	//sensors
+	//Upper Part
+	UpperSenser1=CreateRectangleSensor(293,57,10,10);
+	UpperSenser2 = CreateRectangleSensor(258, 56, 10, 10);
+	UpperSenser3 = CreateRectangleSensor(222, 60, 10, 10);
+	UpperSenser4 = CreateRectangleSensor(350, 35, 10, 10);
+	UpperSmallSenser1= CreateRectangleSensor(392, 147, 7, 7);
+
+  //EssentialSensors
+	pitSensor = CreateRectangleSensor(200,835, 400, 10);
+
 
 	return true;
 }
