@@ -47,6 +47,13 @@ bool ModuleSceneIntro::Start()
 	LittleBlueLight= App->textures->Load("Assets/Sprites/LityleCircleLight.png");
 	YellowScoreText = App->textures->Load("Assets/Sprites/OrangeNumsNew.png");
 	OrangeScoreText = App->textures->Load("Assets/Sprites/YellowNumsNew.png");
+	
+	Shortcut = App->textures->Load("Assets/Sprites/ShortCut.png");
+	x4Text = App->textures->Load("Assets/Sprites/4X.png");
+	freegassText = App->textures->Load("Assets/Sprites/FreeGas.png");
+	canadaText = App->textures->Load("Assets/Sprites/TransCanadaHighway.png");
+
+
 
 	//sounds
 	HitBall = App->audio->LoadFx("Assets/FX/BallhittingSound.wav");	
@@ -69,10 +76,7 @@ bool ModuleSceneIntro::Start()
 	YellowScoreRect = { 0,0,31,32 };
 	OrangeScoreRect = { 0,0,31,32 };
 
-	x4Rect = {0,0,399,239};
-	freegasRect = {0,0,399,239};
-	canadaRect = {0,0,397,238};
-	ShortcutRect = {0,0,393,236};
+
 
 
 
@@ -93,7 +97,7 @@ bool ModuleSceneIntro::Start()
 	world_parts.add(App->physics->CreateStaticChain(0, 0, invWall, 8, WALL_RESTITUTION));
 	world_parts.add(App->physics->CreateStaticChain(0, 0, triangle_bottom_left, 6, WALL_RESTITUTION));
 	world_parts.add(App->physics->CreateStaticChain(0, 1, right_down_path_to_flipper, 16, WALL_RESTITUTION));
-	world_parts.add(App->physics->CreateStaticChain(0, 2, middle_thing, 14, WALL_RESTITUTION));
+	world_parts.add(App->physics->CreateStaticChain(0, 2, middle_thing, 14, WALL_RESTITUTION+0.7));
 	world_parts.add(App->physics->CreateStaticChain(2, 1, left_down_path_to_flipper, 16, WALL_RESTITUTION));
 	world_parts.add(App->physics->CreateStaticChain(2, 0, right_down_base, 16, WALL_RESTITUTION));
 
@@ -212,6 +216,12 @@ bool ModuleSceneIntro::CleanUp()
 	App->textures->Unload(LittleBlueLight);
 	App->textures->Unload(YellowScoreText);
 	App->textures->Unload(OrangeScoreText);
+
+	App->textures->Unload(Shortcut);
+	App->textures->Unload(x4Text);
+	App->textures->Unload(freegassText);
+	App->textures->Unload(canadaText);
+
 
 	LOG("Unloading map");
 
@@ -523,7 +533,7 @@ if (!EndMatch) {
 
 		PitSensorForBall = false;
 		FlipperKickerup = false;
-
+		toBlit = false;
 		SetBoolstoFalse();
 	}
 	
@@ -541,6 +551,7 @@ if (!EndMatch) {
 
 		sensor_LowerSmallSenser1 = sensor_LowerSmallSenser2 = sensor_LowerSmallSenser3 =
 			sensor_LowerSmallSenser4 = sensor_LowerSmallSenser5 = sensor_LowerBigSensor3 = false;
+		toBlit= false;
 	}
 
 	if (sensor_Highway1 && sensor_Highway7 && sensor_Highway11 && sensor_Highway15) {
@@ -552,7 +563,10 @@ if (!EndMatch) {
 			sensor_Highway5 = sensor_Highway6 = sensor_Highway7 = sensor_Highway8 =
 			sensor_Highway10 = sensor_Highway11 = sensor_Highway12 = sensor_Highway13 =
 			sensor_Highway14 = sensor_Highway15 = sensor_Highway9 = false;
-
+		
+		toBlit = true;
+		canada = true;
+		shortcutbool = false;
 	}
 
 
@@ -562,39 +576,44 @@ if (!EndMatch) {
 	{
 		AddScore(ScoreMultiply, 25);
 		sensor_BlueUpperSenser1 = sensor_BlueUpperSenser2 = sensor_BlueUpperSenser3 = sensor_BlueUpperSenser4 = false;
+		toBlit = false;
+		canada = false;
 	}
 	
 	if (sensor_BlueUpperSenser1 && sensor_BlueUpperSenser2 && sensor_BlueUpperSenser3)
 	{
 		AddScore(ScoreMultiply, 15);
 		sensor_BlueUpperSenser1 = sensor_BlueUpperSenser2 = sensor_BlueUpperSenser3 = false;
+		toBlit = false;
+		canada = false;
 	}
 	
 	if (sensor_UpperSmallSenser1 && sensor_UpperSmallSenser2 && sensor_UpperSmallSenser3)
 	{
 		AddScore(ScoreMultiply, 30);
 		sensor_UpperSmallSenser1 = sensor_UpperSmallSenser2 = sensor_UpperSmallSenser3 = false;
+		toBlit = false;
+		canada = false;
 	}
 
-	/*if (sensor_LowerSmallSenser1 &&  sensor_LowerSmallSenser2) {
-
-		AddScore(ScoreMultiply, 5);
-		sensor_LowerSmallSenser1 = sensor_LowerSmallSenser2 = false;
-
-	}*/
-
-	/*if (sensor_LowerSmallSenser5 && sensor_LowerSmallSenser4 && sensor_LowerSmallSenser3) {
-
-		AddScore(ScoreMultiply, 25);
-		sensor_LowerSmallSenser5 = sensor_LowerSmallSenser4 = sensor_LowerSmallSenser3 = false;
-
-	}*/
+	
 	if (sensor_LowerBigSensor3 && sensor_BlueUpperSenser4) {
 
 		AddScore(ScoreMultiply, 15);
 		sensor_BlueUpperSenser4=sensor_LowerBigSensor3=false;
+		toBlit = false;
+		canada = false;
 	}
 	
+	if (sensor_LowerBigSensor3 ) {
+
+		AddScore(ScoreMultiply, 15);
+		toBlit = true;
+		canada = false;
+		shortcutbool = true;
+		sensor_LowerBigSensor3 = false;
+
+	}
 
 	//-------------------------------------
 
@@ -737,6 +756,22 @@ if (!EndMatch) {
 	App->renderer->Blit(launchertext, launch_pos.x+13 , launch_pos.y+6, &launcherRect);
 
 	//draw score
+	
+	if (toBlit)
+	{
+		if (canada)
+		App->renderer->Blit(canadaText, 500, 230);
+
+		if(x4)
+		App->renderer->Blit(x4Text, 500, 230); 
+
+		if (freegass)
+		App->renderer->Blit(freegassText, 530, 230); 
+
+		if(shortcutbool)
+		App->renderer->Blit(Shortcut, 500, 230); 
+	}
+
 	DrawScore();
 	
 	//lose Condition
@@ -1137,9 +1172,7 @@ void ModuleSceneIntro::SetBoolstoFalse() {
 
 void ModuleSceneIntro::DrawScore() 
 {
-	/*App->renderer->Blit(YellowScoreText, 25, 460, &YellowScoreRect);
-	App->renderer->Blit(OrangeScoreText, 560, 460, &OrangeScoreRect);
-*/
+	
 	char char_score[10];
 	sprintf_s(char_score, "%.5d", score);
 	App->fonts->Blit(650, 500, OrangeFont, char_score);
@@ -1148,9 +1181,5 @@ void ModuleSceneIntro::DrawScore()
 	sprintf_s(char_hscore, "%.5d", high_score);
 	App->fonts->Blit(650, 435, YellowFont, char_hscore);
 
-	/*App->renderer->Blit(balls_left.image, 310, 455, &balls_left.rect);*/
-
-	/*for (int i = 0; i < losed_balls; i++) {
-		App->render->Blit(lose_ball.image, 313 + i * 10, 470, &lose_ball.rect);
-	}*/
+	
 }
