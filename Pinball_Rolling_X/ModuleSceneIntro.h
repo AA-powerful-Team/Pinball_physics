@@ -158,6 +158,7 @@ public:
 	uint KickerFX;
 	uint MidleLightFX;
 	uint OneMoreChance;
+	uint Highway;
 
 	//Collisions bools
 	bool BlitBouncer=false;
@@ -234,6 +235,7 @@ public:
 
 	void AddScore(int multiply, int Addscore);
 	void AddBonusScore(int multiply, int bonus);
+	void SetBoolstoFalse();
 
 	SDL_Rect YellowScoreRect;
 	SDL_Rect OrangeScoreRect;
