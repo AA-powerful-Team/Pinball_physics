@@ -103,7 +103,8 @@ public:
 	//EssentialSensors
 	PhysBody*KickerPathSensor;
 	PhysBody*pitSensor;
-	
+	PhysBody*QuadXpointsSensor;
+	PhysBody*DoubleXpointsSensor;
 
 
 	//Textures
@@ -159,6 +160,8 @@ public:
 	uint MidleLightFX;
 	uint OneMoreChance;
 	uint Highway;
+	uint ShortCut;
+	uint GasGas;
 
 	//Collisions bools
 	bool BlitBouncer=false;
@@ -214,7 +217,8 @@ public:
 	bool PitSensorForBall = false;
 	bool EndMatch = false;
 	bool FlipperKickerup = false;
-
+	bool QuadPoints = false;
+	bool DoubleXpoints = false;
 	//numOfBalls
 	int BallsNum = 4;
 
