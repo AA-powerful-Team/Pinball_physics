@@ -4,14 +4,7 @@
 #include "p2Point.h"
 #include "Globals.h"
 
-#define RELEASE( x ) \
-    {                        \
-    if( x != NULL )        \
-	    {                      \
-      delete x;            \
-	  x = NULL;              \
-	    }                      \
-    }
+#include "p2Defs.h"
 
 class PhysBody;
 struct b2Body;
@@ -70,6 +63,7 @@ public:
 	PhysBody*UpperSenser1;
 	PhysBody*UpperSenser2;
 	PhysBody*UpperSenser3;
+	
 	PhysBody*UpperSenser4;
 
 	PhysBody*UpperSmallSenser1;
@@ -78,6 +72,33 @@ public:
 
 		//Lower part
 	PhysBody*LowerBigSensor1;
+	PhysBody*LowerBigSensor2;
+	PhysBody*LowerBigSensor3;
+	
+	PhysBody*LowerSmallSenser1;
+	PhysBody*LowerSmallSenser2;
+
+	PhysBody*LowerSmallSenser3;
+	PhysBody*LowerSmallSenser4;
+	PhysBody*LowerSmallSenser5;
+	
+	//HighWay Sensors
+	PhysBody*Highway1;
+	PhysBody*Highway2;
+	PhysBody*Highway3;
+	PhysBody*Highway4;
+	PhysBody*Highway5;
+	PhysBody*Highway6;
+	PhysBody*Highway7;
+	PhysBody*Highway8;
+	PhysBody*Highway9;
+	PhysBody*Highway10;
+	PhysBody*Highway11;
+	PhysBody*Highway12;
+	PhysBody*Highway13;
+	PhysBody*Highway14;
+	PhysBody*Highway15;
+
 
 	//EssentialSensors
 	PhysBody*KickerPathSensor;
@@ -135,6 +156,8 @@ public:
 	uint FlipperUp;
 	uint FlipperDown;
 	uint KickerFX;
+	uint MidleLightFX;
+	uint OneMoreChance;
 
 	//Collisions bools
 	bool BlitBouncer=false;
@@ -148,13 +171,43 @@ public:
 	bool sensor_BlueUpperSenser1=false;
 	bool sensor_BlueUpperSenser2 = false;
 	bool sensor_BlueUpperSenser3 = false;
+
 	bool sensor_BlueUpperSenser4 = false;
+
 	bool sensor_UpperSmallSenser1 = false;
 	bool sensor_UpperSmallSenser2 = false;
 	bool sensor_UpperSmallSenser3 = false;
 
 		//Lower Light Sensors Bools
 	bool sensor_LowerBigSensor1 = false;
+
+	bool sensor_LowerBigSensor2 = false;
+	bool sensor_LowerBigSensor3 = false;
+
+	bool sensor_LowerSmallSenser1 = false;
+	bool sensor_LowerSmallSenser2 = false;
+
+	bool sensor_LowerSmallSenser3=false;
+	bool sensor_LowerSmallSenser4=false;
+	bool sensor_LowerSmallSenser5=false;
+	//Highway Ligtd
+
+	bool sensor_Highway1 = false;
+	bool sensor_Highway2 = false;
+	bool sensor_Highway3 = false;
+	bool sensor_Highway4 = false;
+	bool sensor_Highway5 = false;
+	bool sensor_Highway6 = false;
+	bool sensor_Highway7 = false;
+	bool sensor_Highway8 = false;
+	bool sensor_Highway9 = false;
+	bool sensor_Highway10 = false;
+	bool sensor_Highway11 = false;
+	bool sensor_Highway12 = false;
+	bool sensor_Highway13 = false;
+	bool sensor_Highway14 = false;
+	bool sensor_Highway15 = false;
+
 
 	//Essntial Sensors bool
 	bool PitSensorForBall = false;
