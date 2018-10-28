@@ -69,6 +69,7 @@ bool ModuleSceneIntro::Start()
 	Highway = App->audio->LoadFx("Assets/FX/Awesome.wav");
 	ShortCut= App->audio->LoadFx("Assets/FX/ShortCut.wav");
 	GasGas = App->audio->LoadFx("Assets/FX/GasGas.wav");
+	LockBall= App->audio->LoadFx("Assets/FX/BallLocked.wav");
 
 	//fonts
 	OrangeFont = App->fonts->Load("Assets/Sprites/OrangeNumsNew.png", "0123456789", 1);
@@ -158,7 +159,7 @@ bool ModuleSceneIntro::Start()
 	sensorsList.add(KickerPathSensor= App->physics->CreateRectangleSensor(450, 230, 50, 5));
 	sensorsList.add(QuadXpointsSensor = App->physics->CreateRectangleSensor(270, 390, 30,20));
 	sensorsList.add(DoubleXpointsSensor = App->physics->CreateRectangleSensor(130,340, 30, 20));
-
+	sensorsList.add(LockBallSensors= App->physics->CreateRectangleSensor(80, 20, 30, 20));
 	//Flipper Collision this shold go with th eother colliders from the module physics
 	leftFlipperRect = { 0,78,63,43 };
 	leftFlipper = App->physics->CreateFlipper(120, 748,
@@ -540,6 +541,7 @@ if (!EndMatch) {
 		FlipperKickerup = false;
 		toBlit = false;
 		SetBoolstoFalse();
+
 	}
 	
 	//------------------------UI Score-------------------
@@ -605,8 +607,14 @@ if (!EndMatch) {
 		x4 = false;
 		freegass = true;
 	}
+	if (sensor_LockBallSensors) {
 
-	//Normal scroe------------------------
+		AddScore(ScoreMultiply,100);
+		App->audio->PlayFx(LockBall);
+		sensor_LockBallSensors = false;
+	}
+
+	//Normal score------------------------
 
 	if (sensor_BlueUpperSenser1 && sensor_BlueUpperSenser2 && sensor_BlueUpperSenser3&&sensor_BlueUpperSenser4)
 	{
@@ -1191,6 +1199,15 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 	}
 
+	if (bodyA == LockBallSensors && bodyB == circles.getLast()->data ||
+		bodyB == LockBallSensors && bodyA == circles.getLast()->data) {
+
+		if (sensor_LockBallSensors != true) {
+			sensor_LockBallSensors = true;
+		}
+
+	}
+	
 	//----------------------------------------------
 
 	App->audio->PlayFx(HitBall);
@@ -1233,6 +1250,11 @@ void ModuleSceneIntro::DrawScore()
 	char char_hscore[10];
 	sprintf_s(char_hscore, "%.5d", high_score);
 	App->fonts->Blit(650, 435, YellowFont, char_hscore);
+
+	char BallNumbers[10];
+	sprintf_s(BallNumbers, "%.1d", BallsNum);
+	App->fonts->Blit(650, 560, YellowFont, BallNumbers);
+
 
 	
 }

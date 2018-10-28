@@ -105,6 +105,7 @@ public:
 	PhysBody*pitSensor;
 	PhysBody*QuadXpointsSensor;
 	PhysBody*DoubleXpointsSensor;
+	PhysBody*LockBallSensors;
 
 
 	//Textures
@@ -162,6 +163,7 @@ public:
 	uint Highway;
 	uint ShortCut;
 	uint GasGas;
+	uint LockBall;
 
 	//Collisions bools
 	bool BlitBouncer=false;
@@ -219,6 +221,8 @@ public:
 	bool FlipperKickerup = false;
 	bool QuadPoints = false;
 	bool DoubleXpoints = false;
+	bool sensor_LockBallSensors = false;
+
 	//numOfBalls
 	int BallsNum = 4;
 
