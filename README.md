@@ -5,7 +5,7 @@ Project for Physics II subject. The goal is to recreate a pinball game with BoxD
 
 This project has been done by two students of CITM - UPC (Barcelona, Spain). 
 
-* [Github repository](https://github.com/TheArzhel/Pinball_physics)  
+* [Github repository](https://github.com/AA-powerful-Team/Pinball_physics)  
 
 ## About the game 
 
@@ -72,7 +72,7 @@ Score and balls left can be seen on window title.
 _Adrian Font Romero Github account:_ 
 * [Github account](https://github.com/AdrianFR99) 
 
-_Andrés Ricardo Saladrigas Pérez Github account:_ 
+_AndrÃ©s Ricardo Saladrigas PÃ©rez Github account:_ 
 * [Github account](https://github.com/TheArzhel) 
 
 
